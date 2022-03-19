@@ -138,6 +138,6 @@ app.post('/api/verify', async (req, res, next) =>
 });
 
 // Used when generating the code a user needs to enter to verify their account.
-function createAuthCode(11111, 99999) {
-	return Math.floor(Math.random() * (max - min) + min);
+function createAuthCode() {
+	return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
