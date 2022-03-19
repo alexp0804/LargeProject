@@ -142,4 +142,10 @@ function createAuthCode() {
 	return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
 
-// stupid
+
+
+
+
+
+
+// bruh
