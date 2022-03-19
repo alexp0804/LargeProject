@@ -137,6 +137,96 @@ app.post('/api/verify', async (req, res, next) =>
 	});
 });
 
+// ADD FAVORITE ENDPOINT
+app.post('/api/addFavorite/', async (req, res, next) =>
+{
+	// Input  = User ID, Recipe ID
+	const { userID, recipeID } = req.body;
+
+	const db = client.db();
+
+	// Add recipe to favorites array of user
+	db.users.updateOne(
+		{ _id: userID },
+		{ $push: { favorites: recipeID } }
+	);
+
+	// Update favorite count for recipe
+	db.recipes.updateOne(
+		{ _id: recipeID },
+		{ $inc: { numFavorites: 1 } }
+	);
+
+	// Okay status
+	res.status(200);
+});
+
+// DELETE FAVORITE ENDPOINT
+app.post('/api/deleteFavorite/', async (req, res, next) =>
+{
+	const { userID, recipeID } = req.body;
+	const db = client.db();
+
+	// Remove recipe from favorites array of user
+	db.users.updateOne(
+		{ _id: userID },
+		{ $pull: { favorites: recipeID } }
+	);
+
+	// Update favorite count for recipe
+	db.recipes.updateOne(
+		{ _id: recipeID },
+		{ $inc: { numFavorites: -1 } }
+	);
+
+	// Okay status
+	res.status(200);
+});
+
+// ADD LIKE ENDPOINT
+app.post('/api/addLike/', async (req, res, next) =>
+{
+	const { userID, recipeID } = req.body;
+	const db = client.db();
+
+	// Update like count for recipe
+	db.recipes.udpateOne(
+		{ _id: recipeID },
+		{ $inc: { likes: 1 } }
+	);
+
+	// Add recipe to likes array of user
+	db.recipes.updateOne(
+		{ _id: userID },
+		{ $push: { likes: recipeID } }
+	);
+
+	// Okay status
+	res.status(200);
+});
+
+// DELETE LIKE ENDPOINT
+app.post('/api/deleteLike/', async (req, res, next) =>
+{
+	const { userID, recipeID } = req.body;
+	const db = client.db();
+
+	// Update like count for recipe
+	db.recipes.updateOne(
+		{ _id: recipeID },
+		{ $inc: { likes: -1 } }
+	);
+
+	// Remove recipe from likes array of user
+	db.users.updateOne(
+		{ _id: userID },
+		{ $pull: { likes: recipeID } }
+	);
+
+	// Okay status
+	res.status(200);
+});
+
 // Used when generating the code a user needs to enter to verify their account.
 function createAuthCode() {
 	return Math.floor(Math.random() * (99999 - 11111) + 11111);
