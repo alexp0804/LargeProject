@@ -141,3 +141,5 @@ app.post('/api/verify', async (req, res, next) =>
 function createAuthCode() {
 	return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
+
+// stupid
