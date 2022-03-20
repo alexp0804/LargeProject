@@ -357,6 +357,57 @@ app.post('/api/test', async (req, res, next) =>
     res.status(200).json(str);
 });
 
+app.post('/api/getcountry', async (req, res, next) => 
+{
+	// grabbing db and storing the name of the country we receive
+	const db = client.db();
+	const country = req.body;
+
+	// query the db and store in an array
+	let results = db.collection("countries").find({ name:country }).toArray();
+
+	// we didn't find any results for this country....is this even gonna be possible?
+	if (results.length < 1)
+	{
+		// return an error and 404 status
+		let ret = { error: 'Country not found' };
+		res.status(404).json(ret);
+	}
+	else
+	{
+		// We found the country! Store its recipes and return that and 200 status
+		let ret = results[0].recipes;
+		res.status(200).json(ret);
+	}
+});
+
+app.post('/api/searchrecipe', async (req, res, next) => 
+{
+	let searchTerm = req.body;
+
+	const db = client.db();
+
+	let search = db.collection("recipes").find( { $text: { $search:searchTerm }}).toArray();
+	res.status(200).json(search)
+});
+
+app.post('/api/updateuser', async (req, res, next) => 
+{
+	const { id, firstName, lastName, password, profilePic } = req.body;
+	const db = client.db();
+
+	db.collection("users").updateOne(
+		{_id:id },
+		{firstName:firstName},
+		{lastName:lastName},
+		{password:password},
+		{profilePic:profilePic}
+	);
+
+	res.status(200).json({ error: 'all good!' })
+})
+
+
 // Used when generating the code a user needs to enter to verify their account.
 function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
