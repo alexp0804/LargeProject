@@ -227,7 +227,27 @@ app.post('/api/editRecipe', async (req, res, next) =>
     // Input = recipe name, description, picture link, text, and Recipe ID.
     const { name, description, picLink, text, recipeID } = req.body;
 
-    const db = client.db();
+	// grab the db so we can access it
+	const db = client.db();
+
+	// store the recipe id that we receive
+	const recipeId = req.body;
+
+	// search the recipes collection and find all matching recipe ids
+	let results = db.collection("recipes").find({ _id:recipeId }).toArray();
+
+	// This recipe id does not exist in our database
+	if (results.length != 1)
+	{
+		// return an error and 404 status
+		let ret = { error: 'Recipe not found'}
+		res.status(404).json(ret)
+	}
+	else
+	{
+		// return the json object of the recipe with this ID
+		res.status(200).json(results[0]);
+	}
 
     // Update recipe with new information.
     db.collection("recipes").updateOne(
