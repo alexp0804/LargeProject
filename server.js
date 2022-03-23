@@ -1,8 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const sendGrid = require('@sendgrid/mail');
+const { ObjectId, CURSOR_FLAGS } = require('mongodb');
+const sendGrid = require('sendgrid');
 const PORT = process.env.PORT || 5000;
+
+const userCol= "users";
+const recipeCol = "recipes";
+const countryCol = "countries";
 
 // Setting up Express and cors.
 const app = express();
@@ -40,73 +45,100 @@ app.post('/api/login', async (req, res, next) =>
 
     // Connecting to Mongo and searching the Users collection for the given input.
     const db = client.db();
-    const results = await db.collection('users').find({username:username,password:password}).toArray();
+    const results = db.collection(userCol).find( { username: username, password: password } );
 
-    // If the length of the query is greater than one, we've found the user.
-    if( results.length > 0 )
+    // We didn't find the user, so we throw an error.
+    if (!(await results.hasNext()))
     {
-        let id = results[0]._id;
-        let fn = results[0].firstName;
-        let ln = results[0].lastName;
-        let pic = results[0].profilePic;
-        let favs = results[0].favorites;
+        let ret = { error: 'User not found.' };
+        res.status(500).json(ret);
+        return;
+    }
 
-        let ret = { id:id, firstName:fn, lastName:ln, profilePic:pic, favorites:favs, error:''};
-        res.status(200).json(ret);
-    }
-    else
-    {
-        // We didn't find the user, so we throw an error.
-        let ret = { error:'User not found.' };
-        res.status(404).json(ret);
-    }
+    // Get user info, remove password from json object
+    let result = await results.next();
+    delete result.password;
+
+    res.status(200).json(result);
 });
 
-app.post('/api/register', async (req, res, next) =>
+// REGISTER ENDPOINT
+app.post('/api/register', async (req, res, next) => 
 {
-    // Input  = username, password
-    const { username, password, firstName, lastName, profilePic, email } = req.body;
-
+    const { username, password, email } = req.body;
     const db = client.db();
-    const results = await db.collection('users').find({username:username}).toArray();
 
-    // First we check to see if the username is already being used.
-    if( results.length > 0 )
+    const usernameTaken = db.collection(userCol).find( { username: username } );
+
+    // If there's a result the username is taken.
+    if (await usernameTaken.hasNext())
     {
-        // Then return an error if it is.
-        var ret = { error:'User already exists.' };
-        res.status(400).json(ret);
+        res.status(500).json( { error: "Username taken." } );
+        return;
     }
-    else
-    {
-        sendGrid.setApiKey(process.env.SENDGRID_API_KEY)
 
-        // Create authentication code for user.
-        let authCode = createAuthCode();
+    // Add user to users collection
+    let newUser = {
+        username: username,
+        password: password,
+        email: email,
+        profilePic: "",
+        favorites: [],
+        created: [],
+        likes: []
+    };
 
-        const msg = {
-            to: email, // Change to your recipient
-            from: 'test@example.com', // Change to your verified sender
-            subject: 'Verify your email',
-            text: 'Copy and paste this authentication code to verify your email: ' + authCode + '.',
-        }
-
-        // Send the authentication code in an email.
-        sendGrid.send(msg)
-        .then((response) => {
-            // If the email successfully sent, return the user info for registering.
-            let ret = {
-                username:username, password:password, firstName:firstName,
-                lastName:lastName, profilePic:profilePic, email:email, authCode:authCode, error:''
-            };
-            res.status(200).json(ret);
-        })
-        .catch((error) => {
-            let ret = { error:'Error occured while sending email.' };
-            res.status(400).json(ret);
-        })
-    }
+    db.collection(userCol).insertOne(newUser);
+    res.status(200).json( { error: "" } );
 });
+
+
+// TODO: fix
+// app.post('/api/register', async (req, res, next) =>
+// {
+//     // Input  = username, password
+//     const { username, password, firstName, lastName, profilePic, email } = req.body;
+
+//     const db = client.db();
+//     const results = db.collection('users').find({username:username}).toArray();
+
+//     // First we check to see if the username is already being used.
+//     if( results.length > 0 )
+//     {
+//         // Then return an error if it is.
+//         var ret = { error:'User already exists.' };
+//         res.status(400).json(ret);
+//     }
+//     else
+//     {
+//         sendGrid.setApiKey(process.env.SENDGRID_API_KEY)
+
+//         // Create authentication code for user.
+//         let authCode = createAuthCode();
+
+//         const msg = {
+//             to: email, // Change to your recipient
+//             from: 'test@example.com', // Change to your verified sender
+//             subject: 'Verify your email',
+//             text: 'Copy and paste this authentication code to verify your email: ' + authCode + '.'
+//         }
+
+//         // Send the authentication code in an email.
+//         sendGrid.send(msg)
+//         .then((response) => {
+//             // If the email successfully sent, return the user info for registering.
+//             let ret = {
+//                 username:username, password:password, firstName:firstName,
+//                 lastName:lastName, profilePic:profilePic, email:email, authCode:authCode, error:''
+//             };
+//             res.status(200).json(ret);
+//         })
+//         .catch((error) => {
+//             let ret = { error:'Error occured while sending email.' };
+//             res.status(400).json(ret);
+//         })
+//     }
+// });
 
 // VERIFY ENDPOINT
 app.post('/api/verify', async (req, res, next) =>
@@ -122,7 +154,7 @@ app.post('/api/verify', async (req, res, next) =>
 
     const db = client.db();
 
-    db.collection("users").insertOne(user, function(err, res) {
+    db.collection(userCol).insertOne(user, function(err, res) {
         if (err)
         {
             let ret = { error:'Error while registering user.' };
@@ -151,7 +183,7 @@ app.post('/api/createRecipe', async (req, res, next) =>
     const db = client.db();
 
 	// Add recipe to collection
-    db.collection("recipes").insertOne(recipe, function(err, res) {
+    db.collection(recipeCol).insertOne(recipe, function(err, res) {
         if (err)
         {
             let ret = { error:'Error while creating recipe.' };
@@ -160,12 +192,12 @@ app.post('/api/createRecipe', async (req, res, next) =>
         else
         {
 			// After successfully creating the recipe we add it to the user's created array.
-			db.collection("users").updateOne(
+			db.collection(userCol).updateOne(
 				{ _id: id },
 				{ $push: { created: recipe._id }}
 			)
 
-			const results = await db.collection('countries').find({name:country}).toArray();
+			const results = db.collection('countries').find({name:country}).toArray();
 
 			// If the country already exists we just append the recipe to the recipes array.
 			if ( results.length > 0 )
@@ -198,19 +230,17 @@ app.post('/api/deleteRecipe', async (req, res, next) =>
     const db = client.db();
 
     // Delete recipe from recipes collection.
-    db.collection("recipes").deleteOne({ _id:recipeID });
+    db.collection(recipeCol).deleteOne( { _id: ObjectId(recipeID) } );
 
 	// Removing recipe from the country's list of recipes.
 	db.collection("countries").updateOne(
-		{ name:country },
-		{
-			$pull: { recipes:recipeID }
-		}
+		{ name: country },
+		{ $pull: { recipes: ObjectId(recipeID) } }
 	);
 
 	// Removing the recipe from both the favorited and liked arrays for each user
 	// VERY INEFFICIENT GOTTA FIND A BETTER WAY
-	db.collection("users").updateMany(
+	db.collection(userCol).updateMany(
 		{ },
 		{
 			$pull: { favorites:recipeID, liked:recipeID }
@@ -230,7 +260,7 @@ app.post('/api/editRecipe', async (req, res, next) =>
     const db = client.db();
 
     // Update recipe with new information.
-    db.collection("recipes").updateOne(
+    db.collection(recipeCol).updateOne(
         { _id: recipeID },
 		{
 			$set: { name:name, desc:description, picURL:picLink, recipeText:text }
@@ -241,28 +271,84 @@ app.post('/api/editRecipe', async (req, res, next) =>
     res.status(200);
 });
 
+// GET FAVORITE ENDPOINT
+app.post('/api/getFavorites', async (req, res, next) =>
+{
+    const { userID } = req.body;
+    const db = client.db();
+
+    // Get documents that match UserID
+    const c = db.collection(userCol).find( { _id: ObjectId(userID) } );
+
+    // If db query results in empty cursor throw error
+    if (!await c.hasNext())
+        res.status(500).json( { error: "Invalid UserID" } );
+
+    // Get users favorites and return
+    const user = await c.next();
+    const favs = user.favorites;
+
+    // Iterate backwards so removing elements doesn't mess with indexing
+    for (let i = favs.length; i >= 0; i--)
+    {
+        // If the recipe isn't in the database
+        if (await atLeastOne(recipeCol, favs[i]) == 0)
+        {
+            // Remove recipe from user favorites list from database.
+            db.collection(userCol).updateOne(
+                  { _id: ObjectId(userID) },
+                  { $pull: { favorites: ObjectId(favs[i]) } }
+            )
+            // Remove recipe from favs
+            favs.splice(i, 1);
+        }
+    }
+
+    res.status(200).json(favs);
+});
+
 // ADD FAVORITE ENDPOINT
-app.post('/api/addFavorite/', async (req, res, next) =>
+app.post('/api/addFavorite', async (req, res, next) =>
 {
     // Input  = User ID, Recipe ID
     const { userID, recipeID } = req.body;
-
     const db = client.db();
 
+    // Check that user and recipe exists
+    const userExists = await atLeastOne(userCol, userID);
+    const recipeExists = await atLeastOne(recipeCol, recipeID);
+
+    // If either user or recipe doesn't exist return error
+    if (!userExists || !recipeExists)
+    {
+        let errors = [];
+
+        if (!userExists)
+            errors.push("userID");
+        
+        if (!recipeExists)
+            errors.push("recipeID");
+
+        let err = "Invalid " + errors.join(', ');
+
+        res.status(500).json( { error: err } );
+        return;
+    }
+
     // Add recipe to favorites array of user
-    db.users.updateOne(
-        { _id: userID },
-        { $push: { favorites: recipeID } }
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(userID) },
+        { $push: { favorites: ObjectId(recipeID) } }
     );
 
     // Update favorite count for recipe
-    db.recipes.updateOne(
-        { _id: recipeID },
+    db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
         { $inc: { numFavorites: 1 } }
     );
 
     // Okay status
-    res.status(200);
+    res.status(200).json( { error: "" } );
 });
 
 // DELETE FAVORITE ENDPOINT
@@ -271,20 +357,41 @@ app.post('/api/deleteFavorite/', async (req, res, next) =>
     const { userID, recipeID } = req.body;
     const db = client.db();
 
+    // Check that user and recipe exists
+    const userExists = await atLeastOne(userCol, userID);
+    const recipeExists = await atLeastOne(recipeCol, recipeID);
+
+    // If either user or recipe doesn't exist return error
+    if (!userExists || !recipeExists)
+    {
+        let errors = [];
+
+        if (!userExists)
+            errors.push("userID");
+        
+        if (!recipeExists)
+            errors.push("recipeID");
+
+        let err = "Invalid " + errors.join(', ');
+
+        res.status(500).json( { error: err } );
+        return;
+    }
+
     // Remove recipe from favorites array of user
-    db.users.updateOne(
-        { _id: userID },
-        { $pull: { favorites: recipeID } }
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(userID) },
+        { $pull: { favorites: ObjectId(recipeID) } }
     );
 
     // Update favorite count for recipe
-    db.recipes.updateOne(
-        { _id: recipeID },
+    db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
         { $inc: { numFavorites: -1 } }
     );
 
     // Okay status
-    res.status(200);
+    res.status(200).json( { error: "" } );
 });
 
 // ADD LIKE ENDPOINT
@@ -293,20 +400,41 @@ app.post('/api/addLike/', async (req, res, next) =>
     const { userID, recipeID } = req.body;
     const db = client.db();
 
+    // Check that user and recipe exists
+    const userExists = await atLeastOne(userCol, userID);
+    const recipeExists = await atLeastOne(recipeCol, recipeID);
+
+    // If either user or recipe doesn't exist return error
+    if (!userExists || !recipeExists)
+    {
+        let errors = [];
+
+        if (!userExists)
+            errors.push("userID");
+        
+        if (!recipeExists)
+            errors.push("recipeID");
+
+        let err = "Invalid " + errors.join(', ');
+
+        res.status(500).json( { error: err } );
+        return;
+    }
+
     // Update like count for recipe
-    db.recipes.updateOne(
-        { _id: recipeID },
+    db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
         { $inc: { likes: 1 } }
     );
 
     // Add recipe to likes array of user
-    db.recipes.updateOne(
-        { _id: userID },
-        { $push: { likes: recipeID } }
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(userID) },
+        { $push: { likes: ObjectId(recipeID) } }
     );
 
     // Okay status
-    res.status(200);
+    res.status(200).json( { error: "" } );
 });
 
 // DELETE LIKE ENDPOINT
@@ -314,28 +442,55 @@ app.post('/api/deleteLike/', async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
+    
+    // Check that user and recipe exists
+    const userExists = await atLeastOne(userCol, userID);
+    const recipeExists = await atLeastOne(recipeCol, recipeID);
+
+    // If either user or recipe doesn't exist return error
+    if (!userExists || !recipeExists)
+    {
+        let errors = [];
+
+        if (!userExists)
+            errors.push("userID");
+        
+        if (!recipeExists)
+            errors.push("recipeID");
+
+        let err = "Invalid " + errors.join(', ');
+
+        res.status(500).json( { error: err } );
+        return;
+    }
 
     // Update like count for recipe
-    db.recipes.updateOne(
-        { _id: recipeID },
+    db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
         { $inc: { likes: -1 } }
     );
 
     // Remove recipe from likes array of user
-    db.users.updateOne(
-        { _id: userID },
-        { $pull: { likes: recipeID } }
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(userID) },
+        { $pull: { likes: ObjectId(recipeID) } }
     );
 
     // Okay status
-    res.status(200);
+    res.status(200).json( { error: "" } );
 });
 
-app.post('/api/test', async (req, res, next) =>
+// Given a collection name, object ID, returns 1 if the object is in the collection.
+async function atLeastOne(col, id)
 {
-    const str = req.body;
-    res.status(200).json(str);
-});
+    const db = client.db();
+
+    // 0 or 1 depending on if at least one document exists with the given id.
+    const exists = await db.collection(col)
+                           .countDocuments( { _id: ObjectId(id) },
+                                            { limit: 1 } );
+    return (exists == 1);
+}
 
 // Used when generating the code a user needs to enter to verify their account.
 function createAuthCode() {
