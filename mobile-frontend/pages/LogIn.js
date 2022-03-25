@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Linking, Keyboard, ScrollView} from 'react-native';
+import {TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import Input from '../components/Input';
