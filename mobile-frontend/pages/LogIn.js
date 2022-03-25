@@ -7,7 +7,7 @@ import Input from '../components/Input';
 
 
 export default function LogIn({navigation}) {
- const [email, setEmail] = useState('');
+ const [user, setUser] = useState('');
  const [password, setPassword] = useState('');
 
 
@@ -21,8 +21,8 @@ export default function LogIn({navigation}) {
           </View>
           <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
             <Ionicons name="md-person-outline" size={24} color="black" style= {{paddingTop: "3.5%"}} />
-            <Input placeholder= "Email" value= {email} 
-                  setValue= {setEmail} />
+            <Input placeholder= "Username" value= {user} 
+                  setValue= {setUser} />
           </View>
           <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
             <Feather name="lock" size={24} color="black" style= {{paddingTop:"3%"}}/>
@@ -30,8 +30,8 @@ export default function LogIn({navigation}) {
                   setValue= {setPassword} secure= {true}/>
           </View>
           <View className= "pt-lg">
-            <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", marginLeft:"15%", 
-            borderRadius: "10", shadowOpacity: ".2"}} onPress={doLogin.bind(this, email, password, setEmail, setPassword)}>
+            <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", 
+            borderRadius: "10", shadowOpacity: ".2", alignSelf: "center"}} onPress={doLogin.bind(this, user, password, setUser, setPassword)}>
               <Text className= "align-center" style= {{color: "white", fontSize: 16, fontWeight: "500"}}>
                 Login 
               </Text>
@@ -47,9 +47,9 @@ export default function LogIn({navigation}) {
   );
 }
 
-function doLogin(email, password, setEmail, setPassword)
+function doLogin(user, password, setUser, setPassword)
 {
-  console.warn(email + "<- email " + password + "<- password" );
-  setEmail("");
+  console.warn(user + "<- user " + password + "<- password" );
+  setUser("");
   setPassword("");
 }

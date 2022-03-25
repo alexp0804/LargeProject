@@ -7,9 +7,11 @@ import Input from '../components/Input';
 
 
 export default function SignUpScreen({navigation}) {
+ const [user, setUser] = useState('');
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
  const [confPass, setConf] = useState('');
+
 
 
   return (
@@ -21,7 +23,12 @@ export default function SignUpScreen({navigation}) {
             </Text>
           </View>
           <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
-            <Ionicons name="md-person-outline" size={24} color="black" style= {{paddingTop: "3.5%"}} />
+          <Ionicons name="md-person-outline" size={24} color="black" style= {{paddingTop: "3.5%"}} />
+            <Input placeholder= "Username" value= {user} 
+                  setValue= {setUser} />
+          </View>
+          <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
+          <Ionicons name="mail-outline" size={24} color="black" style= {{paddingTop: "3.5%"}} />
             <Input placeholder= "Your email" value= {email} 
                   setValue= {setEmail} />
           </View>
@@ -36,8 +43,8 @@ export default function SignUpScreen({navigation}) {
                   setValue= {setConf} secure= {true}/>
           </View>
           <View className= "pt-lg">
-            <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", marginLeft:"15%", 
-            borderRadius: "10", shadowOpacity: ".2"}} onPress={doSignUp.bind(this, email, password, confPass, setEmail, setPassword, setConf)}>
+            <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", alignSelf: "center", 
+            borderRadius: "10", shadowOpacity: ".2"}} onPress={doSignUp.bind(this, user, email, password, confPass, setEmail, setPassword, setConf, setUser)}>
               <Text className= "align-center" style= {{color: "white", fontSize: 16, fontWeight: "500"}}>
                 Sign Up
               </Text>
@@ -48,13 +55,11 @@ export default function SignUpScreen({navigation}) {
   );
 }
 
-function doSignUp (email, password, confirm, setEmail, setPassword, setConf)
+function doSignUp (user, email, password, confirm, setEmail, setPassword, setConf, setUser)
 {
-  if(email == "Test" && password == "test" && confirm == "test")
-  {
+  console.warn(user + "<- user " + email + "<- email " + password + "<- pass" + confirm + "<- conf")
 
-  }
-
+  setUser("");
   setPassword("");
   setEmail("");
   setConf("");
