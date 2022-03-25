@@ -5,7 +5,7 @@ const { ObjectId, CURSOR_FLAGS } = require('mongodb');
 const sendGrid = require('sendgrid');
 const PORT = process.env.PORT || 5000;
 
-const userCol= "users";
+const userCol = "users";
 const recipeCol = "recipes";
 const countryCol = "countries";
 
@@ -303,12 +303,8 @@ app.post('/api/addFavorite', async (req, res, next) =>
     {
         let errors = [];
 
-        if (!userExists)
-            errors.push("userID");
-        
-        if (!recipeExists)
-            errors.push("recipeID");
-
+        if (!userExists) errors.push("userID");
+        if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
         res.status(500).json( { error: err } );
@@ -347,12 +343,8 @@ app.post('/api/deleteFavorite/', async (req, res, next) =>
     {
         let errors = [];
 
-        if (!userExists)
-            errors.push("userID");
-        
-        if (!recipeExists)
-            errors.push("recipeID");
-
+        if (!userExists) errors.push("userID");
+        if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
         res.status(500).json( { error: err } );
@@ -391,12 +383,8 @@ app.post('/api/addLike/', async (req, res, next) =>
     {
         let errors = [];
 
-        if (!userExists)
-            errors.push("userID");
-        
-        if (!recipeExists)
-            errors.push("recipeID");
-
+        if (!userExists) errors.push("userID");
+        if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
         res.status(500).json( { error: err } );
@@ -435,12 +423,8 @@ app.post('/api/deleteLike/', async (req, res, next) =>
     {
         let errors = [];
 
-        if (!userExists)
-            errors.push("userID");
-        
-        if (!recipeExists)
-            errors.push("recipeID");
-
+        if (!userExists) errors.push("userID");
+        if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
         res.status(500).json( { error: err } );
