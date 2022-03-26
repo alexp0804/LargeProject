@@ -459,6 +459,99 @@ async function atLeastOne(col, id)
     return (exists == 1);
 }
 
+app.post('/api/getcountryrecipes', async (req, res, next) => 
+{
+	// grabbing db and storing the name of the country we receive
+	const db = client.db();
+	const country = req.body.name;
+
+	// query the db and store in an array
+	const temp = db.collection("countries").find({name:country});
+    const result = await temp.toArray()
+
+	// we didn't find any results for this country....is this even gonna be possible?
+	if (result.length < 1)
+	{
+		// return an error and 404 status
+		let ret = { error: 'Country not found' };
+		res.status(404).json(ret);
+	}
+	else
+	{
+		// We found the country! Store its recipes and return that and 200 status
+		let ret = result[0].recipes;
+        console.log(ret)
+		res.status(200).json(JSON.stringify(ret));
+	}
+});
+
+app.post('/api/searchrecipe', async (req, res, next) => 
+{
+	let searchTerm = req.body.searchTerm;
+	const db = client.db();
+    ret = []
+	const c = db.collection("recipes").find({name:searchTerm});
+    while (await c.hasNext())
+    {
+        const doc = await c.next();
+        ret.push(doc)
+        console.log(JSON.stringify(doc));
+    }
+
+	res.status(200).json(ret)
+});
+
+app.post('/api/updateuser', async (req, res, next) => 
+{
+	const { id, firstName, lastName, password, profilePic, email } = req.body;
+	const db = client.db();
+
+    // Check to see if this user even exists in the database, just in case
+    const check = await db.collection("users")
+                    .countDocuments( { _id: ObjectId(id) }, { limit: 1 });
+    if (!check)
+    {
+        // this user doesn't exist
+        res.status(404).json({error: "User does not exist"})
+        return;
+    }
+    else
+    {
+        db.collection("users").updateOne(
+            {_id:ObjectId(id) },
+            { 
+                $set: 
+                { 
+                    firstName:firstName, lastName:lastName, 
+                    password:password, profilePic:profilePic,
+                    email:email 
+                }
+            }
+        );
+        res.status(200).json({ error: 'all good!' })
+    }
+})
+
+app.post('/api/viewrecipe', async (req, res, next) => 
+{
+    const id = req.body.id;
+    const db = client.db();
+
+    const check = await db.collection("recipes")
+                    .countDocuments( { _id: ObjectId(id) }, { limit: 1 } )
+    if (!check)
+    {
+        res.status(404).json({error: 'Recipe not found'})
+    }
+    else
+    {
+        let c = await db.collection("recipes").find( {_id: ObjectId(id)} ).toArray()
+        console.log(JSON.stringify(c))
+
+        res.status(200).json(JSON.stringify(c))
+    }
+});
+
 // Used when generating the code a user needs to enter to verify their account.
 function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
