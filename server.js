@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { ObjectId } = require('mongodb')
 // const sendGrid = require('@sendgrid/mail');
 const PORT = process.env.PORT || 5000;
 
@@ -165,7 +166,7 @@ app.post('/api/createRecipe', async (req, res, next) =>
 				{ $push: { created: recipe._id }}
 			)
 
-			const results = await db.collection('countries').find({name:country}).toArray();
+			const results = db.collection('countries').find({name:country}).toArray();
 
 			// If the country already exists we just append the recipe to the recipes array.
 			if ( results.length > 0 )
@@ -357,17 +358,18 @@ app.post('/api/test', async (req, res, next) =>
     res.status(200).json(str);
 });
 
-app.post('/api/getcountry', async (req, res, next) => 
+app.post('/api/getcountryrecipes', async (req, res, next) => 
 {
 	// grabbing db and storing the name of the country we receive
 	const db = client.db();
-	const country = req.body;
+	const country = req.body.name;
 
 	// query the db and store in an array
-	let results = db.collection("countries").find({ name:country }).toArray();
+	const temp = db.collection("countries").find({name:country});
+    const result = await temp.toArray()
 
 	// we didn't find any results for this country....is this even gonna be possible?
-	if (results.length < 1)
+	if (result.length < 1)
 	{
 		// return an error and 404 status
 		let ret = { error: 'Country not found' };
@@ -376,37 +378,78 @@ app.post('/api/getcountry', async (req, res, next) =>
 	else
 	{
 		// We found the country! Store its recipes and return that and 200 status
-		let ret = results[0].recipes;
-		res.status(200).json(ret);
+		let ret = result[0].recipes;
+        console.log(ret)
+		res.status(200).json(JSON.stringify(ret));
 	}
 });
 
 app.post('/api/searchrecipe', async (req, res, next) => 
 {
-	let searchTerm = req.body;
-
+	let searchTerm = req.body.searchTerm;
 	const db = client.db();
+    ret = []
+	const c = db.collection("recipes").find({name:searchTerm});
+    while (await c.hasNext())
+    {
+        const doc = await c.next();
+        ret.push(doc)
+        console.log(JSON.stringify(doc));
+    }
 
-	let search = db.collection("recipes").find( { $text: { $search:searchTerm }}).toArray();
-	res.status(200).json(search)
+	res.status(200).json(ret)
 });
 
 app.post('/api/updateuser', async (req, res, next) => 
 {
-	const { id, firstName, lastName, password, profilePic } = req.body;
+	const { id, firstName, lastName, password, profilePic, email } = req.body;
 	const db = client.db();
 
-	db.collection("users").updateOne(
-		{_id:id },
-		{firstName:firstName},
-		{lastName:lastName},
-		{password:password},
-		{profilePic:profilePic}
-	);
-
-	res.status(200).json({ error: 'all good!' })
+    // Check to see if this user even exists in the database, just in case
+    const check = await db.collection("users")
+                    .countDocuments( { _id: ObjectId(id) }, { limit: 1 });
+    if (!check)
+    {
+        // this user doesn't exist
+        res.status(404).json({error: "User does not exist"})
+        return;
+    }
+    else
+    {
+        db.collection("users").updateOne(
+            {_id:ObjectId(id) },
+            { 
+                $set: 
+                { 
+                    firstName:firstName, lastName:lastName, 
+                    password:password, profilePic:profilePic,
+                    email:email 
+                }
+            }
+        );
+        res.status(200).json({ error: 'all good!' })
+    }
 })
 
+app.post('/api/viewrecipe', async (req, res, next) => 
+{
+    const id = req.body.id;
+    const db = client.db();
+
+    const check = await db.collection("recipes")
+                    .countDocuments( { _id: ObjectId(id) }, { limit: 1 } )
+    if (!check)
+    {
+        res.status(404).json({error: 'Recipe not found'})
+    }
+    else
+    {
+        let c = await db.collection("recipes").find( {_id: ObjectId(id)} ).toArray()
+        console.log(JSON.stringify(c))
+
+        res.status(200).json(JSON.stringify(c))
+    }
+});
 
 // Used when generating the code a user needs to enter to verify their account.
 function createAuthCode() {
