@@ -1,23 +1,22 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import {Button, TouchableOpacity, Linking} from 'react-native';
-import { ThemeProvider, SafeAreaView, Text, View, TextInput} from 'react-native-picasso';
 import SignUpScreen from './pages/SignUpScreen';
 import LogIn from './pages/LogIn';
+import Main from './pages/Main.js'
 import {NavigationContainer} from '@react-navigation/native';
-import {Header, HeaderBackground} from '@react-navigation/elements';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createDrawerNavigator} from '@react-navigation/drawer'
 
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
-function landingPage()
+function LandingPage()
 {
   return(
-    <Stack.Navigator>
-        <Stack.Screen name= "Log In" component= {LogIn} options={{headerShown: false}} />
-        <Stack.Screen name= "Sign Up" component = {SignUpScreen} options= {{title: "" , headerTransparent: true}} />
-      </Stack.Navigator>
+    <Drawer.Navigator>
+      <Drawer.Screen name= "Main" component={Main} options={{title: "Main", headerTransparent: true, headerShown: false}}/> 
+    </Drawer.Navigator>
   )
 }
 
@@ -28,6 +27,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name= "Log In" component= {LogIn} options={{headerShown: false}} />
         <Stack.Screen name= "Sign Up" component = {SignUpScreen} options= {{title: "" , headerTransparent: true}} />
+        <Stack.Screen name= "Landing" component= {LandingPage} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

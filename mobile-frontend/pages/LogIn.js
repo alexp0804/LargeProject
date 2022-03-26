@@ -3,6 +3,7 @@ import {TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import Input from '../components/Input';
+import { StackActions } from '@react-navigation/native';
 
 
 
@@ -31,7 +32,7 @@ export default function LogIn({navigation}) {
           </View>
           <View className= "pt-lg">
             <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", 
-            borderRadius: "10", shadowOpacity: ".2", alignSelf: "center"}} onPress={doLogin.bind(this, user, password, setUser, setPassword)}>
+            borderRadius: "10", shadowOpacity: ".2", alignSelf: "center"}} onPress={doLogin.bind(this, user, password, setUser, setPassword, navigation)}>
               <Text className= "align-center" style= {{color: "white", fontSize: 16, fontWeight: "500"}}>
                 Login 
               </Text>
@@ -47,9 +48,10 @@ export default function LogIn({navigation}) {
   );
 }
 
-function doLogin(user, password, setUser, setPassword)
+function doLogin(user, password, setUser, setPassword, navigation)
 {
   console.warn(user + "<- user " + password + "<- password" );
   setUser("");
   setPassword("");
+  navigation.dispatch(StackActions.replace("Landing"));
 }
