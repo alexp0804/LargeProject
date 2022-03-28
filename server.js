@@ -40,7 +40,7 @@ app.use((req, res, next) =>
 // Tested: yes
 // Login user endpoint
 app.post('/api/login', async (req, res, next) =>
-{
+{   
     // Input = username, password
     const { username, password } = req.body;
 

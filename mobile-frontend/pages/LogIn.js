@@ -14,13 +14,13 @@ export default function LogIn({navigation}) {
 
  function doLogin(user, password, setUser, setPassword, navigation)
  {
-   console.warn(user + "<- user " + password + "<- password" );
+   console.warn(user + "<- testing user " + password + "<- password" );
 
    try
    {
      let loginObj = {username: user, password: password};
      let js = JSON.stringify(loginObj);
-     fetch('https://http://172.31.17.4:5000/api/login', {
+     fetch('https://https://192.168.1.67:5000/api/login', {
        method:'POST', body:js, headers:{'Content-Type': 'application/json'}}).then(
          (response) => response.json()).then(
            (responseJson) => console.warn(responseJson)).catch(
