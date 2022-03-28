@@ -12,6 +12,32 @@ export default function LogIn({navigation}) {
  const [password, setPassword] = useState('');
 
 
+ function doLogin(user, password, setUser, setPassword, navigation)
+ {
+   console.warn(user + "<- user " + password + "<- password" );
+
+   try
+   {
+     let loginObj = {username: user, password: password};
+     let js = JSON.stringify(loginObj);
+     fetch('https://http://172.31.17.4:5000/api/login', {
+       method:'POST', body:js, headers:{'Content-Type': 'application/json'}}).then(
+         (response) => response.json()).then(
+           (responseJson) => console.warn(responseJson)).catch(
+             e => console.warn(e.toString()))
+    }
+
+    catch(e)
+    {
+      console.warn(e.toString())
+    }
+     
+   
+
+   setUser("");
+   setPassword("");
+   navigation.dispatch(StackActions.replace("Landing"));
+  }
   return (
       <SafeAreaView className="flex-1">
         <ScrollView>
@@ -45,13 +71,5 @@ export default function LogIn({navigation}) {
           </View>
         </ScrollView>
       </SafeAreaView>
-  );
-}
-
-function doLogin(user, password, setUser, setPassword, navigation)
-{
-  console.warn(user + "<- user " + password + "<- password" );
-  setUser("");
-  setPassword("");
-  navigation.dispatch(StackActions.replace("Landing"));
+    );
 }

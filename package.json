@@ -10,8 +10,11 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "cors": "^2.8.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-native-gesture-handler": "^2.3.2",
+    "react-native-reanimated": "^2.5.0",
     "react-native-safe-area-context": "^4.2.2",
     "react-native-screens": "^3.13.1",
     "react-native-svg": "^12.3.0",
@@ -19,7 +22,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "nodemon server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
