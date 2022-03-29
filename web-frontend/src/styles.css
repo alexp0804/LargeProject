@@ -1,0 +1,46 @@
+
+html,
+body {
+  height: 100%;
+  background-size: cover;
+  background-image: url("http://www.simpleimageresizer.com/_uploads/photos/4c979f2c/collin_1920x1080.jpg");
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#containerBox {
+  background: white;
+}
+
+.input-group-prepend {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  border-top: 2px solid transparent;
+}
+
+/* removes ugly border from bootstrap */
+.input-group-text {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.form-control {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  border-top: 2px solid transparent;
+}
+
+.leaflet-container {
+  width: 100vw;
+  height: 100vh; 
+  }
