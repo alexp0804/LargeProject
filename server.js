@@ -10,6 +10,7 @@ const senderEmail = 'recipes.code.verify@gmail.com';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
+// Collection names
 const userCol = "users";
 const recipeCol = "recipes";
 const countryCol = "countries";
@@ -19,11 +20,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Get port
 app.set('port', (process.env.PORT || 5000));
 
+// Base URL 
 const baseURL = "http://localhost:5000"
 
-// Connecting to our MongoDB database.
+// Connecting to the MongoDB database
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb+srv://admin:dumEPassword@cluster0.os1jz.mongodb.net/LargeProjDB?retryWrites=true&w=majority"
 const client = new MongoClient(url);
@@ -51,7 +54,7 @@ app.use((req, res, next) =>
 
 // Tested: yes
 // Login user endpoint
-app.get('/api/login', async (req, res) =>
+app.post('/api/login', async (req, res) =>
 {
     // Input = username, password
     const { username, password } = req.body;
@@ -164,7 +167,6 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
 // Create recipe endpoint
 app.post('/api/createRecipe', async (req, res) =>
 {
-
     const { name, desc, pic, country,
             text, creator, coordinates } = req.body;
 
@@ -229,7 +231,7 @@ app.post('/api/deleteRecipe', async (req, res) =>
     res.json( emptyErr );
 });
 
-// TOOD: Test this endpoint
+// TODO: Test this endpoint
 // EDIT RECIPE ENDPOINT
 app.post('/api/editRecipe', async (req, res) =>
 {
@@ -484,27 +486,15 @@ app.post('/api/deleteLike/', async (req, res, next) =>
     res.json( emptyErr );
 });
 
-// Given a collection name, object ID, returns 1 if the object is in the collection.
-async function atLeastOne(col, id)
-{
-    const db = client.db();
-
-    // 0 or 1 depending on if at least one document exists with the given id.
-    const exists = await db.collection(col)
-                           .countDocuments( { _id: ObjectId(id) },
-                                            { limit: 1 } );
-    return (exists == 1);
-}
-
-// TODO: test
-// Get recipes of a given country
-app.get('/api/getCountryRecipes', async (req, res) => 
+// Tested: yes
+// Get recipes of a given country name
+app.post('/api/getCountryRecipes', async (req, res) => 
 {
     const db = client.db();
     const country = req.body.name;
 
     // Query the db and store in an array
-    const found = await db.collection("countries").findOne( { name: country } );
+    const found = await db.collection(countryCol).findOne( { name: country } );
     
     if (found)
         res.json(found.recipes);
@@ -512,20 +502,26 @@ app.get('/api/getCountryRecipes', async (req, res) =>
         res.status(404).json( { error: "Country not found" } );
 });
 
-// TODO: test
-// Search for recipes by name given a search term
-app.get('/api/searchRecipe', async (req, res) => 
+// Tested: yes
+// Partial search for recipes by name given a search term
+app.post('/api/searchRecipe', async (req, res) => 
 {
     let searchTerm = req.body.searchTerm;
     const db = client.db();
 
-    const recipesCursor = db.collection(recipeCol).find( { name: searchTerm } );
+    // Regex to allow matches where the term is a substring of any result
+    let term = ".*" + searchTerm + ".*";
+    // "i" for insensitive search
+    const recipesCursor = await db.collection(recipeCol).find( { name:
+        { $regex: term, $options: "i" }
+    } );
+
     const ret = await recipesCursor.toArray();
 
     res.json(ret);
 });
 
-// TODO: test
+// Tested: yes
 // Updates a given user (by id) with new information
 app.post('/api/updateUser', async (req, res) => 
 {
@@ -533,7 +529,7 @@ app.post('/api/updateUser', async (req, res) =>
     const db = client.db();
 
     // Check if user exists in the database
-    if (!atLeastOne(userCol, id))
+    if (await !atLeastOne(userCol, id))
     {
         res.status(404).json( { error: "User does not exist." } )
         return;
@@ -551,18 +547,19 @@ app.post('/api/updateUser', async (req, res) =>
         }
     );
 
-    res.json( { error: "" } );
+    res.json( emptyErr );
 });
 
-// TODO: test this endpoint
-// Get a recipe document given an id
-app.get('/api/viewRecipe', async (req, res) => 
+// Tested: yes
+// Get a recipe document given an id string
+app.post('/api/viewRecipe', async (req, res) => 
 {
     const id = req.body.id;
     const db = client.db();
+    let x;
 
     // If the recipe doesn't exist return bad status
-    if (!atLeastOne(recipeCol, id))
+    if (!(await atLeastOne(recipeCol, id)))
     {
         res.status(404).json( { error: "Recipe not found" } )
         return;
@@ -578,7 +575,19 @@ function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
 
+// Given a collection name, object ID, returns 1 if the object is in the collection.
+async function atLeastOne(col, id)
+{
+    const db = client.db();
+
+    // 0 or 1 depending on if at least one document exists with the given id.
+    const exists = await db.collection(col)
+                           .countDocuments( { _id: ObjectId(id) },
+                                            { limit: 1 } );
+    return (exists == 1);
+}
+
 app.listen(PORT, () =>
 {
-    console.log('Server is listening on port' + PORT);
+    console.log('Server is listening on port ' + PORT);
 });
