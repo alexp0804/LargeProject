@@ -3,7 +3,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { ObjectId, CURSOR_FLAGS } = require('mongodb');
 const sendGrid = require('sendgrid');
+const sgMail = require('@sendgrid/mail')
 const PORT = process.env.PORT || 5000;
+const senderEmail = 'recipes.code.verify@gmail.com';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const userCol = "users";
 const recipeCol = "recipes";
@@ -14,14 +18,20 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const baseURL = "http://localhost:5000"
+
+
 // Connecting to our MongoDB database.
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb+srv://admin:dumEPassword@cluster0.os1jz.mongodb.net/LargeProjDB?retryWrites=true&w=majority"
 const client = new MongoClient(url);
 client.connect();
 
+// We send empty errors a lot.
+let emptyErr = { error: "" };
+
 // Retrieving the SendGrid API key from the environment variable.
-// const apiKey = process.env.SENDGRID_API_KEY;
+const apiKey = process.env.SENDGRID_API_KEY;
 
 app.use((req, res, next) =>
 {
@@ -60,7 +70,7 @@ app.post('/api/login', async (req, res, next) =>
     let result = await results.next();
     delete result.password;
 
-    res.status(200).json(result);
+    res.json(result);
 });
 
 // Tested: yes
@@ -69,6 +79,7 @@ app.post('/api/register', async (req, res, next) =>
 {
     const { username, password, email } = req.body;
     const db = client.db();
+    let userCode = createAuthCode();
 
     const usernameTaken = db.collection(userCol).find( { username: username } );
 
@@ -79,53 +90,78 @@ app.post('/api/register', async (req, res, next) =>
         return;
     }
 
+    let verifyLink = "hostingLink/api/verify/usercode/username".replace("hostingLink", baseURL).replace("usercode", userCode).replace("username", username);
+
+    let htmlToSend = `<html>
+                         <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
+                             <h1> Welcome! </h1>
+                             <p style="margin-bottom:30px;"> Verify your account by clicking the following link:</p>
+                             <a clicktracking="off" href="verifyLink" style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">VERIFY</a>
+                         </div>
+                         <div style="margin-top:50px;text-align: center; font-family: Arial; font-size: 13px">
+                             <p> Alternatively, paste this link into your browser.  </p>
+                             <a>verifyLink</a>
+                         </div>
+                      </html>`.replaceAll("verifyLink", verifyLink);
+
+    const msg = {
+        to: email,
+        from: senderEmail,
+        subject: 'Verify Your Account',
+        text: ' ',   // THIS CANNOT BE THE EMPTY STRING. But it can be a space.
+        html: htmlToSend
+    };
+
+    // Send auth code to given email 
+    sgMail.send(msg).catch((error) => { console.error(error); });
+
     // Add user to users collection
     let newUser = {
         username: username,
-        password: password,
+        password: password,             // TODO: Hash this
         email: email,
         profilePic: "",
         favorites: [],
         created: [],
-        likes: []
+        likes: [],
+        verified: "no",
+        auth: userCode
     };
-
+    
     db.collection(userCol).insertOne(newUser);
-    res.status(200).json( { error: "" } );
+    res.json(emptyErr);
 });
 
-// TODO: test this endpoint
 // VERIFY ENDPOINT
-app.post('/api/verify', async (req, res, next) =>
+app.get('/api/verify/:auth/:username', async (req, res) =>
 {
-    // Input  = username, password, firstName, lastName, profilePic, email.
-    const { username, password, firstName, lastName, profilePic, email } = req.body;
+    // Check the database for a username that has a matching code.
+    let [code, username] = [req.params.auth, req.params.username];
 
-    // Creating user object to insert into collection.
-    var user = {
-        username:username, password:password, firstName:firstName,
-        lastName:lastName, profilePic:profilePic, email:email
-    };
+    // The code is stored as integer in the collection
+    code = parseInt(code);
 
     const db = client.db();
 
-    db.collection(userCol).insertOne(user, function(err, res) {
-        if (err)
-        {
-            let ret = { error:'Error while registering user.' };
-            res.status(400).json(ret);
-        }
-        else
-        {
-            let ret = { error:'' };
-            res.status(200).json(ret);
-        }
-    });
+    // Check collection for a document with username and auth matching
+    const found = await db.collection(userCol)
+                          .countDocuments( { username: username, auth: code },
+                                           { limit: 1 } );
+
+    // If document found redirect user to landing page and mark the document as verified
+    if (found)
+        db.collection(userCol).updateOne( { username: username, auth: code },
+                                          { $set: { verified: "yes" } } );
+    else 
+        res.status(500).json( { error: "ID/User information invalid." } );
+
+    res.json(emptyErr);
 });
 
 // Tested: yes
 // Create recipe endpoint
-app.post('/api/createRecipe', async (req, res, next) => {
+app.post('/api/createRecipe', async (req, res, next) =>
+{
 
     const { name, desc, pic, country,
             text, creator, coordinates } = req.body;
@@ -156,7 +192,6 @@ app.post('/api/createRecipe', async (req, res, next) => {
     // Add recipe to database and get the _id
     let recipeID = await db.collection(recipeCol).insertOne(recipe);
     recipeID = recipeID.insertedId;
-    console.log(recipeID);
 
     // Add recipe to country.recipes
     db.collection(countryCol).updateOne(
@@ -164,7 +199,7 @@ app.post('/api/createRecipe', async (req, res, next) => {
         { $push: { recipes: recipeID}}
     );
 
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // Tested: yes
@@ -189,7 +224,7 @@ app.post('/api/deleteRecipe', async (req, res, next) =>
 	);
 
     // Okay status
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // TOOD: Test this endpoint
@@ -209,7 +244,7 @@ app.post('/api/editRecipe', async (req, res, next) =>
     );
 
     // Okay status
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // Tested: yes
@@ -246,7 +281,7 @@ app.post('/api/getFavorites', async (req, res, next) =>
         }
     }
 
-    res.status(200).json(favs);
+    res.json(favs);
 });
 
 // Tested: yes
@@ -283,7 +318,7 @@ app.post('/api/getLikes', async (req, res, next) =>
         }
     }
 
-    res.status(200).json(likes);
+    res.json(likes);
 });
 
 // Tested: yes
@@ -324,7 +359,7 @@ app.post('/api/addFavorite', async (req, res, next) =>
     );
 
     // Okay status
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // Tested: yes
@@ -364,7 +399,7 @@ app.post('/api/deleteFavorite/', async (req, res, next) =>
     );
 
     // Okay status
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // Tested: yes
@@ -404,7 +439,7 @@ app.post('/api/addLike/', async (req, res, next) =>
     );
 
     // Okay status
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // Tested: yes
@@ -444,7 +479,7 @@ app.post('/api/deleteLike/', async (req, res, next) =>
     );
 
     // Okay status
-    res.status(200).json( { error: "" } );
+    res.json( emptyErr );
 });
 
 // Given a collection name, object ID, returns 1 if the object is in the collection.
