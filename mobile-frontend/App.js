@@ -8,6 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer'
 
 
+
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -15,7 +16,7 @@ function LandingPage()
 {
   return(
     <Drawer.Navigator>
-      <Drawer.Screen name= "Main" component={Main} options={{title: "Main", headerTransparent: true, headerShown: false}}/> 
+      <Drawer.Screen name= "Main" component={Main} options={{title: "Main"}}/> 
     </Drawer.Navigator>
   )
 }

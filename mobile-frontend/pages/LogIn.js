@@ -4,6 +4,7 @@ import {SafeAreaView, Text, View} from 'react-native-picasso';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import Input from '../components/Input';
 import { StackActions } from '@react-navigation/native';
+//import { response } from 'express';
 
 
 
@@ -12,32 +13,6 @@ export default function LogIn({navigation}) {
  const [password, setPassword] = useState('');
 
 
- function doLogin(user, password, setUser, setPassword, navigation)
- {
-   console.warn(user + "<- testing user " + password + "<- password" );
-
-   try
-   {
-     let loginObj = {username: user, password: password};
-     let js = JSON.stringify(loginObj);
-     fetch('https://https://192.168.1.67:5000/api/login', {
-       method:'POST', body:js, headers:{'Content-Type': 'application/json'}}).then(
-         (response) => response.json()).then(
-           (responseJson) => console.warn(responseJson)).catch(
-             e => console.warn(e.toString()))
-    }
-
-    catch(e)
-    {
-      console.warn(e.toString())
-    }
-     
-   
-
-   setUser("");
-   setPassword("");
-   navigation.dispatch(StackActions.replace("Landing"));
-  }
   return (
       <SafeAreaView className="flex-1">
         <ScrollView>
@@ -73,3 +48,29 @@ export default function LogIn({navigation}) {
       </SafeAreaView>
     );
 }
+
+export async function doLogin(user, password, setUser, setPassword, navigation)
+ {
+   console.warn(user + "<- testing " + password + "<- password" );
+
+   try
+   {
+     let loginObj = {username: user, password: password};
+     let js = JSON.stringify(loginObj);
+     let response = fetch('https://localhost:5000/api/login', {
+                method:'POST', body:js, headers:{'Content-Type': 'application/json'}})
+     var res = JSON.parse(await response.text())
+     console.warn(res);
+    }
+
+    catch(e)
+    {
+      console.warn(e.toString())
+    }
+     
+   
+
+   setUser("");
+   setPassword("");
+   navigation.dispatch(StackActions.replace("Landing"));
+  }

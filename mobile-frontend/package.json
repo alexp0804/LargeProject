@@ -23,11 +23,13 @@
     "react-native": "0.64.3",
     "react-native-bootstrap-styles": "^4.5.0-r",
     "react-native-gesture-handler": "~2.1.0",
+    "react-native-leaflet-view": "^0.1.2",
     "react-native-picasso": "^1.1.12",
     "react-native-reanimated": "~2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-web": "0.17.1",
+    "react-native-webview": "^11.18.0",
     "reanimated": "^0.0.1-alpha"
   },
   "devDependencies": {
