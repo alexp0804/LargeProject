@@ -51,7 +51,7 @@ app.use((req, res, next) =>
 
 // Tested: yes
 // Login user endpoint
-app.post('/api/login', async (req, res, next) =>
+app.get('/api/login', async (req, res) =>
 {
     // Input = username, password
     const { username, password } = req.body;
@@ -77,7 +77,7 @@ app.post('/api/login', async (req, res, next) =>
 
 // Tested: yes
 // Register user endpoint
-app.post('/api/register', async (req, res, next) => 
+app.post('/api/register', async (req, res) => 
 {
     const { username, password, email } = req.body;
     const db = client.db();
@@ -162,7 +162,7 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
 
 // Tested: yes
 // Create recipe endpoint
-app.post('/api/createRecipe', async (req, res, next) =>
+app.post('/api/createRecipe', async (req, res) =>
 {
 
     const { name, desc, pic, country,
@@ -206,7 +206,7 @@ app.post('/api/createRecipe', async (req, res, next) =>
 
 // Tested: yes
 // Delete recipe endpoint
-app.post('/api/deleteRecipe', async (req, res, next) =>
+app.post('/api/deleteRecipe', async (req, res) =>
 {
     // Input = recipeID
     const { recipeID } = req.body;
@@ -219,11 +219,11 @@ app.post('/api/deleteRecipe', async (req, res, next) =>
     // Delete recipe from recipes collection.
     db.collection(recipeCol).deleteOne( { _id: ObjectId(recipeID) } );
 
-	// Removing recipe from the country's list of recipes.
-	db.collection(countryCol).updateOne(
-		{ name: country },
-		{ $pull: { recipes: ObjectId(recipeID) } }
-	);
+    // Removing recipe from the country's list of recipes.
+    db.collection(countryCol).updateOne(
+        { name: country },
+        { $pull: { recipes: ObjectId(recipeID) } }
+    );
 
     // Okay status
     res.json( emptyErr );
@@ -231,7 +231,7 @@ app.post('/api/deleteRecipe', async (req, res, next) =>
 
 // TOOD: Test this endpoint
 // EDIT RECIPE ENDPOINT
-app.post('/api/editRecipe', async (req, res, next) =>
+app.post('/api/editRecipe', async (req, res) =>
 {
     // Input = recipe name, description, picture link, text, and Recipe ID.
     const { name, description, picLink, text, recipeID } = req.body;
@@ -240,9 +240,9 @@ app.post('/api/editRecipe', async (req, res, next) =>
     // Update recipe with new information.
     db.collection(recipeCol).updateOne(
         { _id: recipeID },
-		{
-			$set: { name:name, desc:description, picURL:picLink, recipeText:text }
-		}
+        {
+            $set: { name:name, desc:description, picURL:picLink, recipeText:text }
+        }
     );
 
     // Okay status
@@ -251,7 +251,7 @@ app.post('/api/editRecipe', async (req, res, next) =>
 
 // Tested: yes
 // Get favorited recipes of user
-app.post('/api/getFavorites', async (req, res, next) =>
+app.get('/api/getFavorites', async (req, res) =>
 {
     const { userID } = req.body;
     const db = client.db();
@@ -288,7 +288,7 @@ app.post('/api/getFavorites', async (req, res, next) =>
 
 // Tested: yes
 // Get liked recipes of user
-app.post('/api/getLikes', async (req, res, next) =>
+app.get('/api/getLikes', async (req, res) =>
 {
     const { userID } = req.body;
     const db = client.db();
@@ -325,7 +325,7 @@ app.post('/api/getLikes', async (req, res, next) =>
 
 // Tested: yes
 // Add favorite endpoint
-app.post('/api/addFavorite', async (req, res, next) =>
+app.post('/api/addFavorite', async (req, res) =>
 {
     // Input  = User ID, Recipe ID
     const { userID, recipeID } = req.body;
@@ -496,97 +496,81 @@ async function atLeastOne(col, id)
     return (exists == 1);
 }
 
-app.post('/api/getcountryrecipes', async (req, res, next) => 
+// TODO: test
+// Get recipes of a given country
+app.get('/api/getCountryRecipes', async (req, res) => 
 {
-	// grabbing db and storing the name of the country we receive
-	const db = client.db();
-	const country = req.body.name;
+    const db = client.db();
+    const country = req.body.name;
 
-	// query the db and store in an array
-	const temp = db.collection("countries").find({name:country});
-    const result = await temp.toArray()
-
-	// we didn't find any results for this country....is this even gonna be possible?
-	if (result.length < 1)
-	{
-		// return an error and 404 status
-		let ret = { error: 'Country not found' };
-		res.status(404).json(ret);
-	}
-	else
-	{
-		// We found the country! Store its recipes and return that and 200 status
-		let ret = result[0].recipes;
-        console.log(ret)
-		res.status(200).json(JSON.stringify(ret));
-	}
+    // Query the db and store in an array
+    const found = await db.collection("countries").findOne( { name: country } );
+    
+    if (found)
+        res.json(found.recipes);
+    else
+        res.status(404).json( { error: "Country not found" } );
 });
 
-app.post('/api/searchrecipe', async (req, res, next) => 
+// TODO: test
+// Search for recipes by name given a search term
+app.get('/api/searchRecipe', async (req, res) => 
 {
-	let searchTerm = req.body.searchTerm;
-	const db = client.db();
-    ret = []
-	const c = db.collection("recipes").find({name:searchTerm});
-    while (await c.hasNext())
-    {
-        const doc = await c.next();
-        ret.push(doc)
-        console.log(JSON.stringify(doc));
-    }
+    let searchTerm = req.body.searchTerm;
+    const db = client.db();
 
-	res.status(200).json(ret)
+    const recipesCursor = db.collection(recipeCol).find( { name: searchTerm } );
+    const ret = await recipesCursor.toArray();
+
+    res.json(ret);
 });
 
-app.post('/api/updateuser', async (req, res, next) => 
+// TODO: test
+// Updates a given user (by id) with new information
+app.post('/api/updateUser', async (req, res) => 
 {
-	const { id, firstName, lastName, password, profilePic, email } = req.body;
-	const db = client.db();
+    const { id, password, profilePic, email } = req.body;
+    const db = client.db();
 
-    // Check to see if this user even exists in the database, just in case
-    const check = await db.collection("users")
-                    .countDocuments( { _id: ObjectId(id) }, { limit: 1 });
-    if (!check)
+    // Check if user exists in the database
+    if (!atLeastOne(userCol, id))
     {
-        // this user doesn't exist
-        res.status(404).json({error: "User does not exist"})
+        res.status(404).json( { error: "User does not exist." } )
         return;
     }
-    else
-    {
-        db.collection("users").updateOne(
-            {_id:ObjectId(id) },
-            { 
-                $set: 
-                { 
-                    firstName:firstName, lastName:lastName, 
-                    password:password, profilePic:profilePic,
-                    email:email 
-                }
-            }
-        );
-        res.status(200).json({ error: 'all good!' })
-    }
-})
 
-app.post('/api/viewrecipe', async (req, res, next) => 
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(id) },
+        { 
+            $set: 
+            { 
+                password: password,             // TODO hash this
+                profilePic: profilePic,
+                email: email 
+            }
+        }
+    );
+
+    res.json( { error: "" } );
+});
+
+// TODO: test this endpoint
+// Get a recipe document given an id
+app.get('/api/viewRecipe', async (req, res) => 
 {
     const id = req.body.id;
     const db = client.db();
 
-    const check = await db.collection("recipes")
-                    .countDocuments( { _id: ObjectId(id) }, { limit: 1 } )
-    if (!check)
+    // If the recipe doesn't exist return bad status
+    if (!atLeastOne(recipeCol, id))
     {
-        res.status(404).json({error: 'Recipe not found'})
+        res.status(404).json( { error: "Recipe not found" } )
+        return;
     }
-    else
-    {
-        let c = await db.collection("recipes").find( {_id: ObjectId(id)} ).toArray()
-        console.log(JSON.stringify(c))
 
-        res.status(200).json(JSON.stringify(c))
-    }
+    // Find the document and return
+    let recipeDoc = await db.collection(recipeCol).findOne( { _id: ObjectId(id) } );
+    res.json(recipeDoc);
 });
 
 // Used when generating the code a user needs to enter to verify their account.
