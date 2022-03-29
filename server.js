@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
 const { ObjectId, CURSOR_FLAGS } = require('mongodb');
 const sendGrid = require('sendgrid');
 const sgMail = require('@sendgrid/mail')
-const PORT = process.env.PORT || 5000;
 const senderEmail = 'recipes.code.verify@gmail.com';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -18,8 +19,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const baseURL = "http://localhost:5000"
+app.set('port', (process.env.PORT || 5000));
 
+const baseURL = "http://localhost:5000"
 
 // Connecting to our MongoDB database.
 const MongoClient = require('mongodb').MongoClient;
@@ -592,4 +594,7 @@ function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
 
-app.listen(5000); // Start Node + Express server on port 5000.
+app.listen(PORT, () =>
+{
+    console.log('Server is listening on port' + PORT);
+});
