@@ -2,18 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const PORT = process.env.PORT || 5000;
-const { ObjectId, CURSOR_FLAGS } = require('mongodb');
 const sendGrid = require('sendgrid');
 const sgMail = require('@sendgrid/mail')
+const { ObjectId, CURSOR_FLAGS } = require('mongodb');
+
+const PORT = process.env.PORT || 5000;
+
+// TODO: set this to env var
 const senderEmail = 'recipes.code.verify@gmail.com';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
-// Collection names
-const userCol = "users";
-const recipeCol = "recipes";
-const countryCol = "countries";
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Setting up Express and cors.
 const app = express();
@@ -24,19 +22,23 @@ app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 5000));
 
 // Base URL 
-const baseURL = "http://localhost:5000"
+const baseURL = "http://localhost:5000";
 
 // Connecting to the MongoDB database
 const MongoClient = require('mongodb').MongoClient;
-const url = "mongodb+srv://admin:dumEPassword@cluster0.os1jz.mongodb.net/LargeProjDB?retryWrites=true&w=majority"
+
+// TODO: set this to an env var
+const url = "mongodb+srv://admin:dumEPassword@cluster0.os1jz.mongodb.net/LargeProjDB?retryWrites=true&w=majority";
 const client = new MongoClient(url);
 client.connect();
 
+// Collection names
+const userCol = "users";
+const recipeCol = "recipes";
+const countryCol = "countries";
+
 // We send empty errors a lot.
 let emptyErr = { error: "" };
-
-// Retrieving the SendGrid API key from the environment variable.
-const apiKey = process.env.SENDGRID_API_KEY;
 
 app.use((req, res, next) =>
 {
