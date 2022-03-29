@@ -137,7 +137,9 @@ app.post('/api/register', async (req, res) =>
     res.json(emptyErr);
 });
 
-// VERIFY ENDPOINT
+// Tested: yes
+// Given an authcode and username, sets the verified field in the user document to "yes"
+// If authcode matches username in the users collection.
 app.get('/api/verify/:auth/:username', async (req, res) =>
 {
     // Check the database for a username that has a matching code.
@@ -231,19 +233,19 @@ app.post('/api/deleteRecipe', async (req, res) =>
     res.json( emptyErr );
 });
 
-// TODO: Test this endpoint
+// Tested: yes
 // EDIT RECIPE ENDPOINT
 app.post('/api/editRecipe', async (req, res) =>
 {
-    // Input = recipe name, description, picture link, text, and Recipe ID.
-    const { name, description, picLink, text, recipeID } = req.body;
+    // Input = name, description, picture link, text, and Recipe ID (string).
+    const { name, desc, pic, text, recipeID } = req.body;
     const db = client.db();
 
     // Update recipe with new information.
-    db.collection(recipeCol).updateOne(
-        { _id: recipeID },
+    await db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
         {
-            $set: { name:name, desc:description, picURL:picLink, recipeText:text }
+            $set: { name: name, desc: desc, picURL: pic, recipeText: text }
         }
     );
 
