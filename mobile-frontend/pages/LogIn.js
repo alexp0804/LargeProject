@@ -13,6 +13,35 @@ export default function LogIn({navigation}) {
  const [password, setPassword] = useState('');
 
 
+<<<<<<< HEAD
+=======
+ function doLogin(user, password, setUser, setPassword, navigation)
+ {
+   console.warn(user + "<- testing user " + password + "<- password" );
+
+   try
+   {
+     let loginObj = {username: user, password: password};
+     let js = JSON.stringify(loginObj);
+     fetch('https://192.168.1.67:5000/api/login', {
+       method:'POST', body:js, headers:{'Content-Type': 'application/json'}}).then(
+         (response) => response.json()).then(
+           (responseJson) => console.warn(responseJson)).catch(
+             e => console.warn(e.toString()))
+    }
+
+    catch(e)
+    {
+      console.warn(e.toString())
+    }
+     
+   
+
+   setUser("");
+   setPassword("");
+   navigation.dispatch(StackActions.replace("Landing"));
+  }
+>>>>>>> f638f46ccdd444394d64ee669eb7e8f5d27d6630
   return (
       <SafeAreaView className="flex-1">
         <ScrollView>
@@ -33,7 +62,7 @@ export default function LogIn({navigation}) {
           </View>
           <View className= "pt-lg">
             <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", 
-            borderRadius: "10", shadowOpacity: ".2", alignSelf: "center"}} onPress={doLogin.bind(this, user, password, setUser, setPassword, navigation)}>
+            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center"}} onPress={doLogin.bind(this, user, password, setUser, setPassword, navigation)}>
               <Text className= "align-center" style= {{color: "white", fontSize: 16, fontWeight: "500"}}>
                 Login 
               </Text>

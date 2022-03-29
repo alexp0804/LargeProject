@@ -44,7 +44,7 @@ export default function SignUpScreen({navigation}) {
           </View>
           <View className= "pt-lg">
             <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", alignSelf: "center", 
-            borderRadius: "10", shadowOpacity: ".2"}} onPress={doSignUp.bind(this, user, email, password, confPass, setEmail, setPassword, setConf, setUser)}>
+            borderRadius: 10, shadowOpacity: ".2"}} onPress={doSignUp.bind(this, user, email, password, confPass, setEmail, setPassword, setConf, setUser)}>
               <Text className= "align-center" style= {{color: "white", fontSize: 16, fontWeight: "500"}}>
                 Sign Up
               </Text>
