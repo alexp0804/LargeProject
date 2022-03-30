@@ -75,7 +75,7 @@ app.post('/api/login', async (req, res, next) =>
 
 // Tested: yes
 // Register user endpoint
-app.post('/api/register', async (req, res, next) => 
+app.post('/api/register', async (req, res, next) =>
 {
     const { username, password, email } = req.body;
     const db = client.db();
@@ -112,7 +112,7 @@ app.post('/api/register', async (req, res, next) =>
         html: htmlToSend
     };
 
-    // Send auth code to given email 
+    // Send auth code to given email
     sgMail.send(msg).catch((error) => { console.error(error); });
 
     // Add user to users collection
@@ -127,7 +127,7 @@ app.post('/api/register', async (req, res, next) =>
         verified: "no",
         auth: userCode
     };
-    
+
     db.collection(userCol).insertOne(newUser);
     res.json(emptyErr);
 });
@@ -153,7 +153,7 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
     if (found)
         db.collection(userCol).updateOne( { username: username, auth: code },
                                           { $set: { verified: "yes" } } );
-    else 
+    else
         res.status(500).json( { error: "ID/User information invalid." } );
 
     res.json(emptyErr);
@@ -183,7 +183,7 @@ app.post('/api/createRecipe', async (req, res, next) =>
 
     // Check if the country is in the database
     let countryExists = await db.collection(countryCol)
-                                .countDocuments( { name: country }, 
+                                .countDocuments( { name: country },
                                                  { limit: 1 });
 
     // Put country in database if it doesn't exist
@@ -365,7 +365,7 @@ app.post('/api/addFavorite', async (req, res, next) =>
 
 // Tested: yes
 // Delete favorite endpoint
-app.post('/api/deleteFavorite/', async (req, res, next) =>
+app.post('/api/deleteFavorite', async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
@@ -405,7 +405,7 @@ app.post('/api/deleteFavorite/', async (req, res, next) =>
 
 // Tested: yes
 // Add like endpoint
-app.post('/api/addLike/', async (req, res, next) =>
+app.post('/api/addLike', async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
@@ -444,12 +444,12 @@ app.post('/api/addLike/', async (req, res, next) =>
 });
 
 // Tested: yes
-// Delete like endpoint 
-app.post('/api/deleteLike/', async (req, res, next) =>
+// Delete like endpoint
+app.post('/api/deleteLike', async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
-    
+
     // Check that user and recipe exists
     const userExists = await atLeastOne(userCol, userID);
     const recipeExists = await atLeastOne(recipeCol, recipeID);
@@ -495,7 +495,7 @@ async function atLeastOne(col, id)
     return (exists == 1);
 }
 
-app.post('/api/getcountryrecipes', async (req, res, next) => 
+app.post('/api/getcountryrecipes', async (req, res, next) =>
 {
 	// grabbing db and storing the name of the country we receive
 	const db = client.db();
@@ -521,7 +521,7 @@ app.post('/api/getcountryrecipes', async (req, res, next) =>
 	}
 });
 
-app.post('/api/searchrecipe', async (req, res, next) => 
+app.post('/api/searchrecipe', async (req, res, next) =>
 {
 	let searchTerm = req.body.searchTerm;
 	const db = client.db();
@@ -537,9 +537,9 @@ app.post('/api/searchrecipe', async (req, res, next) =>
 	res.status(200).json(ret)
 });
 
-app.post('/api/updateuser', async (req, res, next) => 
+app.post('/api/updateuser', async (req, res, next) =>
 {
-	const { id, firstName, lastName, password, profilePic, email } = req.body;
+	const { id, password, profilePic, email } = req.body;
 	const db = client.db();
 
     // Check to see if this user even exists in the database, just in case
@@ -555,12 +555,10 @@ app.post('/api/updateuser', async (req, res, next) =>
     {
         db.collection("users").updateOne(
             {_id:ObjectId(id) },
-            { 
-                $set: 
-                { 
-                    firstName:firstName, lastName:lastName, 
-                    password:password, profilePic:profilePic,
-                    email:email 
+            {
+                $set:
+                {
+                    password:password, profilePic:profilePic, email:email
                 }
             }
         );
@@ -568,7 +566,7 @@ app.post('/api/updateuser', async (req, res, next) =>
     }
 })
 
-app.post('/api/viewrecipe', async (req, res, next) => 
+app.post('/api/viewrecipe', async (req, res, next) =>
 {
     const id = req.body.id;
     const db = client.db();
