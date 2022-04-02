@@ -39,7 +39,7 @@ export default function Register() {
     try 
     {
       // Do not await fetches anymore
-      const response =  fetch(buildPath("/api/register"), {
+      const response = await fetch(buildPath("api/register"), {
         method: "POST",
         body: jsonPayLoad,
         headers: { "Content-Type": "application/json" }
