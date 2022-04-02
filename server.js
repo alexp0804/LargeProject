@@ -28,7 +28,8 @@ const baseURL = "http://localhost:5000";
 const MongoClient = require('mongodb').MongoClient;
 
 // TODO: set this to an env var
-const url = "mongodb+srv://admin:dumEPassword@cluster0.os1jz.mongodb.net/LargeProjDB?retryWrites=true&w=majority";
+require('dotenv').config();
+const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
@@ -595,4 +596,13 @@ app.listen(PORT, () =>
 {
     console.log('Server is listening on port ' + PORT);
 });
+
+if (process.env.NODE_ENV === 'production')
+{
+    app.use(express.static('frontend/build'));
+    app.get('*', (req, res) =>
+    {
+        res.sendFile(path.resolve(dirname, 'frontend', 'build', 'index.html'));
+    });
+}
 

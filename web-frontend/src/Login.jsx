@@ -3,6 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 
+// This function is necessary to deploy both on heroku and localhost.
+// You must use this to get the buildPath of any endpoint you call
+const app_name = 'largeproj';
+function buildPath(route)
+{
+    if (process.env.NODE_ENV === 'production')
+        return 'https://' + app_name + '.herokuapp.com/' + route;
+    else
+        return 'http://localhost:5000/' + route;
+}
+
 export default function App() {
   // react hook (useState)
   // [variable that changes, function that changes it]
@@ -41,6 +52,7 @@ export default function App() {
             style={{
               height: "200px",
               width: "200px",
+              objectFit: "cover",
               borderRadius: "100%",
               border: "1px solid rgba(0,0,0, 0.55)"
             }}
