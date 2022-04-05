@@ -1,13 +1,30 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, ScrollView, ImageBackground} from 'react-native';
-import {SafeAreaView, Text, View} from 'react-native-picasso';
-import { Feather, Ionicons } from '@expo/vector-icons';
 import { LatLng, LeafletView } from 'react-native-leaflet-view';
 
-export default function Main (props)
-{
+const icon = require("../components/icon.svg")
+const countries = require("../components/Countries.json")
+
+export default function Main ({route, navigation})
+{   
+    console.warn(JSON.stringify(route))
+    let markerArray = [] 
+
+    function loadMarkers()
+    {
+
+        countries.forEach((country) => {
+           let tmp = {
+                id: country.id,
+                position: {lat: [country.latitude],lng: [country.longitude]},
+                icon: "icon no worky 😔"
+            }
+
+            markerArray.push(tmp)
+        })
+    }
     return(
-        <LeafletView mapCenterPosition={{lat:27.964157, lng: -82.452606}}>
-        </LeafletView>
+        <LeafletView mapCenterPosition={{lat:27.964157, lng: -82.452606}}
+            onLoadStart={loadMarkers} mapMarkers={markerArray}
+        />
     )
 }

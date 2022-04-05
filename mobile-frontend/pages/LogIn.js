@@ -14,7 +14,6 @@ export default function LogIn({navigation}) {
  const [password, setPassword] = useState('');
  const [error, setError] = useState('');
 
-
  async function doLogin(user, password, setUser, setPassword, navigation)
  {
    console.warn(user + "<- testing user " + password + "<- password" );
@@ -23,10 +22,11 @@ export default function LogIn({navigation}) {
    {
      let loginObj = {username: user, password: password};
      let js = JSON.stringify(loginObj);
-     console.warn(url);
      let response = await fetch(url + 'login', {method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
      let txt = await response.text();
+     console.warn(txt)
      let res = JSON.parse(txt);
+     console.warn(res)
      if (res.error != null)
      {
        console.warn(res.error)
@@ -36,7 +36,13 @@ export default function LogIn({navigation}) {
      }
      else
      {
-       navigation.dispatch(StackActions.replace("Landing"));
+       console.warn(res._id)
+       navigation.dispatch(StackActions.replace("Landing", {
+         screen: 'Main',
+         params: {id:res._id,
+                  username:res.username
+                 }
+       }));
      }
 
     }

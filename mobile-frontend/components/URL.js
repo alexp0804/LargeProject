@@ -1,4 +1,4 @@
-const url = 'https://largeproj.herokuapp.com/api/';
+const url = 'https://reci-pin.herokuapp.com/api/';
 
 export default function URL ()
 {
