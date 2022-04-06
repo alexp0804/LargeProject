@@ -6,6 +6,7 @@ web-frontend/node_modules
 mobile-frontend/node_modules
 /.pnp
 .pnp.js
+mobile-frontend/.expo
 
 # testing
 /coverage

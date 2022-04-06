@@ -38,7 +38,7 @@ export default function LogIn({navigation}) {
      {
        console.warn(res._id)
        navigation.dispatch(StackActions.replace("Landing", {
-         screen: 'Main',
+         screen: 'Profile',
          params: {id:res._id,
                   username:res.username
                  }
