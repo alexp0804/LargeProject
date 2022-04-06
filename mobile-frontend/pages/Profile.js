@@ -1,8 +1,31 @@
+import React from 'react';
 import {TouchableOpacity, ScrollView, Image, StyleSheet} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Profile ({route, navigation})
 {
+    const {id, username} = route.params;
+    console.warn(id + " " + username)
+    function goSettings()
+    {
+        navigation.navigate("ProfileOps", {
+            screen: "Settings",
+            params: {id:route.params.id, username: route.params.username}
+        })
+    }
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+                <TouchableOpacity onPress={() => goSettings()}>
+                  <Ionicons name="settings" size={24} color="black"/>
+                </TouchableOpacity>
+          ),
+        });
+      }, [navigation]);
+
+
     return(
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>

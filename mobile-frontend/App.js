@@ -8,11 +8,21 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Verify from './pages/Verify';
+import Settings from './pages/Settings';
 
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+function ProfileOptions()
+{
+  return(
+      <Stack.Navigator>
+        <Stack.Screen name= "Settings" component={Settings} options={{presentation: "modal", headerShown:false}}/>
+      </Stack.Navigator>
+  ) 
+}
 
 function LandingPage()
 {
@@ -33,6 +43,7 @@ export default function App() {
         <Stack.Screen name= "Sign Up" component = {SignUpScreen} options= {{title: "" , headerTransparent: true}} />
         <Stack.Screen name= "Landing" component= {LandingPage} options={{headerShown: false}}/>
         <Stack.Screen name= "Verify" component= {Verify} options= {{headerShown: false}}/>
+        <Stack.Screen name= "ProfileOps" component= {ProfileOptions}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
