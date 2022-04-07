@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Modal, SafeAreaView, Text,View, StyleSheet} from 'react-native'
+import {TouchableOpacity, Modal, SafeAreaView, Text,View, StyleSheet, TextInput, ScrollView} from 'react-native'
 import { LatLng, LeafletView } from 'react-native-leaflet-view';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -14,8 +14,13 @@ export default function Main ({route, navigation})
    const [filterFavorites, setFilterFavorites] = useState(false)
    const [filterMine, setFilterMine] = useState(false)
    const [modalVisible, setModalVisible] = useState(false);
+   const [addRecipeVis, setAddRecipeVis] = useState(false)
+   const [markerArray, setMarkerArray] = useState([])
    const [blur, setBlur] = useState(1);
    const [overAmt, setOverAmt] = useState(-1)
+   const [desc, setDesc] = useState("")
+   const [name, setName] = useState("")
+   const [directions, setDirections] = useState("")
 
    function mapSettings()
    {
@@ -28,16 +33,24 @@ export default function Main ({route, navigation})
 
    function addRecipe()
    {
-        console.warn(route.params);
+        setAddRecipeVis(true)
+   }
+
+   function closeRecipe()
+   {
+       console.warn(desc)
+       console.warn(name)
+       console.warn(directions)
+       setAddRecipeVis(false)
    }
 
    function closeModal()
    {
        setModalVisible(false);
-       setOverAmt(-1)
-       for (let i = 5; i >= 0; i--) {
+       for (let i = 5; i > 0; i--) {
         setBlur(i * 10);
-    }
+        }
+    setBlur(1)
     setOverAmt(-1)
    }
 
@@ -59,11 +72,10 @@ export default function Main ({route, navigation})
       }, [navigation]);
 
     console.warn(JSON.stringify(route))
-    let markerArray = [] 
 
     function loadMarkers()
     {
-
+        let tempArray = [];
         countries.forEach((country) => {
            let tmp = {
                 id: country.id,
@@ -71,14 +83,10 @@ export default function Main ({route, navigation})
                 icon: "icon no worky 😔"
             }
 
-            markerArray.push(tmp)
+            tempArray.push(tmp);            
         })
+        setMarkerArray(tempArray);
     }
-    const handleCheckboxPress = () => {
-        setChecked(prev => {
-          return !prev
-        })
-      }
     
     return(
        <SafeAreaView style={{height:"150%"}}> 
@@ -119,6 +127,22 @@ export default function Main ({route, navigation})
                         checkedColor="green"
                     />
                 </View>
+            </Modal>
+            <Modal animationType="slide"
+                transparent={false}
+                visible={addRecipeVis}
+            >
+                <ScrollView style={{width:"100%", height:"95%", marginTop:"10%"}}>
+                    <TouchableOpacity onPress={closeRecipe}>
+                       <Feather name="x" size={28} color="black"/>
+                    </TouchableOpacity>
+                    <Text style={{textAlign:"center"}}>
+                        Add Recipe
+                    </Text>
+                    <TextInput placeholder='Enter recipe name' value={name} onChangeText={setName} style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholder='Enter description' value={desc} onChangeText= {setDesc}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholder='Enter directions'  value={directions} onChangeText={setDirections}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                </ScrollView>
             </Modal>
         </SafeAreaView>
         
