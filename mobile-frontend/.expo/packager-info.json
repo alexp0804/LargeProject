@@ -1,10 +1,1 @@
-{
-  "expoServerPort": 19000,
-  "packagerPort": 19000,
-  "packagerPid": null,
-  "expoServerNgrokUrl": "https://aj-icq.anonymous.mobile-frontend.exp.direct",
-  "packagerNgrokUrl": "https://aj-icq.anonymous.mobile-frontend.exp.direct",
-  "ngrokPid": 14493,
-  "webpackServerPort": null,
-  "devToolsPort": 19002
-}
+{}

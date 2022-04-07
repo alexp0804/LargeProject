@@ -8,12 +8,20 @@ export default function Profile ({route, navigation})
     const {id, username} = route.params;
     console.warn(id + " " + username)
 
+<<<<<<< HEAD
     
 
 
     return(
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
+=======
+    return(
+        <SafeAreaView>
+            <ScrollView style={{width:"100%", height:"100%"}}>
+
+                {/* Profile Information (picture, username) */}
+>>>>>>> 6b094c8cbfde393100d36920b7b88905b904170e
                 <View>
                     <Image
                         style={{width:200, height:200, borderRadius:1000000, alignSelf:"center", marginTop: "15%"}}
@@ -48,11 +56,6 @@ export default function Profile ({route, navigation})
                             </Text>
                         </TouchableOpacity>
                     </View>
-
-                    {/* Secondary Buttons (Logout, Settings)*/}
-                    <View >
-
-                    </View>
                 </View>
                 <View style= {{marginTop: "25%"}}>
                     <Text style= {{textAlign: "center"}}>
@@ -64,5 +67,9 @@ export default function Profile ({route, navigation})
             </ScrollView>
         </SafeAreaView>
     )
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 6b094c8cbfde393100d36920b7b88905b904170e
