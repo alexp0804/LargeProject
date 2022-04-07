@@ -11,7 +11,7 @@ export default function Settings ({route, navigation})
       }, [navigation]);
 
     return(
-        <SafeAreaView>
+        <SafeAreaView style={{height:"50%", borderColor: "blue", borderWidth: 2}}>
             <Text>
                 Hey, it's me! Goku!
             </Text>

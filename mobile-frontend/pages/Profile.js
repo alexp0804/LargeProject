@@ -46,14 +46,6 @@ export default function Profile ({route, navigation})
                 <View>
                     {/* Primary Buttons */}
                     <View style={{marginTop:"10%"}}>
-                        {/* Add Recipe */}
-                        <TouchableOpacity
-                            activeOpacity= {0.5} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
-                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center"}} >
-                            <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Times New Roman", fontWeight:"500"}}>
-                                Add Recipe
-                            </Text>
-                        </TouchableOpacity>
                         {/* My Recipe */}
                         <TouchableOpacity
                             activeOpacity= {0.5} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
