@@ -23,6 +23,11 @@ export default function Main ({route, navigation})
      }
    }
 
+   function addRecipe()
+   {
+        console.warn(route.params);
+   }
+
    function closeModal()
    {
        setModalVisible(false);
@@ -35,12 +40,19 @@ export default function Main ({route, navigation})
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-          headerRight: () => (
-                <TouchableOpacity onPress={() => mapSettings()} style={{borderColor:"blue", borderWidth:2}}>
-                  <Feather name="menu" size={24} color="black" />
+          headerLeft: () => (
+                <TouchableOpacity onPress={() => addRecipe()} style={{borderColor:"blue", borderWidth:2}}>
+                  <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
           ),
         });
+        navigation.setOptions({
+            headerRight: () => (
+              <TouchableOpacity>
+                  <Feather name="menu" size={24} color="black" onPress={() => mapSettings()}/>
+              </TouchableOpacity>
+            ),
+          });
       }, [navigation]);
 
     console.warn(JSON.stringify(route))
