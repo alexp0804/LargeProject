@@ -1,16 +1,20 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const path = require('path');
-const sendGrid = require('sendgrid');
-const sgMail = require('@sendgrid/mail')
-const { ObjectId, CURSOR_FLAGS } = require('mongodb');
+const express = require('express'),
+    bodyParser = require('body-parser'),
+    cors = require('cors'),
+    path = require('path'),
+    sendGrid = require('sendgrid'),
+    sgMail = require('@sendgrid/mail'),
+  { ObjectId, CURSOR_FLAGS } = require('mongodb');
+
+const bcrypt = require('bcryptjs'),
+    saltRounds = 10;
 
 const PORT = process.env.PORT || 5000;
 
-// TODO: set this to env var
-const senderEmail = 'recipes.code.verify@gmail.com';
+import { email } from './email.js';
 
+
+const senderEmail = process.env.SENDER_EMAIL;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Setting up Express and cors.
@@ -22,24 +26,27 @@ app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 5000));
 
 // Base URL 
+// TODO: make this get heroku or localhost based on prod/local
 const baseURL = "http://localhost:5000";
 
 // Connecting to the MongoDB database
 const MongoClient = require('mongodb').MongoClient;
 
-// TODO: set this to an env var
-require('dotenv').config();
-const url = process.env.MONGODB_URI;
-const client = new MongoClient(url);
+const client = new MongoClient(process.env.MONGODB_URI);
 client.connect();
 
 // Collection names
-const userCol = "users";
-const recipeCol = "recipes";
-const countryCol = "countries";
+const userCol = "users",
+    recipeCol = "recipes",
+    countryCol = "countries";
 
 // We send empty errors a lot.
 let emptyErr = { error: "" };
+
+function hash(str)
+{
+    return bcrypt.hashSync(str, bcrypt.genSaltSync(saltRounds));
+}
 
 app.use((req, res, next) =>
 {
@@ -55,7 +62,7 @@ app.use((req, res, next) =>
     next();
 });
 
-// Tested: yes
+// Tested: no
 // Login user endpoint
 app.post('/api/login', async (req, res) =>
 {
@@ -64,18 +71,17 @@ app.post('/api/login', async (req, res) =>
 
     // Connecting to Mongo and searching the Users collection for the given input.
     const db = client.db();
-    const results = db.collection(userCol).find( { username: username, password: password } );
+    const user = db.collection(userCol).findOne( { username: username } );
 
-    // We didn't find the user, so we throw an error.
-    if (!(await results.hasNext()))
-    {
-        let ret = { error: 'User not found.' };
-        res.status(500).json(ret);
-        return;
-    }
+    // User not found
+    if (!user)
+        return res.status(500).json( { error: 'User not found.' } );
 
-    // Get user info, remove password from json object
-    let result = await results.next();
+    // Compare password
+    if (bcrypt.compare(password, result.password) == false)
+        return res.status(500).json( { error: 'Incorrect password.' } );
+
+    // Remove password from json before sending back
     delete result.password;
 
     res.json(result);
@@ -83,35 +89,32 @@ app.post('/api/login', async (req, res) =>
 
 // Tested: yes
 // Register user endpoint
-app.post('/api/register', async (req, res) => 
+app.post('/api/register/:platform', async (req, res) => 
 {
     const { username, password, email } = req.body;
     const db = client.db();
     let userCode = createAuthCode();
+    let platform = req.params.platform;
 
     const usernameTaken = db.collection(userCol).find( { username: username } );
 
     // If there's a result the username is taken.
     if (await usernameTaken.hasNext())
-    {
-        res.status(500).json( { error: "Username taken." } );
-        return;
-    }
+        return res.status(500).json( { error: "Username taken." } );
+    
+    let verifyLink = "hostingLink/api/verify/usercode/username"
+                     .replace("hostingLink", baseURL)
+                     .replace("usercode", userCode)
+                     .replace("username", username);
 
-    let verifyLink = "hostingLink/api/verify/usercode/username".replace("hostingLink", baseURL).replace("usercode", userCode).replace("username", username);
+    // Set up web email content
+    let htmlToSend = email[web].replaceAll("verifyLink", verifyLink);
 
-    let htmlToSend = `<html>
-                         <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
-                             <h1> Welcome! </h1>
-                             <p style="margin-bottom:30px;"> Verify your account by clicking the following link:</p>
-                             <a clicktracking="off" href="verifyLink" style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">VERIFY</a>
-                         </div>
-                         <div style="margin-top:50px;text-align: center; font-family: Arial; font-size: 13px">
-                             <p> Alternatively, paste this link into your browser.  </p>
-                             <a>verifyLink</a>
-                         </div>
-                      </html>`.replaceAll("verifyLink", verifyLink);
+    // Set up mobile email content
+    if (platform === "mobile")
+        htmlToSend = email[mobile].replaceAll("code", userCode);
 
+    // Construct email
     const msg = {
         to: email,
         from: senderEmail,
@@ -126,7 +129,7 @@ app.post('/api/register', async (req, res) =>
     // Add user to users collection
     let newUser = {
         username: username,
-        password: password,             // TODO: Hash this
+        password: hash(password),
         email: email,
         profilePic: "",
         favorites: [],
@@ -305,7 +308,7 @@ app.get('/api/getLikes', async (req, res) =>
 
     // If db query results in empty cursor throw error
     if (!await c.hasNext())
-        res.status(500).json( { error: "Invalid UserID" } );
+        return res.status(500).json( { error: "Invalid UserID" } );
 
     // Get users favorites and return
     const user = await c.next();
@@ -351,8 +354,7 @@ app.post('/api/addFavorite', async (req, res) =>
         if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
-        res.status(500).json( { error: err } );
-        return;
+        return res.status(500).json( { error: err } );
     }
 
     // Add recipe to favorites array of user
@@ -391,8 +393,7 @@ app.post('/api/deleteFavorite/', async (req, res, next) =>
         if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
-        res.status(500).json( { error: err } );
-        return;
+        return res.status(500).json( { error: err } );
     }
 
     // Remove recipe from favorites array of user
@@ -431,8 +432,7 @@ app.post('/api/addLike/', async (req, res, next) =>
         if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
-        res.status(500).json( { error: err } );
-        return;
+        return res.status(500).json( { error: err } );
     }
 
     // Update like count for recipe
@@ -471,8 +471,7 @@ app.post('/api/deleteLike/', async (req, res, next) =>
         if (!recipeExists) errors.push("recipeID");
         let err = "Invalid " + errors.join(', ');
 
-        res.status(500).json( { error: err } );
-        return;
+        return res.status(500).json( { error: err } );
     }
 
     // Update like count for recipe
@@ -535,40 +534,29 @@ app.post('/api/updateUser', async (req, res) =>
 
     // Check if user exists in the database
     if (await !atLeastOne(userCol, id))
-    {
-        res.status(404).json( { error: "User does not exist." } )
-        return;
-    }
+        return res.status(404).json( { error: "User does not exist." } );
 
     db.collection(userCol).updateOne(
         { _id: ObjectId(id) },
-        { 
-            $set: 
-            { 
-                password: password,             // TODO hash this
+        { $set: { 
+                password: hash(password),
                 profilePic: profilePic,
                 email: email 
-            }
-        }
+            } }
     );
 
     res.json( emptyErr );
 });
 
-// Tested: yes
 // Get a recipe document given an id string
 app.post('/api/viewRecipe', async (req, res) => 
 {
     const id = req.body.id;
     const db = client.db();
-    let x;
 
     // If the recipe doesn't exist return bad status
     if (!(await atLeastOne(recipeCol, id)))
-    {
-        res.status(404).json( { error: "Recipe not found" } )
-        return;
-    }
+        return res.status(404).json( { error: "Recipe not found" } )
 
     // Find the document and return
     let recipeDoc = await db.collection(recipeCol).findOne( { _id: ObjectId(id) } );
@@ -576,6 +564,7 @@ app.post('/api/viewRecipe', async (req, res) =>
 });
 
 // Used when generating the code a user needs to enter to verify their account.
+// Returns a 5-digit code as an int 
 function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
@@ -596,13 +585,3 @@ app.listen(PORT, () =>
 {
     console.log('Server is listening on port ' + PORT);
 });
-
-if (process.env.NODE_ENV === 'production')
-{
-    app.use(express.static('web-frontend/build'));
-    app.get('*', (req, res) =>
-    {
-        res.sendFile(path.resolve(__dirname, 'web-frontend', 'build', 'index.html'));
-    });
-}
-
