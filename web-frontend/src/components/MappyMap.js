@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import countryPosition from "../data/Countries-position.json"
-import L from 'react-leaflet'
 
 
 const MappyMap = () =>
