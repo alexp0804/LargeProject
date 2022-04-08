@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Offcanvas, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import SidebarContent from './SideBar/SidebarContents';
+import Bookmarks from './SideBar/Menu/BookmarksModal';
 
 
 const Sidebar = () =>
@@ -26,7 +27,7 @@ const Sidebar = () =>
       <body>
         <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
           <Container>
-            <Navbar.Brand href="#home">ReciPin.</Navbar.Brand>
+            <Navbar.Brand onClick={handleShow} href="#home">ReciPin.</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
@@ -49,7 +50,7 @@ const Sidebar = () =>
               </Nav>
               <Nav>
                 <Nav.Link href="#deets">My Profile</Nav.Link>
-                <Nav.Link eventKey={2} href="#memes">
+                <Nav.Link eventKey={2} href="./Login">
                   Logout
                 </Nav.Link>
               </Nav>

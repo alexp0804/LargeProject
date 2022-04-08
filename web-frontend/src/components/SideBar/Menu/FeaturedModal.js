@@ -24,45 +24,44 @@ const Container = styled.div`
 
 
 const Span = styled.span`
-    /* color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"}; */
-    color: ${props => !props.active && props.theme.textColor};
-    font-size: 1rem;
-    margin-right: 1rem;
-`
+  /* color: ${(props) =>
+    props.active ? props.theme.activeMenu : "#AAA5A5"}; */
+  color: ${(props) => !props.active && props.theme.textColor};
+  font-size: 1rem;
+  margin-right: 1rem;
+`;
 
 const Title = styled.h1`
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"};
-`
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: "black";
+`;
 
 const Featured = ({ title, active, icon }) => {
+  const [smShow, setSmShow] = useState(false);
+  const [lgShow, setLgShow] = useState(false);
 
-    const [smShow, setSmShow] = useState(false);
-    const [lgShow, setLgShow] = useState(false);
+  return (
+    <>
+      <Modal
+        size="lg"
+        show={lgShow}
+        onHide={() => setLgShow(false)}
+        aria-labelledby="example-modal-sizes-title-lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg">
+            Featured Recipes here!
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>...</Modal.Body>
+      </Modal>
 
-
-    return (
-      <>
-        <Modal
-          size="lg"
-          show={lgShow}
-          onHide={() => setLgShow(false)}
-          aria-labelledby="example-modal-sizes-title-lg"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="example-modal-sizes-title-lg">
-              Featured Recipes here!
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>...</Modal.Body>
-        </Modal>
-
-        <Container onClick={() => setLgShow(true)} active={active}>
-          <Title active={active}>{title}</Title>
-        </Container>
-      </>
-    );
-}
+      <Container onClick={() => setLgShow(true)} active={active}>
+        <Title active={active}>{title}</Title>
+      </Container>
+    </>
+  );
+};
 
 export default Featured

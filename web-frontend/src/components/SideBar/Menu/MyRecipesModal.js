@@ -35,9 +35,9 @@ const Span = styled.span`
 `
 
 const Title = styled.h1`
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: 300;
-    color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"};
+    color: "black";
 `
 
 const MyRecipes = ({ title, active, icon }) => {

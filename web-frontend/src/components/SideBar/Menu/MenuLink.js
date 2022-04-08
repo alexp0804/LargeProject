@@ -30,17 +30,18 @@ const Container = styled.div`
 
 
 const Span = styled.span`
-    /* color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"}; */
-    color: ${props => !props.active && props.theme.textColor};
-    font-size: 1rem;
-    margin-right: 1rem;
-`
+  /* color: ${(props) =>
+    props.active ? props.theme.activeMenu : "#AAA5A5"}; */
+  color: ${(props) => !props.active && props.theme.textColor};
+  font-size: 1rem;
+  margin-right: 1rem;
+`;
 
 const Title = styled.h1`
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"};
-`
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: "black";
+`;
 
 const MenuLink = ({ title, active, icon }) => {
 
