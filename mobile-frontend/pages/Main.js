@@ -1,11 +1,12 @@
 import React, {useState, useRef, useCallback} from 'react';
 import {TouchableOpacity, Modal, SafeAreaView, Text,View, StyleSheet, TextInput, ScrollView} from 'react-native'
 import {WebView} from 'react-native-webview'
-import { LatLng, LeafletView} from 'react-native-leaflet-view';
+import { LatLng, LeafletView, } from 'react-native-leaflet-view';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import {CheckBox} from 'react-native-elements';
 import URL from '../components/URL';
+import Map from './Map';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
@@ -27,8 +28,7 @@ export default function Main ({route, navigation})
    const [addingRecip, setAddingRecip] = useState(false)
    const [recipe, setRecipe] = useState({})
    const [country, setCountry] = useState("")
-   const webViewRef = useRef<WebView>(null);
-
+   const [updateMapVis, setUpdateMapVis] = useState(false)
    function mapSettings()
    {
      setModalVisible(true);
@@ -37,7 +37,6 @@ export default function Main ({route, navigation})
          setBlur(i * 10);
      }
    }
-
    
 
    function addRecipeModal()
@@ -68,6 +67,7 @@ export default function Main ({route, navigation})
             addRecipe(message.payload.touchLatLng)
             console.warn(message.payload.touchLatLng)
             setAddingRecip(false)
+            setUpdateMapVis(true)
             
          }
      }
@@ -99,15 +99,13 @@ export default function Main ({route, navigation})
             {
                 let temp = markerArray
                 let temporary= {
-                            id:1,
+                            id:"Test",
                             position:{lat:[coords.lat], lng:[coords.lng]},
                             icon: "icon no worky 😔"
                 }
                 temp.push(temporary)
                 console.warn(temporary)
                 setMarkerArray(temp)
-                console.warn(markerArray)
-                updateMarkers(temp)
             
             }
         }
@@ -133,6 +131,11 @@ export default function Main ({route, navigation})
         }
     setBlur(1)
     setOverAmt(-1)
+   }
+
+   function closeAddModal()
+   {
+      setUpdateMapVis(false)
    }
 
     React.useLayoutEffect(() => {
@@ -173,7 +176,7 @@ export default function Main ({route, navigation})
        <SafeAreaView style={{height:"150%"}}> 
           <BlurView intensity={blur} tint="default" style={{height:"100%", width:"100%", position:"absolute", zIndex:overAmt}}>
             </BlurView>
-            <LeafletView mapCenterPosition={{lat:27.964157, lng: -82.452606}}
+            <LeafletView doDebug={true}  mapCenterPosition={{lat:27.964157, lng: -82.452606}}
                 onLoadStart={loadMarkers}  mapMarkers={markerArray}
                 onMessageReceived={(message) => mapMessage(message, recipe)}></LeafletView>
             <Modal animationType="slide"
@@ -232,6 +235,16 @@ export default function Main ({route, navigation})
                         </Text>
                     </TouchableOpacity>
                 </ScrollView>
+            </Modal>
+            <Modal animationType="slide" transparent={false} visible={updateMapVis}>
+                <View style={{marginTop:"10%"}}>
+                    <TouchableOpacity onPress={closeAddModal}>
+                        <Feather name="x" size={28} color="black"/>
+                    </TouchableOpacity>
+                    <Text style={{textAlign:"center"}}>
+                        You just added a recipe!
+                    </Text>
+                </View>
             </Modal>
         </SafeAreaView>
         
