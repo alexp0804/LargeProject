@@ -28,7 +28,7 @@ export default function App() {
     console.log(userName + " " + password);
     setMessage("worked");
 
-    window.location.href = "/register";
+    window.location.href = "/landing";
 
     return;
   };
