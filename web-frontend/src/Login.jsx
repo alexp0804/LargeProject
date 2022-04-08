@@ -2,17 +2,7 @@ import "./styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-
-// This function is necessary to deploy both on heroku and localhost.
-// You must use this to get the buildPath of any endpoint you call
-const app_name = 'largeproj';
-function buildPath(route)
-{
-    if (process.env.NODE_ENV === 'production')
-        return 'https://' + app_name + '.herokuapp.com/' + route;
-    else
-        return 'http://localhost:5000/' + route;
-}
+import buildPath from "./dependency";
 
 export default function App() {
   // react hook (useState)
@@ -24,8 +14,30 @@ export default function App() {
     // prevents the form from refreshing the page
     event.preventDefault();
 
-    console.log(event);
-    console.log(userName + " " + password);
+    let jsonPayLoad = JSON.stringify({
+      username: userName.value,
+      password: password.value
+    });
+
+    try
+    {
+      const response = await fetch(buildPath("api/login"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: { "Content-Type": "application/json" }
+      });
+
+      let res = JSON.parse(await response.text());
+
+      console.log(res);
+    }
+    catch (e)
+    {
+      console.log("oops");
+    }
+
+
+
     setMessage("worked");
 
     window.location.href = "/landing";

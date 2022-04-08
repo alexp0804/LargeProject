@@ -11,15 +11,15 @@ const bcrypt = require('bcryptjs'),
 
 const PORT = process.env.PORT || 5000;
 
-const email = {
-    mobile: `<html>
+const emailPlatform = {
+    "mobile": `<html>
               <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
                 <h1> Welcome! </h1>
                 <p style="margin-bottom:30px;"> Here's your verification code!</p>
                 <a clicktracking="off" href="verifyLink" style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">code</a>
               </div>
             </html>`,
-    web: `<html>
+    "web": `<html>
             <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
               <h1> Welcome! </h1>
               <p style="margin-bottom:30px;"> Verify your account by clicking the following link:</p>
@@ -87,25 +87,36 @@ app.post('/api/login', async (req, res) =>
     // Input = username, password
     const { username, password } = req.body;
 
+    var correctPassword = true;
+
     // Connecting to Mongo and searching the Users collection for the given input.
     const db = client.db();
-    const user = db.collection(userCol).findOne( { username: username } );
+    const user = await db.collection(userCol).findOne( { username: username } );
 
     // User not found
     if (!user)
         return res.status(500).json( { error: 'User not found.' } );
 
     // Compare password
-    if (bcrypt.compare(password, result.password) == false)
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err)
+            console.log(err);
+        else if (!isMatch)
+            correctPassword = false;
+        else
+            correctPassword = true;
+    });
+    console.log("Correct password: ", correctPassword);
+    if (!correctPassword)
         return res.status(500).json( { error: 'Incorrect password.' } );
 
     // Remove password from json before sending back
-    delete result.password;
+    delete user.password;
 
-    res.json(result);
+    res.json(user);
 });
 
-// Tested: yes
+// Tested: no
 // Register user endpoint
 app.post('/api/register/:platform', async (req, res) => 
 {
@@ -114,23 +125,21 @@ app.post('/api/register/:platform', async (req, res) =>
     let userCode = createAuthCode();
     let platform = req.params.platform;
 
-    const usernameTaken = db.collection(userCol).find( { username: username } );
+    const usernameTaken = await db.collection(userCol).findOne( { username: username } );
+    console.log(usernameTaken);
 
     // If there's a result the username is taken.
-    if (await usernameTaken.hasNext())
+    if (usernameTaken != null)
         return res.status(500).json( { error: "Username taken." } );
     
-    let verifyLink = "hostingLink/api/verify/usercode/username"
-                     .replace("hostingLink", baseURL)
-                     .replace("usercode", userCode)
-                     .replace("username", username);
+    let verifyLink = "hostingLink/api/verify/usercode/username" .replace("hostingLink", baseURL) .replace("usercode", userCode) .replace("username", username);
 
     // Set up web email content
-    let htmlToSend = email[web].replaceAll("verifyLink", verifyLink);
+    let htmlToSend = emailPlatform["web"].replaceAll("verifyLink", verifyLink);
 
     // Set up mobile email content
     if (platform === "mobile")
-        htmlToSend = email[mobile].replaceAll("code", userCode);
+        htmlToSend = emailPlatform["mobile"].replaceAll("code", userCode);
 
     // Construct email
     const msg = {
