@@ -9,6 +9,7 @@ import {
 import Login from "./Login";
 import Register from "./Register";
 import Landing from "./Landing";
+import './App.css';
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
