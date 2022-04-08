@@ -6,8 +6,9 @@ import { useState } from 'react';
 import Featured from './FeaturedModal';
 import Bookmarks from './BookmarksModal';
 import MyRecipes from './MyRecipesModal';
-import Highlights from './SearchBar';
 import Search2 from './SearchBar2';
+import RandomPick from './RandomPick';
+import MappyMap from '../../MappyMap';
 
 
 const Container = styled.div`

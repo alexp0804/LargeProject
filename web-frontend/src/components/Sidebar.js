@@ -63,7 +63,7 @@ const Sidebar = () =>
             </Offcanvas.Header>
             <Offcanvas.Body>
 
-              <SidebarContent />
+              <SidebarContent/>
 
             </Offcanvas.Body>
           </Offcanvas>
