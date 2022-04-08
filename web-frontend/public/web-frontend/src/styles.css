@@ -1,0 +1,59 @@
+html,
+body {
+  height: 100%;
+  background-color: url("./backy.jpg");
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#containerBox {
+  background: white;
+}
+
+#innerContainerLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+}
+
+#innerContainerLogin {
+  width: 50%;
+  height: 100%;
+}
+
+.round {
+  width: 75%;
+  height: 75%;
+  border-radius: 100%;
+  margin: auto;
+}
+
+.input-group-prepend {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  border-top: 2px solid transparent;
+}
+
+/* removes ugly border from bootstrap */
+.input-group-text {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.form-control {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  border-top: 2px solid transparent;
+}
