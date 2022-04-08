@@ -26,7 +26,7 @@ export default function LogIn({navigation}) {
      let txt = await response.text();
      console.warn(txt)
      let res = JSON.parse(txt);
-     console.warn(res)
+     console.warn("Token is " + res.token)
      if (res.error != null)
      {
        console.warn(res.error)
@@ -39,7 +39,8 @@ export default function LogIn({navigation}) {
        console.warn(res._id)
        navigation.dispatch(StackActions.replace("Landing", {
          params: {id:res._id,
-                  username:res.username
+                  username:res.username,
+                  token:res.token
                  },
        }));
      }

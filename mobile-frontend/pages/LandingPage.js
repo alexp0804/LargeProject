@@ -11,9 +11,9 @@ export default function LandingPage({navigation, route})
   return(
     <Tab.Navigator>
       <Tab.Screen name= "Profile" component= {Profile} 
-                 initialParams={{id:route.params.params.id, username:route.params.params.username}}/>
+                 initialParams={{id:route.params.params.id, username:route.params.params.username, token:route.params.params.token}}/>
       <Tab.Screen name= "Map" component={Main} options={{title: "Main"}}
-                 initialParams={{id:route.params.params.id, username:route.params.params.username}}/> 
+                 initialParams={{id:route.params.params.id, username:route.params.params.username, token:route.params.params.token}}/> 
     </Tab.Navigator>
   )
 }

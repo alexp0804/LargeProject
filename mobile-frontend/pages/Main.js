@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {TouchableOpacity, Modal, SafeAreaView, Text,View, StyleSheet, TextInput, ScrollView} from 'react-native'
-import { LatLng, LeafletView } from 'react-native-leaflet-view';
+import {WebView} from 'react-native-webview'
+import { LatLng, LeafletView} from 'react-native-leaflet-view';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import {CheckBox} from 'react-native-elements';
+import URL from '../components/URL';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
+const url = URL()
 
 export default function Main ({route, navigation})
 {  
@@ -21,6 +24,10 @@ export default function Main ({route, navigation})
    const [desc, setDesc] = useState("")
    const [name, setName] = useState("")
    const [directions, setDirections] = useState("")
+   const [addingRecip, setAddingRecip] = useState(false)
+   const [recipe, setRecipe] = useState({})
+   const [country, setCountry] = useState("")
+   const webViewRef = useRef<WebView>(null);
 
    function mapSettings()
    {
@@ -31,9 +38,83 @@ export default function Main ({route, navigation})
      }
    }
 
-   function addRecipe()
+   
+
+   function addRecipeModal()
    {
         setAddRecipeVis(true)
+   }
+
+   function addingRecipe(name, desc, text, country, id)
+   {
+        setAddRecipeVis(false)
+        setAddingRecip(true)
+        setRecipe({
+            name:name,
+            desc:desc,
+            text:text,
+            country:country,
+            creator:id,
+            pic:"test"
+        })
+   }
+
+   function mapMessage(message)
+   {
+     if(message.event === "onMapClicked")
+     {
+         if(addingRecip == true)
+         {
+            addRecipe(message.payload.touchLatLng)
+            console.warn(message.payload.touchLatLng)
+            setAddingRecip(false)
+            
+         }
+     }
+   }
+
+   async function addRecipe(coords)
+   {
+        let tmp = {
+            name:recipe.name,
+            desc:recipe.desc,
+            text:recipe.text,
+            country:recipe.country,
+            creator:recipe.creator,
+            pic:recipe.pic,
+            coordinates:coords,
+            token: route.params.token
+        }
+        setRecipe(tmp);
+        try
+        {
+            let response = await fetch(url + 'createRecipe',  {method:'POST', body:recipe, 
+                                         headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}, query:{token:route.params.token}});
+            let txt= await response.text()
+            console.warn(txt)
+            let res = JSON.parse(txt)
+            console.warn(res)
+
+            if (res.error == "")
+            {
+                let temp = markerArray
+                let temporary= {
+                            id:1,
+                            position:{lat:[coords.lat], lng:[coords.lng]},
+                            icon: "icon no worky 😔"
+                }
+                temp.push(temporary)
+                console.warn(temporary)
+                setMarkerArray(temp)
+                console.warn(markerArray)
+                updateMarkers(temp)
+            
+            }
+        }
+        catch(error)
+        {
+            console.warn(error.toString())
+        }
    }
 
    function closeRecipe()
@@ -57,7 +138,7 @@ export default function Main ({route, navigation})
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
-                <TouchableOpacity onPress={() => addRecipe()} style={{borderColor:"blue", borderWidth:2}}>
+                <TouchableOpacity onPress={() => addRecipeModal()} style={{borderColor:"blue", borderWidth:2}}>
                   <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
           ),
@@ -93,7 +174,8 @@ export default function Main ({route, navigation})
           <BlurView intensity={blur} tint="default" style={{height:"100%", width:"100%", position:"absolute", zIndex:overAmt}}>
             </BlurView>
             <LeafletView mapCenterPosition={{lat:27.964157, lng: -82.452606}}
-                onLoadStart={loadMarkers} mapMarkers={markerArray}></LeafletView>
+                onLoadStart={loadMarkers}  mapMarkers={markerArray}
+                onMessageReceived={(message) => mapMessage(message, recipe)}></LeafletView>
             <Modal animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -139,9 +221,16 @@ export default function Main ({route, navigation})
                     <Text style={{textAlign:"center"}}>
                         Add Recipe
                     </Text>
-                    <TextInput placeholder='Enter recipe name' value={name} onChangeText={setName} style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TextInput placeholder='Enter description' value={desc} onChangeText= {setDesc}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TextInput placeholder='Enter directions'  value={directions} onChangeText={setDirections}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholderTextColor="black" placeholder='Enter recipe name' value={name} onChangeText={setName} style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholderTextColor="black" placeholder='Enter description' value={desc} onChangeText= {setDesc}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholderTextColor="black" placeholder='Enter directions'  value={directions} onChangeText={setDirections}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholderTextColor="black" placeholder='Enter country'  value={country} onChangeText={setCountry}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TouchableOpacity activeOpacity= {0.5} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
+                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} onPress={() => addingRecipe(name, desc, directions, country, route.params.id)}>
+                        <Text>
+                            Add Recipe
+                        </Text>
+                    </TouchableOpacity>
                 </ScrollView>
             </Modal>
         </SafeAreaView>
