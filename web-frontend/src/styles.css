@@ -2,6 +2,7 @@ html,
 body {
   height: 100%;
   background-image: url("./backy.jpg");
+  background-size: cover;
 }
 
 #root {
