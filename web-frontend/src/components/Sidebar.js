@@ -49,7 +49,7 @@ const Sidebar = () =>
               </Nav>
               <Nav>
                 <Nav.Link href="#deets">My Profile</Nav.Link>
-                <Nav.Link eventKey={2} href="./Login">
+                <Nav.Link eventKey={2} href="./home">
                   Logout
                 </Nav.Link>
               </Nav>
