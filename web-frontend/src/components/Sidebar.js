@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Offcanvas, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import SidebarContent from './SideBar/SidebarContents';
 import Bookmarks from './SideBar/Menu/BookmarksModal';

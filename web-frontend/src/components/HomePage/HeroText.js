@@ -3,7 +3,8 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import Register from "../../Register";
-import {  Modal, Button, FormControl } from 'react-bootstrap'
+import {  Modal, Button, FormControl, Offcanvas } from 'react-bootstrap'
+import duck from "../../assets/images/duck.jpg"
 
 function Signup() {
   const [show, setShow] = useState(false);
@@ -41,6 +42,47 @@ function Signup() {
   );
 }
 
+
+function OffCanvasExample({ name, ...props }) {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow} className="me-2">
+        {name}
+      </Button>
+      <Offcanvas show={show} onHide={handleClose} {...props}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>ReciPin</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          Welcome to ReciPin!
+
+         Group 11 created this project to make finding recipes so much more fun. Map stuff Recipe stuff x x x 
+
+         < duck / >
+
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
+  );
+}
+
+function Readmore() {
+  return (
+    <>
+      {['top'].map((placement, idx) => (
+        <OffCanvasExample key={idx} placement={placement} name="Read More" />
+      ))}
+    </>
+  );
+}
+
+
+
 const HeroText = () => {
   return (
     <Container>
@@ -50,7 +92,7 @@ const HeroText = () => {
       <h1>Anytime.</h1>
       <h1>Anywhere.</h1>
       <BtnContainer>
-        <button className="readmore">Read More</button>
+        < Readmore / > 
         < Signup / >
       </BtnContainer> 
       

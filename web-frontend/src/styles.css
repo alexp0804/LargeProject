@@ -58,3 +58,10 @@ body {
   border-bottom: 2px solid black;
   border-top: 2px solid transparent;
 }
+
+.leaflet-container {
+  
+  width: 100vw; 
+  height: 100vh;
+}
+

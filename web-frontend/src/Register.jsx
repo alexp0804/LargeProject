@@ -64,7 +64,7 @@ export default function Register() {
       id=""
       style={{
         background: "rgba(255,255,255, 0.63)",
-        border: "1px solid rgba(0,0,0, 0.55)",
+        border: "none",
         borderRadius: "7%"
       }}
     >
@@ -79,7 +79,7 @@ export default function Register() {
               width: "200px",
               objectFit: "cover",
               borderRadius: "100%",
-              border: "1px solid rgba(0,0,0, 0.55)"
+              border: "none"
             }}
           />
         </div>
