@@ -51,7 +51,7 @@ export default function App() {
       id=""
       style={{
         background: "rgba(255,255,255, 0.6)",
-        border: "none",
+        border: "1px solid rgba(0,0,0, 0.55)",
         borderRadius: "7%"
       }}
     >
@@ -66,7 +66,7 @@ export default function App() {
               width: "200px",
               objectFit: "cover",
               borderRadius: "100%",
-              border: "none"
+              border: "1px solid rgba(0,0,0, 0.55)"
             }}
           />
         </div>

@@ -1,15 +1,17 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import Sidebar from "./components/Sidebar";
-import MapPage from "./pages/MapPage";
-import styled from 'styled-components'
-
-
 
 export default function mappy() {
-  
   return (
-    <body>
-      < MapPage / >
-    </body>
+    <MapContainer center={[51.505, -0.09]} zoom={13}>
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={[51.505, -0.09]}>
+        <Popup>
+          A pretty CSS3 popup. <br /> Easily customizable.
+        </Popup>
+      </Marker>
+    </MapContainer>
   );
 }
