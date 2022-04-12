@@ -2,6 +2,7 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 import styled from 'styled-components'
 import { useState } from 'react';
+import RecipeReviewCard from './ProfileRecipes';
 
 const Container = styled.div`
     border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
@@ -54,7 +55,13 @@ const Featured = ({ title, active, icon }) => {
             Featured Recipes here!
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>...</Modal.Body>
+        <Modal.Body>
+
+          < RecipeReviewCard / > 
+
+          < RecipeReviewCard / > 
+
+        </Modal.Body>
       </Modal>
 
       <Container onClick={() => setLgShow(true)} active={active}>

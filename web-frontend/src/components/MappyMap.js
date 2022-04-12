@@ -5,6 +5,7 @@ import countryPosition from "../data/CountriesUpdated.json"
 
 
 
+
 function importAll(r) {
   let images = {};
   r.keys().map(item => { images[item.replace('./', '')] = r(item); });
@@ -24,43 +25,42 @@ const MappyMap = () =>
 
 {
 
-  const flags = countryPosition.id
+  const lower = countryPosition.id
+
+  const flags = lower + '.png'
 
 
   
     return (
-        <MapContainer center={[50.8333, 4]} zoom={6}>
+      <MapContainer center={[50.8333, 4]} zoom={6}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {countryPosition.map((countryYoink) => (
+          <Marker
+            key={countryYoink.id}
+            position={[countryYoink.latitude, countryYoink.longitude]}
+          >
+            <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
+              <div>
+                <h2>
+                  <img src={images[flags]} />
+
+                 
+
+                  <img src= {images[countryYoink.id.toLowerCase() + '.png']} />
 
 
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          /> 
 
-          {countryPosition.map((countryYoink) => (
-            <Marker
-              key={countryYoink.id}
-              position={[countryYoink.latitude, countryYoink.longitude]}
-            >
-              <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
-                <div>
-                  <h2>
-
-  
-
-              
-
-                  <img src={images['au.png']} />
-
-                  
-                    
-                    
-                    </h2>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+                 
+                </h2>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
     );
 };
 

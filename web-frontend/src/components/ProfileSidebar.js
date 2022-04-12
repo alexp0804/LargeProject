@@ -2,53 +2,9 @@ import React, { useState } from 'react';
 import { Button, Offcanvas, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import SidebarContent from './SideBar/SidebarContents';
 import Bookmarks from './SideBar/Menu/BookmarksModal';
-import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
 
 
-
-function OffCanvasExample({ name, ...props }) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-      <Button variant="light" onClick={handleShow} className="me-2">
-        {name}
-      </Button>
-      <Offcanvas backdrop = {false} show={show} onHide={handleClose} {...props}>
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>My Profile</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-
-          My Recipes: 
-
-          <br />
-         
-         
-        < RecipeReviewCard / >
-
-
-        </Offcanvas.Body>
-      </Offcanvas>
-    </>
-  );
-}
-
-function Readmore() {
-  return (
-    <>
-      {['end'].map((placement, idx) => (
-        <OffCanvasExample key={idx} placement={placement} name="Read More" />
-      ))}
-    </>
-  );
-}
-
-
-const Sidebar = () =>
+const ProfileSidebar = () =>
 {
  
   const [show, setShow] = useState(false);
@@ -92,7 +48,7 @@ const Sidebar = () =>
                 </NavDropdown>
               </Nav>
               <Nav>
-                <Readmore /> 
+                <Nav.Link href="#deets">My Profile</Nav.Link>
                 <Nav.Link eventKey={2} href="./home">
                   Logout
                 </Nav.Link>
@@ -102,7 +58,7 @@ const Sidebar = () =>
         </Navbar>
 
         <>
-          <Offcanvas id = "contentnav" show={show} backdrop = {true} onHide={handleClose} >
+          <Offcanvas show={show} backdrop = {true} onHide={handleClose} >
             <Offcanvas.Header closeButton>
             </Offcanvas.Header>
             <Offcanvas.Body>
@@ -116,4 +72,4 @@ const Sidebar = () =>
     );
 };
 
-export default Sidebar;
+export default ProfileSidebar;
