@@ -17,7 +17,7 @@ function OffCanvasExample({ name, ...props }) {
       <Button variant="light" onClick={handleShow} className="me-2">
         {name}
       </Button>
-      <Offcanvas backdrop = {false} show={show} onHide={handleClose} {...props}>
+      <Offcanvas backdrop = {true} show={show} onHide={handleClose} {...props}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>My Profile</Offcanvas.Title>
         </Offcanvas.Header>
@@ -68,7 +68,7 @@ const Sidebar = () =>
 
     return (
       <body>
-        <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+        <Navbar style = {{zIndex : "2000"}} collapseOnSelect expand="lg" bg="light" variant="light">
           <Container>
             <Navbar.Brand onClick={handleShow} href="#home">ReciPin.</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -108,6 +108,7 @@ const Sidebar = () =>
             <Offcanvas.Body>
 
               <SidebarContent/>
+
 
             </Offcanvas.Body>
           </Offcanvas>

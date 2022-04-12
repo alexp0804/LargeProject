@@ -16,7 +16,7 @@ const MapPage = () =>
       <body>
       
 
-        <Sidebar />
+      
 
         <MappyMap /> 
 
