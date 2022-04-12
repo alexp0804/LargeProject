@@ -1,9 +1,12 @@
+const { Console } = require('console');
 const express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
     path = require('path'),
     sendGrid = require('sendgrid'),
     sgMail = require('@sendgrid/mail'),
+    auth = require("./middleware/auth"),
+    jwt = require("jsonwebtoken"),
   { ObjectId, CURSOR_FLAGS } = require('mongodb');
 
 const bcrypt = require('bcryptjs'),
@@ -16,7 +19,7 @@ const emailPlatform = {
               <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
                 <h1> Welcome! </h1>
                 <p style="margin-bottom:30px;"> Here's your verification code!</p>
-                <a clicktracking="off" href="verifyLink" style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">code</a>
+                <a clicktracking="off" href="verifyLink" style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">usercode</a>
               </div>
             </html>`,
     "web": `<html>
@@ -31,6 +34,10 @@ const emailPlatform = {
             </div>
           </html>`
 };
+
+const successPage = `<html>
+                     <p style="background-color:red;">Some text</p>
+                     </html>`;
 
 const senderEmail = process.env.SENDER_EMAIL;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -80,14 +87,12 @@ app.use((req, res, next) =>
     next();
 });
 
-// Tested: no
+// Tested: yes
 // Login user endpoint
 app.post('/api/login', async (req, res) =>
 {
     // Input = username, password
     const { username, password } = req.body;
-
-    var correctPassword = true;
 
     // Connecting to Mongo and searching the Users collection for the given input.
     const db = client.db();
@@ -98,17 +103,19 @@ app.post('/api/login', async (req, res) =>
         return res.status(500).json( { error: 'User not found.' } );
 
     // Compare password
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err)
-            console.log(err);
-        else if (!isMatch)
-            correctPassword = false;
-        else
-            correctPassword = true;
-    });
-    console.log("Correct password: ", correctPassword);
-    if (!correctPassword)
-        return res.status(500).json( { error: 'Incorrect password.' } );
+    if (!bcrypt.compareSync(password, user.password))
+        return res.status(500).json( { error: 'Passwords do not match.' } );
+
+    // Refresh token
+    const token = jwt.sign(
+        { userid: user._id, username },
+        process.env.TOKEN_KEY,
+        {
+            expiresIn: "2h",
+        }
+    );
+
+    user.token = token;
 
     // Remove password from json before sending back
     delete user.password;
@@ -116,7 +123,7 @@ app.post('/api/login', async (req, res) =>
     res.json(user);
 });
 
-// Tested: no
+// Tested: yes
 // Register user endpoint
 app.post('/api/register/:platform', async (req, res) => 
 {
@@ -126,20 +133,19 @@ app.post('/api/register/:platform', async (req, res) =>
     let platform = req.params.platform;
 
     const usernameTaken = await db.collection(userCol).findOne( { username: username } );
-    console.log(usernameTaken);
 
     // If there's a result the username is taken.
     if (usernameTaken != null)
         return res.status(500).json( { error: "Username taken." } );
     
-    let verifyLink = "hostingLink/api/verify/usercode/username" .replace("hostingLink", baseURL) .replace("usercode", userCode) .replace("username", username);
+    let verifyLink = "hostingLink/api/verify/usercode/username".replace("hostingLink", baseURL).replace("usercode", userCode).replace("username", username);
 
     // Set up web email content
     let htmlToSend = emailPlatform["web"].replaceAll("verifyLink", verifyLink);
 
     // Set up mobile email content
     if (platform === "mobile")
-        htmlToSend = emailPlatform["mobile"].replaceAll("code", userCode);
+        htmlToSend = emailPlatform["mobile"].replaceAll("verifyLink", verifyLink).replaceAll("usercode", userCode);
 
     // Construct email
     const msg = {
@@ -165,6 +171,17 @@ app.post('/api/register/:platform', async (req, res) =>
         verified: "no",
         auth: userCode
     };
+
+    // Add token to user
+    const token = jwt.sign(
+        { userid: newUser._id, username },
+        process.env.TOKEN_KEY,
+        {
+            expiresIn: "2h",
+        }
+    );
+
+    newUser.token = token;
     
     db.collection(userCol).insertOne(newUser);
     res.json(emptyErr);
@@ -195,12 +212,12 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
     else 
         res.status(500).json( { error: "ID/User information invalid." } );
 
-    res.json(emptyErr);
+    res.send(successPage);
 });
 
 // Tested: yes
 // Create recipe endpoint
-app.post('/api/createRecipe', async (req, res) =>
+app.post('/api/createRecipe', auth, async (req, res) =>
 {
     const { name, desc, pic, country,
             text, creator, coordinates } = req.body;
@@ -243,7 +260,7 @@ app.post('/api/createRecipe', async (req, res) =>
 
 // Tested: yes
 // Delete recipe endpoint
-app.post('/api/deleteRecipe', async (req, res) =>
+app.post('/api/deleteRecipe', auth, async (req, res) =>
 {
     // Input = recipeID
     const { recipeID } = req.body;
@@ -268,7 +285,7 @@ app.post('/api/deleteRecipe', async (req, res) =>
 
 // Tested: yes
 // EDIT RECIPE ENDPOINT
-app.post('/api/editRecipe', async (req, res) =>
+app.post('/api/editRecipe', auth, async (req, res) =>
 {
     // Input = name, description, picture link, text, and Recipe ID (string).
     const { name, desc, pic, text, recipeID } = req.body;
@@ -288,7 +305,7 @@ app.post('/api/editRecipe', async (req, res) =>
 
 // Tested: yes
 // Get favorited recipes of user
-app.get('/api/getFavorites', async (req, res) =>
+app.get('/api/getFavorites', auth, async (req, res) =>
 {
     const { userID } = req.body;
     const db = client.db();
@@ -325,7 +342,7 @@ app.get('/api/getFavorites', async (req, res) =>
 
 // Tested: yes
 // Get liked recipes of user
-app.get('/api/getLikes', async (req, res) =>
+app.get('/api/getLikes', auth, async (req, res) =>
 {
     const { userID } = req.body;
     const db = client.db();
@@ -362,7 +379,7 @@ app.get('/api/getLikes', async (req, res) =>
 
 // Tested: yes
 // Add favorite endpoint
-app.post('/api/addFavorite', async (req, res) =>
+app.post('/api/addFavorite', auth, async (req, res) =>
 {
     // Input  = User ID, Recipe ID
     const { userID, recipeID } = req.body;
@@ -402,7 +419,7 @@ app.post('/api/addFavorite', async (req, res) =>
 
 // Tested: yes
 // Delete favorite endpoint
-app.post('/api/deleteFavorite/', async (req, res, next) =>
+app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
@@ -441,7 +458,7 @@ app.post('/api/deleteFavorite/', async (req, res, next) =>
 
 // Tested: yes
 // Add like endpoint
-app.post('/api/addLike/', async (req, res, next) =>
+app.post('/api/addLike/', auth, async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
@@ -480,7 +497,7 @@ app.post('/api/addLike/', async (req, res, next) =>
 
 // Tested: yes
 // Delete like endpoint 
-app.post('/api/deleteLike/', async (req, res, next) =>
+app.post('/api/deleteLike/', auth, async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
@@ -519,7 +536,7 @@ app.post('/api/deleteLike/', async (req, res, next) =>
 
 // Tested: yes
 // Get recipes of a given country name
-app.post('/api/getCountryRecipes', async (req, res) => 
+app.post('/api/getCountryRecipes', auth, async (req, res) => 
 {
     const db = client.db();
     const country = req.body.name;
@@ -535,7 +552,7 @@ app.post('/api/getCountryRecipes', async (req, res) =>
 
 // Tested: yes
 // Partial search for recipes by name given a search term
-app.post('/api/searchRecipe', async (req, res) => 
+app.post('/api/searchRecipe', auth, async (req, res) => 
 {
     let searchTerm = req.body.searchTerm;
     const db = client.db();
@@ -554,7 +571,7 @@ app.post('/api/searchRecipe', async (req, res) =>
 
 // Tested: yes
 // Updates a given user (by id) with new information
-app.post('/api/updateUser', async (req, res) => 
+app.post('/api/updateUser', auth, async (req, res) => 
 {
     const { id, password, profilePic, email } = req.body;
     const db = client.db();
@@ -576,7 +593,7 @@ app.post('/api/updateUser', async (req, res) =>
 });
 
 // Get a recipe document given an id string
-app.post('/api/viewRecipe', async (req, res) => 
+app.post('/api/viewRecipe', auth, async (req, res) => 
 {
     const id = req.body.id;
     const db = client.db();
