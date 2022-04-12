@@ -54,6 +54,7 @@ const Menu = () => {
             < Search2 / > 
             <Featured title="Featured Recipes"/>
             <Bookmarks title="Bookmarks"/>
+            <MyRecipes title="Add Recipe"/>
             <MyRecipes title="My Recipes"/>
             <MenuLink title="Pick for Me" icon={'cog'} />
         </Container>

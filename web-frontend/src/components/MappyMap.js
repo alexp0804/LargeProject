@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
-import countryPosition from "../data/Countries-position.json"
+import countryPosition from "../data/CountriesUpdated.json"
+
+
+function importAll(r) {
+	let images = {};
+  r.keys().forEach((item, index) => { images[item.replace('./', '')] = r(item); });
+	return images
+}
+
+const images = importAll(require.context('../assets/images/flagpng', false, /\.(png|jpe?g|svg)$/));
+
+
 
 
 const MappyMap = () =>
@@ -8,7 +19,13 @@ const MappyMap = () =>
   // const filteredStations = countryPosition.filter(cntry => cntry.alpha2 == "US")
   // console.log(countryPosition)  
 
+
+
 {
+
+  // const flags = countryPosition.id.toLowerCase();
+
+  
     return (
         <MapContainer center={[50.8333, 4]} zoom={6}>
 
@@ -25,7 +42,14 @@ const MappyMap = () =>
             >
               <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
                 <div>
-                  <h2>{countryYoink.country}</h2>
+                  <h2>
+
+                  {/* <img src={images[`${flags}.png`].default} alt={flags} height={150} width={150}/> */}
+                   
+                    {countryYoink.id}
+                    
+                    
+                    </h2>
                 </div>
               </Popup>
             </Marker>
