@@ -3,6 +3,7 @@ import { Button, Offcanvas, Navbar, Container, Nav, NavDropdown } from 'react-bo
 import SidebarContent from './SideBar/SidebarContents';
 import Bookmarks from './SideBar/Menu/BookmarksModal';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
+import AddRecipe from './SideBar/Menu/AddRecipe';
 
 
 
@@ -74,7 +75,7 @@ const Sidebar = () =>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link onClick={handleShow}>Add Recipe</Nav.Link>
+                <AddRecipe title="Add Recipes"/>
 
                 <Nav.Link>BookMarks</Nav.Link>
                 <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
