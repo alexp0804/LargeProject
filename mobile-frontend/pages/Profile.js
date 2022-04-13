@@ -9,6 +9,27 @@ export default function Profile ({route, navigation})
     const [newRecipeName, setNewRecipeName] = useState('')
     const [newRecipeDesc, setNewRecipeDesc] = useState('')
     const [newRecipePic, setNewRecipePic] = useState('')
+    const {id, username} = route.params;
+    console.warn(id + " " + username)
+    function goSettings()
+    {
+        navigation.navigate("ProfileOps", {
+            screen: "Settings",
+            params: {id:route.params.id, username: route.params.username}
+        })
+    }
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+                <TouchableOpacity onPress={() => goSettings()}>
+                  <Ionicons name="settings" size={24} color="black"/>
+                </TouchableOpacity>
+          ),
+        });
+      }, [navigation]);
+
+
     return(
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
