@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Modal, SafeAreaView, Text,View} from 'react-native'
+import {TouchableOpacity, Modal, SafeAreaView, Text,View, StyleSheet} from 'react-native'
 import { LatLng, LeafletView } from 'react-native-leaflet-view';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
+import {CheckBox} from 'react-native-elements';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
 
 export default function Main ({route, navigation})
 {  
-
+   const [filterLikes, setFilterLikes] = useState(false)
+   const [filterFavorites, setFilterFavorites] = useState(false)
+   const [filterMine, setFilterMine] = useState(false)
    const [modalVisible, setModalVisible] = useState(false);
    const [blur, setBlur] = useState(1);
    const [overAmt, setOverAmt] = useState(-1)
@@ -59,6 +62,12 @@ export default function Main ({route, navigation})
             markerArray.push(tmp)
         })
     }
+    const handleCheckboxPress = () => {
+        setChecked(prev => {
+          return !prev
+        })
+      }
+    
     return(
        <SafeAreaView style={{height:"150%"}}> 
           <BlurView intensity={blur} tint="default" style={{height:"100%", width:"100%", position:"absolute", zIndex:overAmt}}>
@@ -69,14 +78,59 @@ export default function Main ({route, navigation})
                 transparent={true}
                 visible={modalVisible}
             >
-                <View style={{width:"100%", height:"70%",marginTop: "60%",
-                              backgroundColor: "white"}}>
+                <View style={modalStyles.modalView}>
                     <TouchableOpacity onPress={closeModal}>
                        <Feather name="x" size={28} color="black"/>
                     </TouchableOpacity>
+                    <Text style={{textAlign:"center", fontSize:20, color:"black", fontWeight:"500"}}>
+                        Filter Options
+                    </Text>
+                    <CheckBox 
+                        title="My Liked Recipes" 
+                        checked={filterLikes} 
+                        onPress={() => setFilterLikes(!filterLikes)} 
+                        checkedTitle="Filtering by Liked Recipes"
+                        checkedColor="green"
+                    />
+                    <CheckBox 
+                        title="My Favorite Recipes" 
+                        checked={filterFavorites} 
+                        onPress={() => setFilterFavorites(!filterFavorites)} 
+                        checkedTitle="Filtering by Favorited Recipes"
+                        checkedColor="green"
+                    />
+                    <CheckBox 
+                        title="My Created Recipes" 
+                        checked={filterMine} 
+                        onPress={() => setFilterMine(!filterMine)} 
+                        checkedTitle="Filtering by My Recipes"
+                        checkedColor="green"
+                    />
                 </View>
             </Modal>
         </SafeAreaView>
         
     )
 }
+
+const modalStyles = StyleSheet.create({
+    modalView: {
+        width:425,
+        height:500,
+        margin: 500,
+        backgroundColor: "white",
+        borderRadius: 20,
+        borderColor: "black",
+        borderWidth: 2,
+        padding: 35,
+        alignSelf: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+})
