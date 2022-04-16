@@ -45,18 +45,19 @@ export default function RecipeReviewCard() {
   return (
     <>
       <Modal
-        style={{ zIndex: "2000", marginTop: "10%" }}
+        style={{ zIndex: "2000"}}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}
         aria-labelledby="example-modal-sizes-title-lg"
+        scrollable={true}
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton >
           <Modal.Title id="example-modal-sizes-title-lg">
-            Bookmarks:
+            Key Lime Pie !!!!! 
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body >
           <Readmore />
         </Modal.Body>
       </Modal>
