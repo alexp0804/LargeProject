@@ -1,5 +1,18 @@
+const { Console } = require('console');
+const express = require('express'),
+    bodyParser = require('body-parser'),
+    cors = require('cors'),
+    path = require('path'),
+    sendGrid = require('sendgrid'),
+    sgMail = require('@sendgrid/mail'),
+    auth = require("./middleware/auth"),
+    jwt = require("jsonwebtoken"),
+  { ObjectId, CURSOR_FLAGS } = require('mongodb');
+
+const bcrypt = require('bcryptjs'),
+    saltRounds = 10;
+
 const PORT = process.env.PORT || 5000;
-<<<<<<< Updated upstream
 
 const emailPlatform = {
     "mobile": `<html>
@@ -37,7 +50,7 @@ app.use(bodyParser.json());
 // Get port
 app.set('port', (process.env.PORT || 5000));
 
-// Base URL 
+// Base URL
 // TODO: make this get heroku or localhost based on prod/local
 const baseURL = "http://localhost:5000";
 
@@ -107,12 +120,12 @@ app.post('/api/login', async (req, res) =>
     // Remove password from json before sending back
     delete user.password;
 
-    res.json(user);
+    res.status(200).json(user);
 });
 
 // Tested: yes
 // Register user endpoint
-app.post('/api/register/:platform', async (req, res) => 
+app.post('/api/register/:platform', async (req, res) =>
 {
     const { username, password, email } = req.body;
     const db = client.db();
@@ -124,7 +137,7 @@ app.post('/api/register/:platform', async (req, res) =>
     // If there's a result the username is taken.
     if (usernameTaken != null)
         return res.status(500).json( { error: "Username taken." } );
-    
+
     let verifyLink = "hostingLink/api/verify/usercode/username".replace("hostingLink", baseURL).replace("usercode", userCode).replace("username", username);
 
     // Set up web email content
@@ -143,7 +156,7 @@ app.post('/api/register/:platform', async (req, res) =>
         html: htmlToSend
     };
 
-    // Send auth code to given email 
+    // Send auth code to given email
     sgMail.send(msg).catch((error) => { console.error(error); });
 
     // Add user to users collection
@@ -169,7 +182,7 @@ app.post('/api/register/:platform', async (req, res) =>
     );
 
     newUser.token = token;
-    
+
     db.collection(userCol).insertOne(newUser);
     res.json(emptyErr);
 });
@@ -196,42 +209,10 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
     if (found)
         db.collection(userCol).updateOne( { username: username, auth: code },
                                           { $set: { verified: "yes" } } );
-    else 
+    else
         res.status(500).json( { error: "ID/User information invalid." } );
 
     res.send(successPage);
-});
-
-app.get('/api/getResetCode', auth, async (req, res) =>
-{
-    const { email } = req.body;
-    const db = client.db();
-
-    // Check that email is valid
-    const valid = await db.collection(userCol).findOne( { email: email } );
-
-    if (!valid) 
-        return res.status(500).json( { error: "Invalid email address." } );
-
-    // Construct email
-    const htmlToSend = `<html>
-                            <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
-                                <h1> Hello! </h1>
-                                <p style="margin-bottom:30px;"> Reset your password by entering this code:</p>
-                                <p style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">CODE</p>
-                            </div>
-                        </html>`;
-
-    const msg = {
-        to: email,
-        from: senderEmail,
-        subject: 'Password Reset Request',
-        text: ' ',
-        html: htmlToSend
-    };
-
-    // Send email
-    sgMail.send(msg).catch((error) => { console.error(error); });
 });
 
 // Tested: yes
@@ -257,7 +238,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
 
     // Check if the country is in the database
     let countryExists = await db.collection(countryCol)
-                                .countDocuments( { name: country }, 
+                                .countDocuments( { name: country },
                                                  { limit: 1 });
 
     // Put country in database if it doesn't exist
@@ -274,7 +255,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         { $push: { recipes: recipeID}}
     );
 
-    res.json( emptyErr );
+    res.status(200).json( emptyErr );
 });
 
 // Tested: yes
@@ -515,12 +496,12 @@ app.post('/api/addLike/', auth, async (req, res, next) =>
 });
 
 // Tested: yes
-// Delete like endpoint 
+// Delete like endpoint
 app.post('/api/deleteLike/', auth, async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
     const db = client.db();
-    
+
     // Check that user and recipe exists
     const userExists = await atLeastOne(userCol, userID);
     const recipeExists = await atLeastOne(recipeCol, recipeID);
@@ -555,14 +536,14 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
 
 // Tested: yes
 // Get recipes of a given country name
-app.post('/api/getCountryRecipes', auth, async (req, res) => 
+app.post('/api/getCountryRecipes', auth, async (req, res) =>
 {
     const db = client.db();
     const country = req.body.name;
 
     // Query the db and store in an array
     const found = await db.collection(countryCol).findOne( { name: country } );
-    
+
     if (found)
         res.json(found.recipes);
     else
@@ -571,7 +552,7 @@ app.post('/api/getCountryRecipes', auth, async (req, res) =>
 
 // Tested: yes
 // Partial search for recipes by name given a search term
-app.post('/api/searchRecipe', auth, async (req, res) => 
+app.post('/api/searchRecipe', auth, async (req, res) =>
 {
     let searchTerm = req.body.searchTerm;
     const db = client.db();
@@ -590,7 +571,7 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
 
 // Tested: yes
 // Updates a given user (by id) with new information
-app.post('/api/updateUser', auth, async (req, res) => 
+app.post('/api/updateUser', auth, async (req, res) =>
 {
     const { id, password, profilePic, email } = req.body;
     const db = client.db();
@@ -601,10 +582,10 @@ app.post('/api/updateUser', auth, async (req, res) =>
 
     db.collection(userCol).updateOne(
         { _id: ObjectId(id) },
-        { $set: { 
+        { $set: {
                 password: hash(password),
                 profilePic: profilePic,
-                email: email 
+                email: email
             } }
     );
 
@@ -612,7 +593,7 @@ app.post('/api/updateUser', auth, async (req, res) =>
 });
 
 // Get a recipe document given an id string
-app.post('/api/viewRecipe', auth, async (req, res) => 
+app.post('/api/viewRecipe', auth, async (req, res) =>
 {
     const id = req.body.id;
     const db = client.db();
@@ -627,7 +608,7 @@ app.post('/api/viewRecipe', auth, async (req, res) =>
 });
 
 // Used when generating the code a user needs to enter to verify their account.
-// Returns a 5-digit code as an int 
+// Returns a 5-digit code as an int
 function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
@@ -643,20 +624,5 @@ async function atLeastOne(col, id)
                                             { limit: 1 } );
     return (exists == 1);
 }
-=======
-const app = require("./app");
->>>>>>> Stashed changes
 
-app.listen(PORT, () =>
-{
-    console.log('Server is listening on port ' + PORT);
-});
-
-if (process.env.NODE_ENV === 'production')
-{
-    app.use(express.static('web-frontend/build'));
-    app.get('*', (req, res) =>
-    {
-        res.sendFile(path.resolve(__dirname, 'web-frontend', 'build', 'index.html'));
-    });
-}
+module.exports = app;
