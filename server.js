@@ -207,12 +207,44 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
 
     // If document found redirect user to landing page and mark the document as verified
     if (found)
-        await db.collection(userCol).updateOne( { username: username, auth: code },
+        db.collection(userCol).updateOne( { username: username, auth: code },
                                           { $set: { verified: "yes" } } );
     else 
         res.status(500).json( { error: "ID/User information invalid." } );
 
     res.send(successPage);
+});
+
+app.get('/api/getResetCode', auth, async (req, res) =>
+{
+    const { email } = req.body;
+    const db = client.db();
+
+    // Check that email is valid
+    const valid = await db.collection(userCol).findOne( { email: email } );
+
+    if (!valid) 
+        return res.status(500).json( { error: "Invalid email address." } );
+
+    // Construct email
+    const htmlToSend = `<html>
+                            <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
+                                <h1> Hello! </h1>
+                                <p style="margin-bottom:30px;"> Reset your password by entering this code:</p>
+                                <p style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">CODE</p>
+                            </div>
+                        </html>`;
+
+    const msg = {
+        to: email,
+        from: senderEmail,
+        subject: 'Password Reset Request',
+        text: ' ',
+        html: htmlToSend
+    };
+
+    // Send email
+    sgMail.send(msg).catch((error) => { console.error(error); });
 });
 
 // Tested: yes
