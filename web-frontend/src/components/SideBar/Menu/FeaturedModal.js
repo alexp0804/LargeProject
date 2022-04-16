@@ -44,7 +44,7 @@ const Featured = ({ title, active, icon }) => {
 
   return (
     <>
-      <Modal
+      <Modal style = {{zIndex : "2000"}}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}
