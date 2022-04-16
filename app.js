@@ -1,4 +1,5 @@
 const { Console } = require('console');
+const { create } = require('domain');
 const express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
@@ -215,6 +216,97 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
     res.send(successPage);
 });
 
+// Given a userID and email address, sends an email containing a reset code to the user.
+// If no user is found, sends a 500 code with an error message.
+app.post('/api/getResetCode', auth, async (req, res) =>
+{
+    const { userID, email } = req.body;
+    const db = client.db();
+
+    // Check that email is valid
+    const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
+
+    if (!valid) 
+        return res.status(500).json( { error: "Invalid email address." } );
+
+    const authCode = createAuthCode();
+
+    // Set this code to the code in the database
+    db.collection(userCol).updateOne( {email: email},
+                                      { $set: { auth: authCode } } );
+
+    // Construct email
+    const htmlToSend = `<html>
+                            <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
+                                <h1> Hello! </h1>
+                                <p style="margin-bottom:30px;"> Reset your password by entering this code:</p>
+                                <p style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">CODE</p>
+                            </div>
+                        </html>`.replace("CODE", String(authCode));
+
+    const msg = {
+        to: email,
+        from: senderEmail,
+        subject: 'Password Reset Request',
+        text: ' ',
+        html: htmlToSend
+    };
+
+    // Send email
+    sgMail.send(msg).catch((error) => { console.error(error); });
+
+    res.json( emptyErr );
+});
+
+// Given a userID and a reset code, checks if the reset code is valid.
+// If the user is wrong or the code isn't found, 500 status is sent.
+// If the code is correct, empty 200 message.
+app.post('/api/validateResetCode', async (req, res) =>
+{
+    const { userID, givenCode } = req.body;
+    const db = client.db();
+
+    // Get user
+    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    // Not found
+    if (!user) 
+        return res.status(500).json( { error: "Invalid User ID" } );
+    
+    // Compare given code to one in db
+    if (String(user.auth) != String(givenCode))
+        return res.status(500).json( { error: "Code does not match." } );
+    
+    res.json( emptyErr );
+});
+
+// Given a userID, field to change, value to change it to, updates the field of the user to the new value.
+// If the field is password, the value is encrypted.
+// 500 if invalid user, 200 if change was successful.
+app.post('/api/editUserField', auth, async (req, res) =>
+{
+    let { userID, newField, newValue } = req.body;
+    const db = client.db();
+
+    // Find the user
+    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+    
+    // Not found
+    if (!user) 
+        return res.status(500).json( { error: "Invalid User ID" } );
+
+    // Check if field is password
+    if (newField === "password")
+        newValue = hash(newValue);
+    
+    // Update the value
+    await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
+                                            { $set: { [newField]: newValue } });
+
+    // We okay
+    res.json( emptyErr );
+});
+
 // Tested: yes
 // Create recipe endpoint
 app.post('/api/createRecipe', auth, async (req, res) =>
@@ -288,16 +380,12 @@ app.post('/api/deleteRecipe', auth, async (req, res) =>
 app.post('/api/editRecipe', auth, async (req, res) =>
 {
     // Input = name, description, picture link, text, and Recipe ID (string).
-    const { name, desc, pic, text, recipeID } = req.body;
+    const { recipeID, newField, newValue } = req.body;
     const db = client.db();
 
     // Update recipe with new information.
-    await db.collection(recipeCol).updateOne(
-        { _id: ObjectId(recipeID) },
-        {
-            $set: { name: name, desc: desc, picURL: pic, recipeText: text }
-        }
-    );
+    await db.collection(recipeCol).updateOne( { _id: ObjectId(recipeID) },
+                                            { $set: { [newField]: newValue } });
 
     // Okay status
     res.json( emptyErr );
