@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import countryPosition from "../data/CountriesUpdated.json"
 import Sidebar from './Sidebar';
+import RecipeReviewCard from './SideBar/Menu/ProfileRecipesMap';
 
 
 
@@ -35,7 +36,7 @@ const MappyMap = () =>
     return (
 
 
-      <MapContainer center={[50.8333, 4]} zoom={6}>
+      <MapContainer center={[50.8333, 4]} zoom={6} minZoom={3} >
 
         < Sidebar / >
 
@@ -53,11 +54,13 @@ const MappyMap = () =>
             <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
               <div>
                 <h2>
-                  <img src={images[flags]} />
+                  {/* <img src={images[flags]} />
 
                  
 
-                  <img src= {images[countryYoink.id.toLowerCase() + '.png']} />
+                  <img src= {images[countryYoink.id.toLowerCase() + '.png']} /> */}
+
+                  < RecipeReviewCard / >
 
 
 

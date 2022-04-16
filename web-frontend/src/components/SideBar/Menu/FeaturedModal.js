@@ -1,28 +1,28 @@
-import React from 'react'
-import { Modal } from 'react-bootstrap'
-import styled from 'styled-components'
-import { useState } from 'react';
-import RecipeReviewCard from './ProfileRecipes';
+import React from "react";
+import { Modal, Row, Col } from "react-bootstrap";
+import styled from "styled-components";
+import { useState } from "react";
+import RecipeReviewCard from "./ProfileRecipes";
 
 const Container = styled.div`
-    border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
-    width: 100%;
-    padding: 0.3rem;
-    padding-left: 2rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1rem;
-    transition: 0.2s all ease-in-out;
+  border-left: 3px solid
+    ${(props) => (props.active ? props.theme.activeMenu : "transparent")};
+  width: 100%;
+  padding: 0.3rem;
+  padding-left: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  transition: 0.2s all ease-in-out;
 
-    &:hover {
-        background-color: rgba(0,0,0,0.1);
-    }
-`
-
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
 
 const Span = styled.span`
   /* color: ${(props) =>
@@ -44,7 +44,8 @@ const Featured = ({ title, active, icon }) => {
 
   return (
     <>
-      <Modal style = {{zIndex : "2000"}}
+      <Modal
+        style={{ zIndex: "2000" }}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}
@@ -56,10 +57,11 @@ const Featured = ({ title, active, icon }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Row>
 
-          < RecipeReviewCard / > 
-
-          < RecipeReviewCard / > 
+            <Col> <RecipeReviewCard />  </Col>
+            <Col> <RecipeReviewCard />  </Col>
+          </Row>
 
         </Modal.Body>
       </Modal>
@@ -71,4 +73,4 @@ const Featured = ({ title, active, icon }) => {
   );
 };
 
-export default Featured
+export default Featured;
