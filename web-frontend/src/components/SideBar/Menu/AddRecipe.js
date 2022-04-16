@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
+import { Modal, Form, Button, Row, Col, FormControl } from 'react-bootstrap'
 import styled from 'styled-components'
 import { useState } from 'react';
 import Chip from '@mui/material/Chip';
@@ -22,32 +22,15 @@ const Container = styled.div`
     }
 `
 
-
-const Span = styled.span`
-    /* color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"}; */
-    color: ${props => !props.active && props.theme.textColor};
-    font-size: 1rem;
-    margin-right: 1rem;
-`
-
-const Title = styled.h1`
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 300;
-    color: "black";
-`
-
 const MyRecipes = ({ title, active, icon }) => {
 
-
-    const [smShow, setSmShow] = useState(false);
     const [lgShow, setLgShow] = useState(false);
 
-    let recipeTitle, country, ingredients, directions, coordinates;
+    let recipeTitle, country, ingredients, directions;
     let mappy = useMap();
     
     // unused in data base
-    let prepTime, tags, notes;
+    // let prepTime, tags, notes;
 
 
     function insertMarker()
@@ -59,7 +42,7 @@ const MyRecipes = ({ title, active, icon }) => {
         let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${country}", "${directions}", "${1}", "${recipeTitle}", "${ingredients}", "${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
         marky.bindPopup(popup).openPopup();
 
-        marky.on('dragend', function(){marky.openPopup(); coordinates = marky.getLatLng(), popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe(${country}, ${directions}, ${1}, ${recipeTitle}, ${ingredients}, ${"google.com"}, ${marky.getLatLng()})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
+        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${country}", "${directions}", "${1}", "${recipeTitle}", "${ingredients}", "${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
     }
 
     return (
