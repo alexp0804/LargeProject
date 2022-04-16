@@ -88,7 +88,7 @@ export default function Main ({route, navigation})
         setRecipe(tmp);
         try
         {
-            let response = await fetch(url + 'createRecipe',  {method:'POST', body:recipe, 
+            let response = await fetch(url + 'createRecipe',  {method:'POST', body:JSON.stringify(recipe), 
                                          headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}, query:{token:route.params.token}});
             let txt= await response.text()
             console.warn(txt)
