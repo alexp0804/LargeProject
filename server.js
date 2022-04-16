@@ -1,5 +1,4 @@
 const PORT = process.env.PORT || 5000;
-<<<<<<< Updated upstream
 
 const emailPlatform = {
     "mobile": `<html>
@@ -643,9 +642,6 @@ async function atLeastOne(col, id)
                                             { limit: 1 } );
     return (exists == 1);
 }
-=======
-const app = require("./app");
->>>>>>> Stashed changes
 
 app.listen(PORT, () =>
 {
