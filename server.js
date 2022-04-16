@@ -207,7 +207,7 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
 
     // If document found redirect user to landing page and mark the document as verified
     if (found)
-        db.collection(userCol).updateOne( { username: username, auth: code },
+        await db.collection(userCol).updateOne( { username: username, auth: code },
                                           { $set: { verified: "yes" } } );
     else 
         res.status(500).json( { error: "ID/User information invalid." } );
