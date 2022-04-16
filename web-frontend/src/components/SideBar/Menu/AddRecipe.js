@@ -5,20 +5,8 @@ import { useState } from 'react';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Marker, Popup, useMap} from 'react-leaflet'
-import { useCallback, useMemo, useRef } from 'react'
-import DraggableMarkerExample from '../../DragPin';
+import { useMap} from 'react-leaflet'
 import l from "leaflet";
-
-
-const app_name = 'reci-pin';
-function buildPath(route)
-{
-    if (process.env.NODE_ENV === 'production')
-        return 'https://' + app_name + '.herokuapp.com/' + route;
-    else
-        return 'http://localhost:5000/' + route;
-}
 
 const Container = styled.div`
     border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
@@ -49,12 +37,6 @@ const Title = styled.h1`
     color: "black";
 `
 
-const center = {
-    lat: 51.505,
-    lng: -0.09,
-  }
-
-
 const MyRecipes = ({ title, active, icon }) => {
 
 
@@ -68,55 +50,16 @@ const MyRecipes = ({ title, active, icon }) => {
     let prepTime, tags, notes;
 
 
-    const createRecipe = async (event) => {
-        // prevents the form from refreshing the page
-        event.preventDefault();
-      
-        let jsonPayLoad = JSON.stringify({
- 
-            'country': country,
-            'desc': directions,
-            'creatorID': 1,
-            "name": recipeTitle,
-            "text": ingredients,
-            'pic': "google.com",
-            'coordinates': [0, 0]
-        });
-
-        console.log(jsonPayLoad);
-      
-        try 
-        {
-            // Do not await fetches anymore
-            const response = await fetch(buildPath("api/createRecipe"), {
-                method: "POST",
-                body: jsonPayLoad,
-                headers: { "Content-Type": "application/json" }
-            });
-            
-            let res = JSON.parse(await response.text());
-        
-            // to do
-            console.log(res);
-
-        } 
-        catch (e) 
-        {
-            console.log(e);
-            return;
-        }
-
-    };
-
-
     function insertMarker()
     {
         setLgShow(false)
   
         let marky =  l.marker(mappy.getCenter(), {draggable: true}).addTo(mappy);
-        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = '() => {console.log("shit")}' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
+
+        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${country}", "${directions}", "${1}", "${recipeTitle}", "${ingredients}", "${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
         marky.bindPopup(popup).openPopup();
-        marky.on('dragend', function(){marky.openPopup(); coordinates = marky.getLatLng()});
+
+        marky.on('dragend', function(){marky.openPopup(); coordinates = marky.getLatLng(), popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe(${country}, ${directions}, ${1}, ${recipeTitle}, ${ingredients}, ${"google.com"}, ${marky.getLatLng()})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
     }
 
     return (

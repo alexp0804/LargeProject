@@ -22,9 +22,68 @@
 
     <title>React App</title>
     <link rel="stylesheet" href="../src/styles.css" />
+
   </head>
 
   <body>
+    <script>
+    let myObjs = 
+    {
+        submitRecipe: function(country, directions, creatorID, recipeTitle, ingredients, picture, coordinateX, coordinateY, production)
+        {
+            const app_name = 'reci-pin';
+            let route = 'https://reci-pin.herokuapp.com/api/createRecipe';
+
+            if (!production)
+                route = 'http://localhost:5000/createRecipe';
+
+            coordinates = [coordinateX, coordinateY];
+        
+            const createRecipe = async (event) => {
+                // prevents the form from refreshing the page
+            
+                let jsonPayLoad = JSON.stringify({
+                    'country': country,
+                    'desc': directions,
+                    'creatorID': creatorID,
+                    "name": recipeTitle,
+                    "text": ingredients,
+                    'pic': picture,
+                    'coordinates': coordinates
+                });
+        
+                console.log(jsonPayLoad);
+            
+                try 
+                {
+                    // Do not await fetches anymore
+                    const response = await fetch(route, {
+                        method: "POST",
+                        body: jsonPayLoad,
+                        headers: { "Content-Type": "application/json" }
+                    });
+                    
+                    let res = JSON.parse(await response.text());
+                
+                    // to do
+                    console.log(res);
+        
+                } 
+                catch (e) 
+                {
+                    console.log(e);
+                    return;
+                }
+        
+            };
+        
+            createRecipe();
+        }
+    
+    } 
+
+    window.myObj = myObjs;
+    </script>
     <div id="root"></div>
     <script src="../src/index.js" type="text/JSX"></script>
   </body>
