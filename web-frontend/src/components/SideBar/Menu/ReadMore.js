@@ -2,7 +2,9 @@ import React from 'react'
 import { Container, Row, Col, Modal } from 'react-bootstrap'
 
 
+
 function ReadMore() {
+
   
     return (
         <Container>
@@ -12,7 +14,7 @@ function ReadMore() {
             xs=12 md=8
           </Col>
           <Col xs={6} md={4}>
-            xs=6 md=4
+            xs=6 md=4reeee
           </Col>
         </Row>
       
