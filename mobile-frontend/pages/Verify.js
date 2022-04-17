@@ -4,9 +4,13 @@ import {SafeAreaView, Text, View, TextInput} from 'react-native-picasso';
 import { Ionicons } from '@expo/vector-icons';
 
 
-export default function Verify({navigation})
+export default function Verify({route, navigation})
 {
     const [authCode, setAuthCode] = useState('');
+    let apiObj = {
+        auth: authCode,
+        username: route.params.user
+    }
 
     function doAuth(authCode, navigation)
     {

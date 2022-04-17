@@ -47,7 +47,7 @@ export default function SignUpScreen({navigation}) {
      else
      {
       setError("");
-      navigation.navigate("Verify");
+      navigation.navigate("Verify", {username: user});
      }
 
     }
