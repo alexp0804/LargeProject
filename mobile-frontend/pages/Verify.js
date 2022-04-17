@@ -8,12 +8,7 @@ const url = URL();
 
 export default function Verify({route, navigation})
 {
-    const [authCode, setAuthCode] = useState('');
-    let apiObj = {
-        auth: authCode,
-        username: route.params.user
-    }
-
+    
     async function doAuth(authCode, navigation)
     {
         let username = route.params.username

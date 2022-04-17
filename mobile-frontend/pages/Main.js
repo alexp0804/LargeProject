@@ -27,6 +27,10 @@ export default function Main ({route, navigation})
    const [recipe, setRecipe] = useState({})
    const [country, setCountry] = useState("")
    const [updateMapVis, setUpdateMapVis] = useState(false)
+   const [viewRecVis, setViewRecVis] = useState(false)
+   const [likeRecipe, setLikeRecipe] = useState(false)
+   const [favoriteRecipe, setFavoriteRecipe] = useState(false)
+
    function mapSettings()
    {
      setModalVisible(true);
@@ -35,7 +39,119 @@ export default function Main ({route, navigation})
          setBlur(i * 10);
      }
    }
+
+   function compareRecipe (id, array, box)
+   {
+       console.warn(id)
+       console.warn(array)
+       array.forEach((rec) => {
+           if (rec._id == id)
+           {
+               if (box == "like")
+               {
+                   setLikeRecipe(true)
+               }
+
+               if (box == "favorite")
+               {
+                   setFavoriteRecipe(true)
+               }
+           }
+       })
+   }
    
+   async function checkRecipe(checkBox)
+   {
+       if (checkBox == "like")
+       {
+           if(likeRecipe == true)
+           {
+                try
+                {
+                    let response = await fetch(url + "deleteLike", {method:"POST", 
+                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
+                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
+                    let txt = await response.text();
+                    let res = JSON.parse(txt);
+                    if (res.error != "")
+                    {
+                        console.warn(res.error)
+                        return
+                    }
+                }
+                catch(error)
+                {
+                    console.warn(error.toString())
+                }
+           }
+           else if(likeRecipe == false)
+           {
+                try
+                {
+                    let response = await fetch(url + "addLike", {method:"POST", 
+                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
+                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
+                    let txt = await response.text();
+                    let res = JSON.parse(txt);
+                    if (res.error != "")
+                    {
+                        console.warn(res.error)
+                        return
+                    }
+                }
+                catch(error)
+                {
+                    console.warn(error.toString())
+                }
+            }
+            setLikeRecipe(!likeRecipe)
+       }
+
+       if (checkBox == "favorite")
+       {
+            if(favoriteRecipe == true)
+            {
+                try
+                {
+                    let response = await fetch(url + "deleteFavorite", {method:"POST", 
+                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
+                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
+                    let txt = await response.text();
+                    let res = JSON.parse(txt);
+                    if (res.error != "")
+                    {
+                        console.warn(res.error)
+                        return
+                    }
+                }
+                catch(error)
+                {
+                    console.warn(error.toString())
+                }
+            }
+            else if(favoriteRecipe == false)
+            {
+                try
+                {
+                    let response = await fetch(url + "addFavorite", {method:"POST", 
+                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
+                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
+                    let txt = await response.text();
+                    let res = JSON.parse(txt);
+                    if (res.error != "")
+                    {
+                        console.warn(res.error)
+                        return
+                    }
+                }
+                catch(error)
+                {
+                    console.warn(error.toString())
+                }
+            }
+            setFavoriteRecipe(!favoriteRecipe)
+        }
+   }
 
    function addRecipeModal()
    {
@@ -63,7 +179,6 @@ export default function Main ({route, navigation})
          if(addingRecip == true)
          {
             addRecipe(message.payload.touchLatLng)
-            console.warn(message.payload.touchLatLng)
             setAddingRecip(false)
             setUpdateMapVis(true)
             
@@ -74,15 +189,67 @@ export default function Main ({route, navigation})
      {
         try
         {
-            console.warn("Testing" + message.payload.mapMarkerID)
             let response = await fetch (url + "viewRecipe", {method:"POST" , headers:{'Content-Type': 'application/json', 
-                                        "x-access-token":route.params.token}, body:{_id:message.payload.mapMarkerID}});
+                                        "x-access-token":route.params.token}, body:JSON.stringify({id:message.payload.mapMarkerID})});
             let txt = await response.text();
             let res = JSON.parse(txt);
-            console.warn("Just before testing res")
-            console.warn(res);
-            setRecipe(res)
-            console.warn(recipe)
+            if (res.error == null)
+            {    
+                setRecipe(res)
+                
+                try
+                {
+                     let resp = await (fetch(url + "getLikes", {method:"POST", 
+                                       body: JSON.stringify({userID: route.params.id}), 
+                                       headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
+                    
+                    txt = await resp.text()
+                    let newRes = JSON.parse(txt);
+
+                    if (newRes.error == null)
+                    {
+                        compareRecipe(res._id, newRes, "like")
+                    }
+                    else if (newRes.error != null)
+                    {
+                        console.warn(newRes.error)
+                    }
+                }
+                catch (error)
+                {
+                    console.warn(error.toString())
+                }
+                
+                try
+                {
+                     let resp = await (fetch(url + "getFavorites", {method:"POST", 
+                                       body: JSON.stringify({userID: route.params.id}), 
+                                       headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
+                    
+                    txt = await resp.text()
+                    let newRes = JSON.parse(txt);
+
+                    if (newRes.error == null)
+                    {
+                        console.warn("Is it favorites?")
+                        compareRecipe(res._id, newRes, "favorite")
+                    }
+                    else
+                    {
+                        console.warn(newRes.error)
+                    }
+                }
+                catch (error)
+                {
+                    console.warn(error.toString())
+                }
+
+                setViewRecVis(true)
+            }
+            else
+            {
+                console.warn(res.error);
+            }
         }
 
         catch(error)
@@ -105,8 +272,7 @@ export default function Main ({route, navigation})
             token: route.params.token
         }
         setRecipe(tmp);
-        console.warn(recipe)
-        console.warn(tmp)
+        
         try
         {
             let response = await fetch(url + 'createRecipe',  {method:'POST', body:JSON.stringify(tmp), 
@@ -114,18 +280,19 @@ export default function Main ({route, navigation})
             let txt= await response.text()
             console.warn(txt)
             let res = JSON.parse(txt)
-            console.warn(res)
+            console.warn(res.error)
 
-            if (res.error == "")
+            if (res.error == null)
             {
+                console.warn("testing")
                 let temp = markerArray
                 let temporary= {
-                            id:"Test",
+                            id:res.recipeID,
                             position:{lat:[coords.lat], lng:[coords.lng]},
                             icon: "icon no worky 😔"
                 }
                 temp.push(temporary)
-                console.warn(temporary)
+                console.warn("testing")
                 setMarkerArray(temp)
             
             }
@@ -159,10 +326,17 @@ export default function Main ({route, navigation})
       setUpdateMapVis(false)
    }
 
+   function closeViewRecipeModal()
+   {
+      setViewRecVis(false)
+      console.warn("This is working")
+      setLikeRecipe(false)
+      setFavoriteRecipe(false)
+   }
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
-                <TouchableOpacity onPress={() => loadMarkers()} style={{borderColor:"blue", borderWidth:2}}>
+                <TouchableOpacity onPress={() => addRecipeModal()} style={{borderColor:"blue", borderWidth:2}}>
                   <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
           ),
@@ -184,7 +358,7 @@ export default function Main ({route, navigation})
 
        try
        { 
-           let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm: ""}), 
+           let response = await fetch(url + 'getUserRecipes',  {method:'POST', body:JSON.stringify({userID: route.params.id}), 
            headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
            let txt = await response.text();
            console.warn(txt);
@@ -284,6 +458,42 @@ export default function Main ({route, navigation})
                         You just added a recipe!
                     </Text>
                 </View>
+            </Modal>
+            <Modal animationType="slide" transparent={false} visible={viewRecVis}>
+                <ScrollView style={{marginTop:"10%"}}>
+                    <TouchableOpacity onPress={closeViewRecipeModal}>
+                        <Feather name="x" size={28} color="black"/>
+                    </TouchableOpacity>
+                    <Text style={{textAlign:"center"}}>
+                        Recipe: {recipe.name}
+                    </Text>
+                    <Text>
+                        Description: {recipe.desc}
+                    </Text>
+                    <Text>
+                        Pic: {recipe.pic}
+                    </Text>
+                    <Text>
+                        Directions: {recipe.text}
+                    </Text>
+                    <Text>
+                        Country: {recipe.country}
+                    </Text>
+                    <CheckBox 
+                        title="Like this Recipe" 
+                        checked={likeRecipe} 
+                        onPress={() => checkRecipe("like")} 
+                        checkedTitle="Remove from liked recipes"
+                        checkedColor="green"
+                    />
+                    <CheckBox 
+                        title="Favorite this Recipe" 
+                        checked={favoriteRecipe} 
+                        onPress={() => checkRecipe("favorite")} 
+                        checkedTitle="Remove from favorite recipes"
+                        checkedColor="green"
+                    />
+                </ScrollView>
             </Modal>
         </SafeAreaView>
         
