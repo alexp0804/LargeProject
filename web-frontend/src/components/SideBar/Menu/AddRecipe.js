@@ -9,6 +9,7 @@ import { useMap} from 'react-leaflet'
 import l from "leaflet";
 import {Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import UploadButtons from '../../../pages/UploadButton';
 
 
 const Container = styled.div`
@@ -59,6 +60,7 @@ const MyRecipes = ({ title, active, icon }) => {
       <>
         <Modal
           size="lg"
+          style = {{zIndex : "2000"}}
           show={lgShow}
           onHide={() => setLgShow(false)}
           aria-labelledby="example-modal-sizes-title-lg"
@@ -93,12 +95,41 @@ const MyRecipes = ({ title, active, icon }) => {
                 </Form.Group>
               </Row>
 
-                <Form.Label>Preparation Time: </Form.Label>
-              <Form.Select className="w-25" aria-label="Default select example">
+
+              <Row>
+
+                <Col> <Form.Label>Preparation Time: </Form.Label>
+              <Form.Select className="w-35" aria-label="Default select example">
                 <option value="1"> 0-30min </option>
                 <option value="2"> 1 - 2 hrs</option>
                 <option value="3"> 2 - 3 hrs </option>
               </Form.Select>
+              </Col>
+
+              
+
+
+              <Col>
+
+            
+              
+              < UploadButtons> </UploadButtons>
+
+              
+              </Col>
+
+
+
+
+
+
+
+
+              </Row>
+
+         
+
+               
 
               <Form.Group className="mt-3 mb-3" controlId="formGridAddress2">
                 <Form.Label>Ingredients: </Form.Label>
@@ -165,9 +196,15 @@ const MyRecipes = ({ title, active, icon }) => {
                 <Form.Check type="checkbox" label="Make My Recipe Public" />
               </Form.Group>
 
+              
+            
+
+
               <Button variant="primary" type="button" onClick = {insertMarker} >
                 Place Pin
               </Button>
+
+              
             </Form>
           </Modal.Body>
         </Modal>

@@ -13,12 +13,14 @@ import { green, red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import ShareIcon from "@mui/icons-material/Share";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import image from "../../../assets/images/milkshake.jpg";
 import AddRecipe from "./AddRecipe";
 import MyRecipes from "./MyRecipesModal";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+
 import Readmore from "./ReadMore";
 import countryPosition from "../../../data/CountriesUpdated.json";
 
