@@ -111,7 +111,7 @@ app.post('/api/login', async (req, res) =>
     const token = jwt.sign(
         { userid: user._id, username },
         process.env.TOKEN_KEY,
-        {
+         {
             expiresIn: "2h",
         }
     );
@@ -439,7 +439,13 @@ app.post('/api/getFavorites', auth, async (req, res) =>
         }
     }
 
-    res.json(favs);
+    let result = await Promise.all(
+                    favs.map(  
+                        async x => await db.collection(recipeCol).findOne( { _id: x } )
+                        )
+                    );
+
+    res.json(result);
 });
 
 // Tested: yes
