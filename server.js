@@ -592,10 +592,11 @@ app.post('/api/updateUser', auth, async (req, res) =>
     res.json( emptyErr );
 });
 
+// Tested: yes
 // Get a recipe document given an id string
 app.post('/api/viewRecipe', auth, async (req, res) => 
 {
-    const id = req.body.id;
+    const id = req.body._id;
     const db = client.db();
 
     // If the recipe doesn't exist return bad status
@@ -606,6 +607,33 @@ app.post('/api/viewRecipe', auth, async (req, res) =>
     let recipeDoc = await db.collection(recipeCol).findOne( { _id: ObjectId(id) } );
     res.json(recipeDoc);
 });
+
+// Tested: yes
+// get all recipes associated created by a user
+app.post('/api/getUserRecipes', auth, async (req, res) => 
+{
+    const id = req.body.creator
+    console.log(id)
+    const db = client.db()
+    const exists = await db.collection(recipeCol)
+                           .countDocuments( { creator: ObjectId(id) },
+                                            { limit: 1 } );
+    if (!exists)
+        return res.status(404).json( { error: "No recipes found" } )
+    let recipeDoc = await db.collection(recipeCol).find( {creator:ObjectId(id)} )
+    let ret = await recipeDoc.toArray()
+    res.json(ret)
+})
+
+// Tested: yes
+// Get all recipes currently stored in the database
+app.post('/api/getAllRecipes', auth, async (req, res) =>
+{
+    const db = client.db()
+    let recipeDoc = await db.collection(recipeCol).find()
+    let ret = await recipeDoc.toArray()
+    res.json(ret)
+})
 
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int 
