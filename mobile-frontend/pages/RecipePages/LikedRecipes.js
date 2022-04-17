@@ -1,13 +1,18 @@
 import React from 'react';
 import {TouchableOpacity, ScrollView, Image, Modal, StyleSheet} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
+import { useFocusEffect } from '@react-navigation/native';
 import URL from '../../components/URL';
 import RecipeCard from '../../components/RecipeCard'
 const url = URL()
 
 export default function LikedRecipes({route, navigation})
 {
-    let liked = [];
+    navigation.getParent().setOptions({
+        title: "Liked"
+    });
+    let liked = []
+    liked = viewMyLikes()
     async function viewMyLikes()
     {
         let response = await fetch(url + "getLikes", {method:"POST", 
@@ -16,27 +21,12 @@ export default function LikedRecipes({route, navigation})
         let txt = await response.text()
         let res = JSON.parse(txt)
         console.warn(res)
+        return res
     }
-
-    React.useLayoutEffect(() => {
-        navigation.getParent().setOptions({
-          title: "Liked"
-        });
-        liked = viewMyLikes()
-        console.warn(liked)
-        console.warn("previous warn was in ULE")
-      }, [navigation]);
-
     return (
         <SafeAreaView>
             <View style={{width:"100%", height:"100%"}}>
-                {liked.map((like, i) => (
-                    <RecipeCard 
-                        name={like.name} 
-                        desc={like.desc} 
-                        country={like.country} 
-                    />
-                ))}
+                <Text>he</Text>
             </View>
         </SafeAreaView>
     )

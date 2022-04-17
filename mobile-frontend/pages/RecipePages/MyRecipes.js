@@ -1,11 +1,15 @@
 import React from 'react';
 import {TouchableOpacity, ScrollView, Image, Modal, StyleSheet} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
+import { useFocusEffect } from '@react-navigation/native';
 import URL from '../../components/URL';
 
 const url = URL()
 export default function MyRecipes({route, navigation})
 {
+    navigation.getParent().setOptions({
+        title: "My Recipes"
+    });
     async function viewMyRecipes()
     {
         console.warn(route.params.id)
@@ -15,14 +19,6 @@ export default function MyRecipes({route, navigation})
         let res = JSON.parse(txt);
         console.warn(res);
     }
-
-    React.useLayoutEffect(() => {
-        navigation.getParent().setOptions({
-          title: "Settings"
-        });
-        // call the function
-      }, [navigation]);
-
     return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, ScrollView, Image, Modal, StyleSheet} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
+import { useFocusEffect } from '@react-navigation/native';
 import URL from '../../components/URL';
 
 const url = URL()
@@ -8,12 +9,9 @@ const url = URL()
 
 export default function AllRecipes({route, navigation})
 {
-    React.useLayoutEffect(() => {
-        navigation.getParent().setOptions({
-          title: "Settings"
-        });
-      }, [navigation]);
-
+    navigation.getParent().setOptions({
+        title: "All Recipe"
+    });
     return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
