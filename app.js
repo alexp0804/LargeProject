@@ -357,7 +357,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         { $push: { created: recipeID } }
     );
 
-    res.status(200).json( emptyErr );
+    res.status(200).json( { recipeID: recipeID } );
 });
 
 // Tested: yes
