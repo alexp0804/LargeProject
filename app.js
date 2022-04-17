@@ -105,7 +105,7 @@ app.post('/api/login', async (req, res) =>
 
     // Compare password
     if (!bcrypt.compareSync(password, user.password))
-        return res.status(500).json( { error: 'Passwords do not match.' } );
+        return res.status(500).json( { error: 'Username or password incorrect.' } );
 
     // Refresh token
     const token = jwt.sign(
