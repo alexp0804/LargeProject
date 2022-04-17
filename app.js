@@ -744,12 +744,6 @@ app.post('/api/viewRecipe', auth, async (req, res) =>
     res.json(recipeDoc);
 });
 
-app.post('/api/test', async (req, res) =>
-{
-    console.log("Any heroku haters?");
-    res.json({msg:"We don't deserve this"});
-});
-
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int
 function createAuthCode() {
