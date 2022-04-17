@@ -2,7 +2,9 @@ import { useState } from 'react';
 import {TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView, Text, View, TextInput} from 'react-native-picasso';
 import { Ionicons } from '@expo/vector-icons';
+import URL from '../components/URL';
 
+const url = URL();
 
 export default function Verify({route, navigation})
 {
@@ -12,10 +14,32 @@ export default function Verify({route, navigation})
         username: route.params.user
     }
 
-    function doAuth(authCode, navigation)
+    async function doAuth(authCode, navigation)
     {
-        console.warn(authCode);
-        navigation.navigate("Log In");
+        let username = route.params.username
+        console.warn(username)
+        try
+        {
+            let response = await fetch(url + 'verify' + '/' + authCode + '/' + username
+                                        , {method:'GET', headers:{'Content-Type': 'application/json'}})
+            console.warn(response.status)
+            if (response.status != 200)
+            {
+                // add error code saying invalid auth code
+                console.warn("something is wrong boy!")
+                setAuthCode("");
+                return;
+            }
+            else
+            {
+                navigation.navigate("Log In")
+            }
+        }
+        catch(e)
+        {
+            console.warn(e.toString())
+            setAuthCode("");
+        }
     }
     return(
         <SafeAreaView className="flex-1">

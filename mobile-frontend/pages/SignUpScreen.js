@@ -32,10 +32,10 @@ export default function SignUpScreen({navigation}) {
      let loginObj = {username: user, password: password, email:email};
      let js = JSON.stringify(loginObj);
      console.warn(url);
-     let response = await fetch(url + 'register', {method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
+     let response = await fetch(url + 'register/mobile', {method:'POST', body:js, headers:{'Content-Type': 'application/json'}});
      let txt = await response.text();
      let res = JSON.parse(txt);
-     if (res.error != null)
+     if (res.error != "")
      {
        console.warn(res.error)
        setUser("");
@@ -53,6 +53,7 @@ export default function SignUpScreen({navigation}) {
     }
 
     catch(e)
+
     {
       console.warn(e.toString())
       setUser("");

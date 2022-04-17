@@ -27,6 +27,12 @@ export default function LogIn({navigation}) {
      console.warn(txt)
      let res = JSON.parse(txt);
      console.warn("Token is " + res.token)
+     if (res.verified == "no")
+     {
+       console.warn("not verified!!!!!!!")
+       navigation.navigate("Verify", {username: user})
+       return
+     }
      if (res.error != null)
      {
        console.warn(res.error)
