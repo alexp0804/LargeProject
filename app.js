@@ -387,7 +387,7 @@ app.post('/api/deleteRecipe', auth, async (req, res) =>
 
 // Tested: yes
 // EDIT RECIPE ENDPOINT
-app.post('/api/editRecipe', auth, async (req, res) =>
+app.post('/api/editRecipe/:fields/:values', auth, async (req, res) =>
 {
     // Input = name, description, picture link, text, and Recipe ID (string).
     const { recipeID, newField, newValue } = req.body;
@@ -742,6 +742,12 @@ app.post('/api/viewRecipe', auth, async (req, res) =>
     // Find the document and return
     let recipeDoc = await db.collection(recipeCol).findOne( { _id: ObjectId(id) } );
     res.json(recipeDoc);
+});
+
+app.post('/api/test', async (req, res) =>
+{
+    console.log("Any heroku haters?");
+    res.json({msg:"We don't deserve this"});
 });
 
 // Used when generating the code a user needs to enter to verify their account.
