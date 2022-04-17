@@ -407,7 +407,7 @@ app.post('/api/editRecipe/:fields/:values', auth, async (req, res) =>
 
 // Tested: yes
 // Get favorited recipes of user
-app.get('/api/getFavorites', auth, async (req, res) =>
+app.post('/api/getFavorites', auth, async (req, res) =>
 {
     const { userID } = req.body;
     const db = client.db();
@@ -417,7 +417,7 @@ app.get('/api/getFavorites', auth, async (req, res) =>
 
     // If db query results in empty cursor throw error
     if (!await c.hasNext())
-        res.status(500).json( { error: "Invalid UserID" } );
+        return res.status(500).json( { error: "Invalid UserID" } );
 
     // Get users favorites and return
     const user = await c.next();
