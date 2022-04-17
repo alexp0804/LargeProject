@@ -17,7 +17,7 @@ function ReadMore() {
       <br></br>
       <Row>
         <Tabs
-          defaultActiveKey="profile"
+          defaultActiveKey="ingredients"
           id="uncontrolled-tab-example"
           className="mb-3"
           tabClassName="text-black"
@@ -66,31 +66,25 @@ function ReadMore() {
 
             <h5> Make the crust:</h5>
 
-              <p>
+            <p>
               Break up the graham crackers into smaller pieces and add them into
               a food processor. Attach the lid and pulse about 20 times until
               fine even crumbs form.
-              </p>
-              <p> 
+            </p>
+            <p>
               Add the powdered sugar and 1/8 teaspoon salt, and pulse to
               combine. In a small heatproof bowl, add the butter and microwave
               on high in 30-second increments until melted. Pour the melted
               butter over the crumbs and pulse until fully combined. It should
               look like moist sand and loosely stick together when pressed with
-              your fingers. 
+              your fingers.
+            </p>
 
-
-              </p>
-
-              <p>
-              If using store-bought graham cracker crumbs, add it
-              into a medium bowl and use a rubber spatula to stir it with the
-              powdered sugar, 1/8 teaspoon salt, and melted butter until
-              combined.
-              </p>
-              
-            
-            
+            <p>
+              If using store-bought graham cracker crumbs, add it into a medium
+              bowl and use a rubber spatula to stir it with the powdered sugar,
+              1/8 teaspoon salt, and melted butter until combined.
+            </p>
           </Tab>
           <Tab
             eventKey="Country Stuff"

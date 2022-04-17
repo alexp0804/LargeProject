@@ -54,7 +54,7 @@ export default function RecipeReviewCard() {
       >
         <Modal.Header closeButton >
           <Modal.Title id="example-modal-sizes-title-lg">
-            Key Lime Pie !!!!! 
+            Key Lime Pie 
           </Modal.Title>
         </Modal.Header>
         <Modal.Body >
