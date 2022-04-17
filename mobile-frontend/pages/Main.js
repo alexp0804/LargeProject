@@ -1,12 +1,10 @@
 import React, {useState, useRef, useCallback} from 'react';
 import {TouchableOpacity, Modal, SafeAreaView, Text,View, StyleSheet, TextInput, ScrollView} from 'react-native'
-import {WebView} from 'react-native-webview'
 import { LatLng, LeafletView, } from 'react-native-leaflet-view';
 import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import {CheckBox} from 'react-native-elements';
 import URL from '../components/URL';
-import Map from './Map';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
@@ -58,7 +56,7 @@ export default function Main ({route, navigation})
         })
    }
 
-   function mapMessage(message)
+   async function mapMessage(message)
    {
      if(message.event === "onMapClicked")
      {
@@ -71,6 +69,27 @@ export default function Main ({route, navigation})
             
          }
      }
+
+     if (message.event == "onMapMarkerClicked")
+     {
+        try
+        {
+            console.warn("Testing" + message.payload.mapMarkerID)
+            let response = await fetch (url + "viewRecipe", {method:"POST" , headers:{'Content-Type': 'application/json', 
+                                        "x-access-token":route.params.token}, body:{_id:message.payload.mapMarkerID}});
+            let txt = await response.text();
+            let res = JSON.parse(txt);
+            console.warn("Just before testing res")
+            console.warn(res);
+            setRecipe(res)
+            console.warn(recipe)
+        }
+
+        catch(error)
+        {
+            console.warn(error.toString())
+        }
+     }
    }
 
    async function addRecipe(coords)
@@ -82,14 +101,15 @@ export default function Main ({route, navigation})
             country:recipe.country,
             creator:recipe.creator,
             pic:recipe.pic,
-            coordinates:coords,
+            coordinates:[coords.lat, coords.lng],
             token: route.params.token
         }
         setRecipe(tmp);
         console.warn(recipe)
+        console.warn(tmp)
         try
         {
-            let response = await fetch(url + 'createRecipe',  {method:'POST', body:JSON.stringify(recipe), 
+            let response = await fetch(url + 'createRecipe',  {method:'POST', body:JSON.stringify(tmp), 
                                          headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}, query:{token:route.params.token}});
             let txt= await response.text()
             console.warn(txt)
@@ -142,7 +162,7 @@ export default function Main ({route, navigation})
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
-                <TouchableOpacity onPress={() => addRecipeModal()} style={{borderColor:"blue", borderWidth:2}}>
+                <TouchableOpacity onPress={() => loadMarkers()} style={{borderColor:"blue", borderWidth:2}}>
                   <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
           ),
@@ -158,19 +178,37 @@ export default function Main ({route, navigation})
 
     console.warn(JSON.stringify(route))
 
-    function loadMarkers()
+    async function loadMarkers()
     {
-        let tempArray = [];
-        countries.forEach((country) => {
-           let tmp = {
-                id: country.id,
-                position: {lat: [country.latitude],lng: [country.longitude]},
+        let tempArray = []
+
+       try
+       { 
+           let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm: ""}), 
+           headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
+           let txt = await response.text();
+           console.warn(txt);
+           let recipes = JSON.parse(txt);
+
+          console.warn(recipes);
+
+         recipes.forEach((recipe) => {
+            console.warn(recipe)
+            let tmp = {
+                id: recipe._id,
+                position: {lat:[recipe.coordinates[0]], lng: [recipe.coordinates[1]]},
                 icon: "icon no worky 😔"
             }
 
             tempArray.push(tmp);            
         })
         setMarkerArray(tempArray);
+       }
+       catch(error)
+       {
+           console.warn(error.toString())
+       }
+
     }
     
     return(
@@ -178,7 +216,7 @@ export default function Main ({route, navigation})
           <BlurView intensity={blur} tint="default" style={{height:"100%", width:"100%", position:"absolute", zIndex:overAmt}}>
             </BlurView>
             <LeafletView doDebug={true}  mapCenterPosition={{lat:27.964157, lng: -82.452606}}
-                onLoadStart={loadMarkers}  mapMarkers={markerArray}
+                onLoadStart={() => loadMarkers()}  mapMarkers={markerArray}
                 onMessageReceived={(message) => mapMessage(message, recipe)}></LeafletView>
             <Modal animationType="slide"
                 transparent={true}
