@@ -295,6 +295,10 @@ app.post('/api/editUserField', auth, async (req, res) =>
     if (!user) 
         return res.status(500).json( { error: "Invalid User ID" } );
 
+    // Valid field?
+    if (!(["username", "password", "email", "profilePic", "verified", "auth"].includes(newField)))
+        return res.status(500).json( { error: "Invalid field." } );
+
     // Check if field is password
     if (newField === "password")
         newValue = hash(newValue);
@@ -344,7 +348,13 @@ app.post('/api/createRecipe', auth, async (req, res) =>
     // Add recipe to country.recipes
     db.collection(countryCol).updateOne(
         { name: country },
-        { $push: { recipes: recipeID}}
+        { $push: { recipes: recipeID } }
+    );
+
+    // Add recipe to user.created
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(creator) },
+        { $push: { created: recipeID } }
     );
 
     res.status(200).json( emptyErr );
@@ -382,6 +392,10 @@ app.post('/api/editRecipe', auth, async (req, res) =>
     // Input = name, description, picture link, text, and Recipe ID (string).
     const { recipeID, newField, newValue } = req.body;
     const db = client.db();
+
+    // Valid field?
+    if (!(["name", "desc", "pic", "country", "text", "likes", "favorites"].includes(newField)))
+        return res.status(500).json( { error: "Invalid field." } );
 
     // Update recipe with new information.
     await db.collection(recipeCol).updateOne( { _id: ObjectId(recipeID) },
@@ -430,7 +444,7 @@ app.get('/api/getFavorites', auth, async (req, res) =>
 
 // Tested: yes
 // Get liked recipes of user
-app.get('/api/getLikes', auth, async (req, res) =>
+app.post('/api/getLikes', auth, async (req, res) =>
 {
     const { userID } = req.body;
     const db = client.db();
@@ -462,7 +476,13 @@ app.get('/api/getLikes', auth, async (req, res) =>
         }
     }
 
-    res.json(likes);
+    let result = await Promise.all(
+                    likes.map(  
+                        async x => await db.collection(recipeCol).findOne( { _id: x } )
+                        )
+                    );
+
+    res.json(result);
 });
 
 // Tested: yes
@@ -626,16 +646,45 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
 // Get recipes of a given country name
 app.post('/api/getCountryRecipes', auth, async (req, res) =>
 {
+    const { country } = req.body;
     const db = client.db();
-    const country = req.body.name;
 
     // Query the db and store in an array
     const found = await db.collection(countryCol).findOne( { name: country } );
 
-    if (found)
-        res.json(found.recipes);
-    else
+    if (!found)
         res.status(404).json( { error: "Country not found" } );
+    
+    // Get the actual recipe object associated with each id
+    let result = await Promise.all(
+                    found.recipes.map(  
+                        async x => await db.collection(recipeCol).findOne( { _id: x } )
+                        )
+                    );
+
+    res.json(result);
+});
+
+app.post('/api/getUserRecipes', auth, async (req, res) =>
+{
+    const { userID } = req.body;
+    const db = client.db();
+
+    // Get user
+    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    if (!user)
+        return res.status(500).json( { error: "Invalid User ID" } );
+
+    // Grab the recipe associated with each id
+    let result = await Promise.all(
+                    user.created.map(
+                        async x => await db.collection(recipeCol).findOne( { _id: x } )
+                    )
+                );
+
+    // Return created recipes
+    res.json(result);
 });
 
 // Tested: yes
