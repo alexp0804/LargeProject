@@ -9,9 +9,20 @@ const url = URL()
 
 export default function AllRecipes({route, navigation})
 {
-    navigation.getParent().setOptions({
-        title: "All Recipe"
-    });
+    React.useEffect(() => {
+        const nameHeader = navigation.addListener('focus', () => {
+            navigation.getParent().setOptions({
+                title: "All Recipes"
+              });
+        });
+    
+        return nameHeader;
+      }, [navigation]);
+
+      console.warn("All Recipies")
+
+      console.warn(route.params.allRecipes)
+
     return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>

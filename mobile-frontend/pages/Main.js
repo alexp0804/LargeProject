@@ -392,6 +392,11 @@ export default function Main ({route, navigation})
                 console.warn(error.toString())
             }
         }
+
+        if ((filterFavorites == false) && (filterLikes == false) && (filterMine == false))
+        {
+            loadMarkers();
+        }
         try
         {
             console.warn("Is it breaking here")
@@ -456,7 +461,7 @@ export default function Main ({route, navigation})
 
        try
        { 
-           let response = await fetch(url + 'getUserRecipes',  {method:'POST', body:JSON.stringify({userID: route.params.id}), 
+           let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:""}), 
            headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
            let txt = await response.text();
            console.warn(txt);

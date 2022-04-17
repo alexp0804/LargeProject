@@ -7,18 +7,17 @@ import URL from '../../components/URL';
 const url = URL()
 export default function MyRecipes({route, navigation})
 {
-    navigation.getParent().setOptions({
-        title: "My Recipes"
-    });
-    async function viewMyRecipes()
-    {
-        console.warn(route.params.id)
-        let response = await fetch (url + "getUserRecipes", {method:"POST" , headers:{'Content-Type': 'application/json', 
-                                    "x-access-token":route.params.token}, body:JSON.stringify({userID:route.params.id})});
-        let txt = await response.text();
-        let res = JSON.parse(txt);
-        console.warn(res);
-    }
+    React.useEffect(() => {
+        const nameHeader = navigation.addListener('focus', () => {
+            navigation.getParent().setOptions({
+                title: "My Recipes"
+              });
+        });
+    
+        return nameHeader;
+      }, [navigation]);
+
+      console.warn(route.params.myRec)
     return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>

@@ -9,18 +9,19 @@ const url = URL()
 
 export default function FavoriteRecipes({route, navigation})
 {
-    navigation.getParent().setOptions({
-        title: "Favorites"
-    });
-    async function viewMyFavs()
-    {
-        let response = await fetch(url + "getFavorites", {method:"POST", 
-                                body: JSON.stringify({userID: route.params.id}), 
-                                headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
-        let txt = await response.text()
-        let res = JSON.parse(txt)
-        console.warn(res)
-    }
+    React.useEffect(() => {
+        const nameHeader = navigation.addListener('focus', () => {
+            navigation.getParent().setOptions({
+                title: "Favorites"
+              });
+        });
+    
+        return nameHeader;
+      }, [navigation]);
+
+      console.warn("Favorite Recipes")
+
+      console.warn(route.params.favs)
     return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
