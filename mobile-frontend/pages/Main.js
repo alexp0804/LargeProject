@@ -272,7 +272,7 @@ export default function Main ({route, navigation})
             token: route.params.token
         }
         setRecipe(tmp);
-        
+
         try
         {
             let response = await fetch(url + 'createRecipe',  {method:'POST', body:JSON.stringify(tmp), 
@@ -311,14 +311,112 @@ export default function Main ({route, navigation})
        setAddRecipeVis(false)
    }
 
-   function closeModal()
+   async function closeModal()
    {
-       setModalVisible(false);
        for (let i = 5; i > 0; i--) {
         setBlur(i * 10);
         }
-    setBlur(1)
-    setOverAmt(-1)
+        setBlur(1)
+        setOverAmt(-1)
+        let filtered = {}
+        let filteredArray = []
+
+        if (filterLikes == true)
+        {
+            try
+            {
+                let response = await (fetch(url + "getLikes", {method:"POST", 
+                                        body: JSON.stringify({userID: route.params.id}), 
+                                        headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
+                let txt = await response.text()
+                let res = JSON.parse(txt)
+                res.forEach((rec) => {
+                    if (!(rec._id in filtered))
+                    {
+                        filtered[rec._id] = 1
+                        filteredArray.push(rec)
+                    }
+                })
+                
+            }
+            catch(error)
+            {
+                console.warn(error.toString())
+            }
+        }
+
+        if (filterFavorites == true)
+        {
+            try
+            {
+                let response = await (fetch(url + "getFavorites", {method:"POST", 
+                                        body: JSON.stringify({userID: route.params.id}), 
+                                        headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
+                let txt = await response.text()
+                let res = JSON.parse(txt)
+                res.forEach((rec) => {
+                    if (!(rec._id in filtered))
+                    {
+                        filtered[rec._id] = 1
+                        filteredArray.push(rec)
+                    }
+                })
+                
+            }
+            catch(error)
+            {
+                console.warn(error.toString())
+            }
+        }
+
+        if (filterMine == true)
+        {
+            try
+            {
+                let response = await (fetch(url + "getUserRecipes", {method:"POST", 
+                                        body: JSON.stringify({userID: route.params.id}), 
+                                        headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
+                let txt = await response.text()
+                let res = JSON.parse(txt)
+                res.forEach((rec) => {
+                    if (!(rec._id in filtered))
+                    {
+                        filtered[rec._id] = 1
+                        filteredArray.push(rec)
+                    }
+                })
+                
+            }
+            catch(error)
+            {
+                console.warn(error.toString())
+            }
+        }
+        try
+        {
+            console.warn("Is it breaking here")
+            console.warn(filteredArray)
+            let tempArray = []
+            filteredArray.forEach((recipe) => {
+                console.warn("Testing" + recipe._id)
+                let tmp = {
+                    id: recipe._id,
+                    position: {lat:[recipe.coordinates[0]], lng: [recipe.coordinates[1]]},
+                    icon: "icon no worky 😔"
+                }
+
+                tempArray.push(tmp);            
+            })
+            setMarkerArray(tempArray);
+        }
+        catch(error)
+        {
+            console.warn(error.toString())
+        }
+        
+        console.warn(markerArray)
+        console.warn(filtered)
+        setModalVisible(false);
    }
 
    function closeAddModal()
