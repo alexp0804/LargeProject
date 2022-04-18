@@ -13,10 +13,9 @@ import { green, red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import ShareIcon from "@mui/icons-material/Share";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import image from "../../../assets/images/milkshake.jpg";
-import AddRecipe from "./AddRecipe";
-import MyRecipes from "./MyRecipesModal";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import Readmore from "./ReadMore";
@@ -38,6 +37,11 @@ export default function RecipeReviewCard() {
   const [expanded, setExpanded] = React.useState(false);
 
   const [lgShow, setLgShow] = useState(false);
+
+  const[bookImage, setbookImage] = useState(<BookmarkBorderIcon/>); 
+  const[flag, setFlag] = useState(false); 
+
+
 
   const lower = countryPosition.id;
   const flags = "au.png";
@@ -73,8 +77,8 @@ export default function RecipeReviewCard() {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings">
-              <BookmarkBorderIcon></BookmarkBorderIcon>
+            <IconButton aria-label="settings" onClick = {() => {flag? setbookImage(<BookmarkBorderIcon/>) : setbookImage(<BookmarkIcon/>); setFlag(!flag)} }>
+              {bookImage} 
             </IconButton>
           }
           title="Shrimp and Chorizo Paella"

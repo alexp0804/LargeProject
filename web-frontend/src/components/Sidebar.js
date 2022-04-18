@@ -6,8 +6,6 @@ import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
 import AddRecipe from './SideBar/Menu/AddRecipe';
 
 
-
-
 function OffCanvasExample({ name, ...props }) {
 
     
