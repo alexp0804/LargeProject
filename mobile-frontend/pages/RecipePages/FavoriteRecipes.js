@@ -11,9 +11,13 @@ const url = URL()
 export default function FavoriteRecipes({route, navigation})
 {
     const favs = route.params.favs
+    const likes = route.params.liked
     const hashyHash = {}
     const [searchArray,setSearchArray] = useState(route.params.favs)
-    
+    likeMap = {}
+    likes.forEach((rec) => {
+        likeMap[rec._id] = rec
+    })
 
     async function search(text)
     {
@@ -67,15 +71,22 @@ export default function FavoriteRecipes({route, navigation})
             <ScrollView style={{width:"100%", height:"100%"}}>
                 <SearchBar onChangeText={search} placeholder="Search"
                            />
-                
-                    <View>
-                   { 
-                       searchArray.map((rec, i) => {
-                       return(
-                       <RecipeCard name= {rec.name} country={rec.country}
-                                   desc= {rec.desc} key= {i} />
-                   )})}
-                </View> 
+                <View>
+                        {favs.map((rec, i) => {
+                            return (
+                                <RecipeCard name={rec.name}
+                                            desc={rec.desc}
+                                            country={rec.country}
+                                            userID={route.params.id}
+                                            recID={rec._id}
+                                            token={route.params.token}
+                                            faved={true}
+                                            liked={(rec._id in likeMap)}
+                                            key={i}
+                                />
+                            )
+                        })}
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

@@ -11,13 +11,13 @@ export default function RecipePage({navigation, route})
   return(
     <Tab.Navigator screenOptions={{headerShown:false}}>
       <Tab.Screen name= "AllRecipes" component= {All} options={{title: "All Recipes"}}
-                 initialParams={{id:route.params.id, token:route.params.token, allRecipes: route.params.all}}/>
+                 initialParams={{id:route.params.id, token:route.params.token, allRecipes: route.params.all, favs: route.params.favs, liked: route.params.liked}}/>
       <Tab.Screen name= "FavoriteRecipes" component={Favorites} options={{title: "Favorite Recipes"}}
-                 initialParams={{id:route.params.id, token:route.params.token, favs: route.params.favs}}/> 
+                 initialParams={{id:route.params.id, token:route.params.token, favs: route.params.favs, liked: route.params.liked}}/> 
       <Tab.Screen name= "LikedRecipes" component={Liked} options={{title: "Liked Recipes"}}
-                 initialParams={{id:route.params.id, token:route.params.token, liked: route.params.liked}}/> 
+                 initialParams={{id:route.params.id, token:route.params.token, favs: route.params.favs, liked: route.params.liked}}/> 
       <Tab.Screen name= "MyRecipes" component={MyRecipes} options={{title: "My Recipes"}}
-                 initialParams={{id:route.params.id, token:route.params.token, myRec: route.params.myRecipes}}/> 
+                 initialParams={{id:route.params.id, token:route.params.token, myRec: route.params.myRecipes, favs: route.params.favs, liked: route.params.liked}}/> 
     </Tab.Navigator>
   )
 }
