@@ -473,7 +473,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         { $push: { created: recipeID } }
     );
 
-    res.status(200).json( { recipeID: recipeID } );
+    res.json( { recipeID: recipeID } );
 });
 
 // UPDATE RECIPE
