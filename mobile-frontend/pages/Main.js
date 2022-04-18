@@ -30,6 +30,7 @@ export default function Main ({route, navigation})
    const [viewRecVis, setViewRecVis] = useState(false)
    const [likeRecipe, setLikeRecipe] = useState(false)
    const [favoriteRecipe, setFavoriteRecipe] = useState(false)
+   const [ingredients, setIngredients] = useState([])
 
    function mapSettings()
    {
