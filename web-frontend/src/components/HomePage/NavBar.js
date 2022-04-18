@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import {  Modal, Form, FormControl } from 'react-bootstrap'
 import App from '../../Login'
+import RegisterApp from '../../Register'
 
 
 function Login() {
@@ -38,6 +39,40 @@ function Login() {
     </>
   );
 }
+function Register() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button variant="" onClick={handleShow}>
+        Sign Up
+      </Button>
+
+      <Modal size="lg" show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+        </Modal.Header>
+        <Modal.Body closeButton>
+           
+
+           <RegisterApp / >
+
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="primary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+    </>
+  );
+}
 
 
 const Navbar = () => {
@@ -46,15 +81,11 @@ const Navbar = () => {
     <Nav>
       <Container>
         <mapLogo />
-        <Hamburger onClick={() => setIsOpen(!isOpen)}>
-          <span />
-          <span />
-          <span />
-        </Hamburger>
+        
         <Menu isOpen={isOpen}>
           <LinkWrapper>
             <MenuLink href="">Help</MenuLink>
-            <MenuLink href="/Register">Signup</MenuLink>
+            <Register/>
             < Login / >
           </LinkWrapper>
         </Menu>

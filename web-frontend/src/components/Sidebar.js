@@ -7,11 +7,79 @@ import AddRecipe from './SideBar/Menu/AddRecipe';
 
 
 
+
 function OffCanvasExample({ name, ...props }) {
+
+    
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {setShow(true); getUserRecipes();}
+  const [recipeArray, setArray] = useState([]);
+
+  const getUserRecipes = async (event) => {
+    // prevents the form from refreshing the page
+    console.log("HELLO")
+
+    const app_name = 'reci-pin';
+    function buildPath(route)
+    {
+        if (process.env.NODE_ENV === 'production')
+            return 'https://' + app_name + '.herokuapp.com/' + route;
+        else
+            return 'http://localhost:5000/' + route;
+    }
+
+    let jsonPayLoad = JSON.stringify({
+        userID: JSON.parse(window.localStorage.getItem('userObject'))['_id']
+      });
+
+    console.log(jsonPayLoad)
+
+
+    try 
+    {
+      // Do not await fetches anymore
+      const response = await fetch(buildPath("api/getUserRecipes"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
+        });
+      let res = JSON.parse(await response.text());
+  
+      if(res.hasOwnProperty('error'))
+        console.log(res['error']);
+  
+        console.log(res)
+      setArray(res)
+
+    }
+    catch(e)
+    {
+        console.log(e)
+    }
+
+
+    return;
+};
+
+
+
+    function createCard(recipe)
+    {
+        return (
+            <RecipeReviewCard
+            key = {recipe._id}
+            recipeTitle = {recipe.name}
+            recipeSummary = {recipe.desc}
+            recipeIngredients = {recipe.ingredients}
+            recipeinstructions = {recipe.instructions}
+            recipePic = {recipe.pic}
+            />
+        );
+    }
+
 
   return (
     <>
@@ -27,9 +95,9 @@ function OffCanvasExample({ name, ...props }) {
           My Recipes: 
 
           <br />
+
+        { recipeArray.map(createCard) }
          
-         
-        < RecipeReviewCard / >
 
 
         </Offcanvas.Body>
@@ -103,7 +171,7 @@ const Sidebar = () =>
         </Navbar>
 
         <>
-          <Offcanvas id = "contentnav" show={show} backdrop = {true} onHide={handleClose} >
+          <Offcanvas id = "contentnav" show={show} backdrop = {true} onHide={handleClose}>
             <Offcanvas.Header closeButton>
             </Offcanvas.Header>
             <Offcanvas.Body>

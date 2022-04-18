@@ -13,14 +13,12 @@ import { green, red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import ShareIcon from "@mui/icons-material/Share";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import image from "../../../assets/images/milkshake.jpg";
 import AddRecipe from "./AddRecipe";
 import MyRecipes from "./MyRecipesModal";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-
 import Readmore from "./ReadMore";
 import countryPosition from "../../../data/CountriesUpdated.json";
 
@@ -47,19 +45,18 @@ export default function RecipeReviewCard() {
   return (
     <>
       <Modal
-        style={{ zIndex: "2000"}}
+        style={{ zIndex: "2000", marginTop: "10%" }}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}
         aria-labelledby="example-modal-sizes-title-lg"
-        scrollable={true}
       >
-        <Modal.Header closeButton >
+        <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">
-            Key Lime Pie 
+            Bookmarks:
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body >
+        <Modal.Body>
           <Readmore />
         </Modal.Body>
       </Modal>

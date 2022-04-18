@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "test": "jest",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix web-frontend && npm run build --prefix web-frontend"
   },
   "author": "",
@@ -19,8 +20,11 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
+    "jest": "^27.5.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.0",
     "react-router-dom": "^6.3.0",
-    "sendgrid": "^5.2.3"
+    "sendgrid": "^5.2.3",
+    "supertest": "^6.2.2"
   }
 }

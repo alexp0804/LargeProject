@@ -29,13 +29,13 @@
     <script>
     let myObjs = 
     {
-        submitRecipe: function(country, directions, creatorID, recipeTitle, ingredients, picture, coordinateX, coordinateY, production)
+        submitRecipe: function(country, directions, recipeTitle, ingredients, desc, picture, coordinateX, coordinateY, id, production)
         {
             const app_name = 'reci-pin';
             let route = 'https://reci-pin.herokuapp.com/api/createRecipe';
 
             if (!production)
-                route = 'http://localhost:5000/createRecipe';
+                route = 'http://localhost:5000/api/createRecipe';
 
             coordinates = [coordinateX, coordinateY];
         
@@ -43,13 +43,14 @@
                 // prevents the form from refreshing the page
             
                 let jsonPayLoad = JSON.stringify({
-                    'country': country,
-                    'desc': directions,
-                    'creatorID': creatorID,
                     "name": recipeTitle,
-                    "text": ingredients,
+                    'desc': desc,
                     'pic': picture,
-                    'coordinates': coordinates
+                    'creator': id,
+                    'instructions': directions,
+                    "ingredients": ingredients,
+                    'coordinates': coordinates,
+                    'country': country,
                 });
         
                 console.log(jsonPayLoad);
@@ -60,13 +61,16 @@
                     const response = await fetch(route, {
                         method: "POST",
                         body: jsonPayLoad,
-                        headers: { "Content-Type": "application/json" }
+                        headers: { "Content-Type": "application/json", "x-access-token": JSON.parse(localStorage.getItem('userObject'))['token'] }
+                
                     });
+
+                    console.log(await response.text())
                     
-                    let res = JSON.parse(await response.text());
+                   // let res = JSON.parse(await response.text());
                 
                     // to do
-                    console.log(res);
+                   // console.log(res);
         
                 } 
                 catch (e) 

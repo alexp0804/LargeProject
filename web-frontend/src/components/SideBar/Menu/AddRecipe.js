@@ -9,7 +9,6 @@ import { useMap} from 'react-leaflet'
 import l from "leaflet";
 import {Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import UploadButtons from '../../../pages/UploadButton';
 
 
 const Container = styled.div`
@@ -37,11 +36,11 @@ const MyRecipes = ({ title, active, icon }) => {
     const [lgShow, setLgShow] = useState(false);
     const [countryHook, setCountryHook] = useState();
 
-    let recipeTitle, country, ingredients, directions;
+    let recipeTitle, country, ingredients, directions, description;
     let mappy = useMap();
     
     // unused in data base
-    // let prepTime, tags, notes;
+    // let prepTime, tags;
 
 
     function insertMarker()
@@ -50,17 +49,16 @@ const MyRecipes = ({ title, active, icon }) => {
   
         let marky =  l.marker(mappy.getCenter(), {draggable: true}).addTo(mappy);
 
-        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${1}", "${recipeTitle}", "${ingredients}", "${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
+        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
         marky.bindPopup(popup).openPopup();
 
-        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${1}", "${recipeTitle}", "${ingredients}", "${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
+        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
     }
 
     return (
       <>
         <Modal
           size="lg"
-          style = {{zIndex : "2000"}}
           show={lgShow}
           onHide={() => setLgShow(false)}
           aria-labelledby="example-modal-sizes-title-lg"
@@ -71,6 +69,21 @@ const MyRecipes = ({ title, active, icon }) => {
           <Modal.Body>
             <Form>
               <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridPassword">
+                  <Form.Label>Country of Origin: </Form.Label>
+                  <Typeahead
+                    filterBy={filterBy}
+                    id = "countryInputs"
+                    options={options}
+                    placeholder="Choose a country..."
+                    onChange = {(e) => setCountryHook(e)}
+                    onInputChange = {(e) => setCountryHook(e)}
+                    >
+                    
+                  </Typeahead>
+                    
+
+                </Form.Group>
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label>Recipe Title: </Form.Label>
                   <Form.Control
@@ -80,56 +93,14 @@ const MyRecipes = ({ title, active, icon }) => {
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} controlId="formGridPassword">
-                  <Form.Label>Country of Origin: </Form.Label>
-                  <Typeahead
-                    filterBy={filterBy}
-                    id = "countryInputs"
-                    options={options}
-                    placeholder="Choose a country..."
-                    >
-                    {({selected}) => setCountryHook(selected[0])}
-                  </Typeahead>
-                    
-
-                </Form.Group>
               </Row>
 
-
-              <Row>
-
-                <Col> <Form.Label>Preparation Time: </Form.Label>
-              <Form.Select className="w-35" aria-label="Default select example">
+                <Form.Label>Preparation Time: </Form.Label>
+              <Form.Select className="w-25" aria-label="Default select example">
                 <option value="1"> 0-30min </option>
                 <option value="2"> 1 - 2 hrs</option>
                 <option value="3"> 2 - 3 hrs </option>
               </Form.Select>
-              </Col>
-
-              
-
-
-              <Col>
-
-            
-              
-              < UploadButtons> </UploadButtons>
-
-              
-              </Col>
-
-
-
-
-
-
-
-
-              </Row>
-
-         
-
-               
 
               <Form.Group className="mt-3 mb-3" controlId="formGridAddress2">
                 <Form.Label>Ingredients: </Form.Label>
@@ -188,7 +159,8 @@ const MyRecipes = ({ title, active, icon }) => {
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Notes: </Form.Label>
                   <FormControl as="textarea" aria-label="With textarea"  type="notes"
-                  placeholder="Don't overcook the red sauce!" />
+                  placeholder="Don't overcook the red sauce!" 
+                  onChange = {(e) => description = e.target.value}/>
                 </Form.Group>
               </Row>
 
@@ -196,15 +168,9 @@ const MyRecipes = ({ title, active, icon }) => {
                 <Form.Check type="checkbox" label="Make My Recipe Public" />
               </Form.Group>
 
-              
-            
-
-
               <Button variant="primary" type="button" onClick = {insertMarker} >
                 Place Pin
               </Button>
-
-              
             </Form>
           </Modal.Body>
         </Modal>
