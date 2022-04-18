@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 
-export default function RecipeCard({name, desc, country})
+export default function RecipeCard({name, desc, country, onPress})
 {
     return (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1}} onStartShouldSetResponder={onPress}>
             <View style={styles.rect}>
                 <View style={styles.imageRow}>
                     <Image
