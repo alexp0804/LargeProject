@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+
+    <title>React App</title>
+    <link rel="stylesheet" href="../src/styles.css" />
+
+  </head>
+
+  <body>
+    <script>
+    let myObjs = 
+    {
+        submitRecipe: function(country, directions, recipeTitle, ingredients, desc, picture, coordinateX, coordinateY, id, production)
+        {
+            const app_name = 'reci-pin';
+            let route = 'https://reci-pin.herokuapp.com/api/createRecipe';
+
+            if (!production)
+                route = 'http://localhost:5000/api/createRecipe';
+
+            coordinates = [coordinateX, coordinateY];
+        
+            const createRecipe = async (event) => {
+                // prevents the form from refreshing the page
+            
+                let jsonPayLoad = JSON.stringify({
+                    "name": recipeTitle,
+                    'desc': desc,
+                    'pic': picture,
+                    'creator': id,
+                    'instructions': directions,
+                    "ingredients": ingredients,
+                    'coordinates': coordinates,
+                    'country': country,
+                });
+        
+                console.log(jsonPayLoad);
+            
+                try 
+                {
+                    // Do not await fetches anymore
+                    const response = await fetch(route, {
+                        method: "POST",
+                        body: jsonPayLoad,
+                        headers: { "Content-Type": "application/json", "x-access-token": JSON.parse(localStorage.getItem('userObject'))['token'] }
+                
+                    });
+
+                    console.log(await response.text())
+                    
+                   // let res = JSON.parse(await response.text());
+                
+                    // to do
+                   // console.log(res);
+        
+                } 
+                catch (e) 
+                {
+                    console.log(e);
+                    return;
+                }
+        
+            };
+        
+            createRecipe();
+        }
+    
+    } 
+
+    window.myObj = myObjs;
+    </script>
+    <div id="root"></div>
+    <script src="../src/index.js" type="text/JSX"></script>
+  </body>
+</html>
