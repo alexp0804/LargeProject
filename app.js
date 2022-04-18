@@ -8,6 +8,7 @@ const express = require('express'),
     sgMail = require('@sendgrid/mail'),
     auth = require("./middleware/auth"),
     jwt = require("jsonwebtoken"),
+    cloudinary = require('cloudinary').v2,
   { ObjectId, CURSOR_FLAGS } = require('mongodb');
 
 const bcrypt = require('bcryptjs'),
@@ -47,6 +48,13 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Cloudinary set up 
+cloudinary.config({
+    cloud_name: "deks041ua",
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // Get port
 app.set('port', (process.env.PORT || 5000));
@@ -435,10 +443,10 @@ app.post('/api/createRecipe', auth, async (req, res) =>
 
     const db = client.db();
 
-    let recipe = {
+    var recipe = {
         name: name,
         desc: desc,
-        pic: pic,
+        pic: null,
         creator: ObjectId(creator),
         instructions: instructions,
         ingredients: ingredients,
@@ -447,6 +455,16 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         likes: 0,
         favorites: 0
     };
+
+    // Upload the image to Cloudinary
+    try
+    {
+        recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
+    }
+    catch (e)
+    {
+        res.status(500).json( { error: "Image upload failure." } );
+    }
 
     // Check if the country is in the database
     let countryExists = await db.collection(countryCol)
