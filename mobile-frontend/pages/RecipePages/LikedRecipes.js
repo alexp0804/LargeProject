@@ -8,6 +8,7 @@ const url = URL()
 
 export default function LikedRecipes({route, navigation})
 {
+    var likes = route.params.liked
     React.useEffect(() => {
         const nameHeader = navigation.addListener('focus', () => {
             navigation.getParent().setOptions({
@@ -17,15 +18,26 @@ export default function LikedRecipes({route, navigation})
     
         return nameHeader;
       }, [navigation]);
-    
-
-      console.warn(route.params.liked)
 
     return (
         <SafeAreaView>
-            <View style={{width:"100%", height:"100%"}}>
-                <Text>he</Text>
-            </View>
+            <ScrollView style={{width:"100%", height:"100%"}}>
+                <View>
+                    {likes.map((rec, i) => {
+                        return (
+                            <RecipeCard name={rec.name}
+                                        desc={rec.desc}
+                                        country={rec.country}
+                                        userID={route.params.id}
+                                        recID={rec._id}
+                                        token={route.params.token}
+                                        liked={true}
+                                        key={i}
+                            />
+                        )
+                    })}
+                </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
