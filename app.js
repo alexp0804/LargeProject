@@ -440,10 +440,9 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         desc: desc,
         pic: pic,
         creator: ObjectId(creator),
-        country: country,
         instructions: instructions,
         ingredients: ingredients,
-        text: text,
+        country: country,
         coordinates: coordinates,
         likes: 0,
         favorites: 0
