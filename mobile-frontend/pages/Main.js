@@ -30,6 +30,7 @@ export default function Main ({route, navigation})
    const [viewRecVis, setViewRecVis] = useState(false)
    const [likeRecipe, setLikeRecipe] = useState(false)
    const [favoriteRecipe, setFavoriteRecipe] = useState(false)
+   const [ingredients, setIngredients] = useState("")
 
    function mapSettings()
    {
@@ -158,18 +159,22 @@ export default function Main ({route, navigation})
         setAddRecipeVis(true)
    }
 
-   function addingRecipe(name, desc, text, country, id)
+   function addingRecipe(name, desc, directions, country, ingredients, id)
    {
         setAddRecipeVis(false)
         setAddingRecip(true)
         setRecipe({
             name:name,
             desc:desc,
-            text:text,
+            instructions:directions,
             country:country,
             creator:id,
+            ingredients:ingredients,
             pic:"test"
         })
+        console.warn("Testing new rec stuff")
+        console.warn(ingredients)
+        console.warn(recipe)
    }
 
    async function mapMessage(message)
@@ -264,10 +269,11 @@ export default function Main ({route, navigation})
         let tmp = {
             name:recipe.name,
             desc:recipe.desc,
-            text:recipe.text,
+            instructions:recipe.instructions,
             country:recipe.country,
             creator:recipe.creator,
             pic:recipe.pic,
+            ingreditents:recipe.ingredients,
             coordinates:[coords.lat, coords.lng],
             token: route.params.token
         }
@@ -467,10 +473,7 @@ export default function Main ({route, navigation})
            console.warn(txt);
            let recipes = JSON.parse(txt);
 
-          console.warn(recipes);
-
          recipes.forEach((recipe) => {
-            console.warn(recipe)
             let tmp = {
                 id: recipe._id,
                 position: {lat:[recipe.coordinates[0]], lng: [recipe.coordinates[1]]},
@@ -544,8 +547,9 @@ export default function Main ({route, navigation})
                     <TextInput placeholderTextColor="black" placeholder='Enter description' value={desc} onChangeText= {setDesc}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
                     <TextInput placeholderTextColor="black" placeholder='Enter directions'  value={directions} onChangeText={setDirections}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
                     <TextInput placeholderTextColor="black" placeholder='Enter country'  value={country} onChangeText={setCountry}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
+                    <TextInput placeholderTextColor="black" placeholder='Enter ingredients'  value={ingredients} onChangeText={setIngredients}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
                     <TouchableOpacity activeOpacity= {0.5} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
-                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} onPress={() => addingRecipe(name, desc, directions, country, route.params.id)}>
+                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} onPress={() => addingRecipe(name, desc, directions, country, ingredients, route.params.id)}>
                         <Text>
                             Add Recipe
                         </Text>
@@ -577,10 +581,13 @@ export default function Main ({route, navigation})
                         Pic: {recipe.pic}
                     </Text>
                     <Text>
-                        Directions: {recipe.text}
+                        Directions: {recipe.instructions}
                     </Text>
                     <Text>
                         Country: {recipe.country}
+                    </Text>
+                    <Text>
+                        Ingredients: {recipe.ingredients}
                     </Text>
                     <CheckBox 
                         title="Like this Recipe" 

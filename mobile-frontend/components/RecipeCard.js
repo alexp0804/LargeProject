@@ -5,8 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
+<<<<<<< HEAD
 const url = URL();
 export default function RecipeCard({name, desc, country, userID, recID, token, liked})
+=======
+export default function RecipeCard({name, desc, country, onPress})
+>>>>>>> aa6537ab4dd3264964b0a651b920bfc86dfc8e8b
 {
     const [favIcon, setFavIcon] = useState("hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? "ios-thumbs-up-sharp" : "ios-thumbs-up")
@@ -84,6 +88,7 @@ export default function RecipeCard({name, desc, country, userID, recID, token, l
         }
     }
     return (
+<<<<<<< HEAD
         <TouchableOpacity activeOpacity={0.75}>
             <View style={styles.container}>
                 <Image 
@@ -103,6 +108,21 @@ export default function RecipeCard({name, desc, country, userID, recID, token, l
                         <TouchableOpacity onPress={() => decideIfLiked(likeIcon)} activeOpacity={0.75}>
                             <Ionicons style={{marginRight:"5%"}} name={likeIcon} size={24} color="black" />
                         </TouchableOpacity>
+=======
+        <View style={{flex: 1}} onStartShouldSetResponder={onPress}>
+            <View style={styles.rect}>
+                <View style={styles.imageRow}>
+                    <Image
+                        style={{width:80, height:80, borderRadius:0, alignSelf:"center", marginTop: "0%"}}
+                        source={{
+                        uri: 'https://cdn.discordapp.com/attachments/963149385875738684/963149436173832222/darth_early_2020_pfp.jpg',
+                        }}>
+                    </Image>
+                    <View style={styles.recipeNameColumn}>
+                        <Text style={styles.recipeName}>{name}</Text>
+                        <Text style={styles.recipeDesc}>{desc}</Text>
+                        <Text style={styles.recipeCountry}>{country}</Text>
+>>>>>>> aa6537ab4dd3264964b0a651b920bfc86dfc8e8b
                     </View>
                 </View>
                 <View>
