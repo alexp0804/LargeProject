@@ -45,7 +45,7 @@ export default function RecipeReviewCard() {
   return (
     <>
       <Modal
-        style={{ zIndex: "2000", marginTop: "10%" }}
+        style={{ zIndex: "2000", marginTop: "5%" }}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}
