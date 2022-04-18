@@ -553,6 +553,17 @@ app.post('/api/deleteRecipe', auth, async (req, res) =>
 });
 
 
+// GET RANDOM RECIPE
+app.post('/api/randomRecipe', auth, async (req, res) =>
+{
+    const db = client.db();
+
+    let randomRecipe = db.collection(recipeCol).aggregate(
+        [ { $sample: { size: 1 } } ]
+    ).toArray();
+
+    res.json(await randomRecipe);
+})
 
 // GET USER LIKE(S)
 app.post('/api/getLikes', auth, async (req, res) =>
