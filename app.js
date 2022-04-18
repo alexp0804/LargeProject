@@ -88,8 +88,10 @@ app.use((req, res, next) =>
     next();
 });
 
-// Tested: yes
-// Login user endpoint
+
+
+
+// USER LOGIN
 app.post('/api/login', async (req, res) =>
 {
     // Input = username, password
@@ -124,8 +126,7 @@ app.post('/api/login', async (req, res) =>
     res.status(200).json(user);
 });
 
-// Tested: yes
-// Register user endpoint
+// USER REGISTER
 app.post('/api/register/:platform', async (req, res) =>
 {
     const { username, password, email } = req.body;
@@ -188,9 +189,7 @@ app.post('/api/register/:platform', async (req, res) =>
     res.json(emptyErr);
 });
 
-// Tested: yes
-// Given an authcode and username, sets the verified field in the user document to "yes"
-// If authcode matches username in the users collection.
+// USER VERIFY
 app.get('/api/verify/:auth/:username', async (req, res) =>
 {
     // Check the database for a username that has a matching code.
@@ -216,8 +215,9 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
     res.send(successPage);
 });
 
-// Given a userID and email address, sends an email containing a reset code to the user.
-// If no user is found, sends a 500 code with an error message.
+
+
+// Password Reset Section
 app.post('/api/getResetCode', auth, async (req, res) =>
 {
     const { userID, email } = req.body;
@@ -258,9 +258,6 @@ app.post('/api/getResetCode', auth, async (req, res) =>
     res.json( emptyErr );
 });
 
-// Given a userID and a reset code, checks if the reset code is valid.
-// If the user is wrong or the code isn't found, 500 status is sent.
-// If the code is correct, empty 200 message.
 app.post('/api/validateResetCode', async (req, res) =>
 {
     const { userID, givenCode } = req.body;
@@ -280,10 +277,7 @@ app.post('/api/validateResetCode', async (req, res) =>
     res.json( emptyErr );
 });
 
-// Given a userID, field to change, value to change it to, updates the field of the user to the new value.
-// If the field is password, the value is encrypted.
-// 500 if invalid user, 200 if change was successful.
-app.post('/api/editUserField', auth, async (req, res) =>
+app.post('/api/editUser', auth, async (req, res) =>
 {
     let { userID, newField, newValue } = req.body;
     const db = client.db();
@@ -296,7 +290,7 @@ app.post('/api/editUserField', auth, async (req, res) =>
         return res.status(500).json( { error: "Invalid User ID" } );
 
     // Valid field?
-    if (!(["username", "password", "email", "profilePic", "verified", "auth"].includes(newField)))
+    if (!(["username", "password", "email", "profilePic"].includes(newField)))
         return res.status(500).json( { error: "Invalid field." } );
 
     // Check if field is password
@@ -311,102 +305,7 @@ app.post('/api/editUserField', auth, async (req, res) =>
     res.json( emptyErr );
 });
 
-// Tested: yes
-// Create recipe endpoint
-app.post('/api/createRecipe', auth, async (req, res) =>
-{
-    const { name, desc, pic, country,
-            text, creator, coordinates } = req.body;
-
-    const db = client.db();
-
-    let recipe = {
-        name: name,
-        desc: desc,
-        pic: pic,
-        country: country,
-        text: text,
-        creator: ObjectId(creator),
-        coordinates: coordinates,
-        likes: 0,
-        favorites: 0
-    };
-
-    // Check if the country is in the database
-    let countryExists = await db.collection(countryCol)
-                                .countDocuments( { name: country },
-                                                 { limit: 1 });
-
-    // Put country in database if it doesn't exist
-    if (!countryExists)
-        await db.collection(countryCol).insertOne( { name: country, recipes: [] } );
-
-    // Add recipe to database and get the _id
-    let recipeID = await db.collection(recipeCol).insertOne(recipe);
-    recipeID = recipeID.insertedId;
-
-    // Add recipe to country.recipes
-    db.collection(countryCol).updateOne(
-        { name: country },
-        { $push: { recipes: recipeID } }
-    );
-
-    // Add recipe to user.created
-    db.collection(userCol).updateOne(
-        { _id: ObjectId(creator) },
-        { $push: { created: recipeID } }
-    );
-
-    res.status(200).json( { recipeID: recipeID } );
-});
-
-// Tested: yes
-// Delete recipe endpoint
-app.post('/api/deleteRecipe', auth, async (req, res) =>
-{
-    // Input = recipeID
-    const { recipeID } = req.body;
-    const db = client.db();
-
-    // Find the recipe from the recipes collection
-    const recipe = await db.collection(recipeCol).findOne( { _id: ObjectId(recipeID) } );
-    const country = recipe.country;
-
-    // Delete recipe from recipes collection.
-    db.collection(recipeCol).deleteOne( { _id: ObjectId(recipeID) } );
-
-    // Removing recipe from the country's list of recipes.
-    db.collection(countryCol).updateOne(
-        { name: country },
-        { $pull: { recipes: ObjectId(recipeID) } }
-    );
-
-    // Okay status
-    res.json( emptyErr );
-});
-
-// Tested: yes
-// EDIT RECIPE ENDPOINT
-app.post('/api/editRecipe/:fields/:values', auth, async (req, res) =>
-{
-    // Input = name, description, picture link, text, and Recipe ID (string).
-    const { recipeID, newField, newValue } = req.body;
-    const db = client.db();
-
-    // Valid field?
-    if (!(["name", "desc", "pic", "country", "text", "likes", "favorites"].includes(newField)))
-        return res.status(500).json( { error: "Invalid field." } );
-
-    // Update recipe with new information.
-    await db.collection(recipeCol).updateOne( { _id: ObjectId(recipeID) },
-                                            { $set: { [newField]: newValue } });
-
-    // Okay status
-    res.json( emptyErr );
-});
-
-// Tested: yes
-// Get favorited recipes of user
+// GET USER FAVORITE(S)
 app.post('/api/getFavorites', auth, async (req, res) =>
 {
     const { userID } = req.body;
@@ -448,8 +347,197 @@ app.post('/api/getFavorites', auth, async (req, res) =>
     res.json(result);
 });
 
-// Tested: yes
-// Get liked recipes of user
+// ADD USER FAVORITE
+app.post('/api/addFavorite', auth, async (req, res) =>
+{
+    // Input  = User ID, Recipe ID
+    const { userID, recipeID } = req.body;
+    const db = client.db();
+
+    // Check that user and recipe exists
+    const userExists = await atLeastOne(userCol, userID);
+    const recipeExists = await atLeastOne(recipeCol, recipeID);
+
+    // If either user or recipe doesn't exist return error
+    if (!userExists || !recipeExists)
+    {
+        let errors = [];
+
+        if (!userExists) errors.push("userID");
+        if (!recipeExists) errors.push("recipeID");
+        let err = "Invalid " + errors.join(', ');
+
+        return res.status(500).json( { error: err } );
+    }
+
+    // Add recipe to favorites array of user
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(userID) },
+        { $push: { favorites: ObjectId(recipeID) } }
+    );
+
+    // Update favorite count for recipe
+    db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
+        { $inc: { favorites: 1 } }
+    );
+
+    // Okay status
+    res.json( emptyErr );
+});
+
+// DELETE USER FAVORITE
+app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
+{
+    const { userID, recipeID } = req.body;
+    const db = client.db();
+
+    // Check that user and recipe exists
+    const userExists = await atLeastOne(userCol, userID);
+    const recipeExists = await atLeastOne(recipeCol, recipeID);
+
+    // If either user or recipe doesn't exist return error
+    if (!userExists || !recipeExists)
+    {
+        let errors = [];
+
+        if (!userExists) errors.push("userID");
+        if (!recipeExists) errors.push("recipeID");
+        let err = "Invalid " + errors.join(', ');
+
+        return res.status(500).json( { error: err } );
+    }
+
+    // Remove recipe from favorites array of user
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(userID) },
+        { $pull: { favorites: ObjectId(recipeID) } }
+    );
+
+    // Update favorite count for recipe
+    db.collection(recipeCol).updateOne(
+        { _id: ObjectId(recipeID) },
+        { $inc: { numFavorites: -1 } }
+    );
+
+    // Okay status
+    res.json( emptyErr );
+});
+
+
+
+// CREATE RECIPE
+app.post('/api/createRecipe', auth, async (req, res) =>
+{
+    const { name, desc, pic, creator,
+            instructions, ingredients,
+            country, coordinates } = req.body;
+
+    const db = client.db();
+
+    let recipe = {
+        name: name,
+        desc: desc,
+        pic: pic,
+        creator: ObjectId(creator),
+        country: country,
+        instructions: instructions,
+        ingredients: ingredients,
+        text: text,
+        coordinates: coordinates,
+        likes: 0,
+        favorites: 0
+    };
+
+    // Check if the country is in the database
+    let countryExists = await db.collection(countryCol)
+                                .countDocuments( { name: country },
+                                                 { limit: 1 });
+
+    // Put country in database if it doesn't exist
+    if (!countryExists)
+        await db.collection(countryCol).insertOne( { name: country, recipes: [] } );
+
+    // Add recipe to database and get the _id
+    let recipeID = await db.collection(recipeCol).insertOne(recipe);
+    recipeID = recipeID.insertedId;
+
+    // Add recipe to country.recipes
+    db.collection(countryCol).updateOne(
+        { name: country },
+        { $push: { recipes: recipeID } }
+    );
+
+    // Add recipe to user.created
+    db.collection(userCol).updateOne(
+        { _id: ObjectId(creator) },
+        { $push: { created: recipeID } }
+    );
+
+    res.status(200).json( { recipeID: recipeID } );
+});
+
+// UPDATE RECIPE
+app.post('/api/editRecipe', auth, async (req, res) =>
+{
+    // Input = name, description, picture link, text, and Recipe ID (string).
+    const { recipeID, newField, newValue } = req.body;
+    const db = client.db();
+
+    // Valid field?
+    if (!(["name", "desc", "pic", "instructions", "ingredients"].includes(newField)))
+        return res.status(500).json( { error: "Invalid field." } );
+
+    // Update recipe with new information.
+    await db.collection(recipeCol).updateOne( { _id: ObjectId(recipeID) },
+                                            { $set: { [newField]: newValue } });
+
+    // Okay status
+    res.json( emptyErr );
+});
+
+// VIEW RECIPE
+app.post('/api/viewRecipe', auth, async (req, res) =>
+{
+    const id = req.body.id;
+    const db = client.db();
+
+    // If the recipe doesn't exist return bad status
+    if (!(await atLeastOne(recipeCol, id)))
+        return res.status(404).json( { error: "Recipe not found" } )
+
+    // Find the document and return
+    let recipeDoc = await db.collection(recipeCol).findOne( { _id: ObjectId(id) } );
+    res.json(recipeDoc);
+});
+
+// DELETE RECIPE
+app.post('/api/deleteRecipe', auth, async (req, res) =>
+{
+    // Input = recipeID
+    const { recipeID } = req.body;
+    const db = client.db();
+
+    // Find the recipe from the recipes collection
+    const recipe = await db.collection(recipeCol).findOne( { _id: ObjectId(recipeID) } );
+    const country = recipe.country;
+
+    // Delete recipe from recipes collection.
+    db.collection(recipeCol).deleteOne( { _id: ObjectId(recipeID) } );
+
+    // Removing recipe from the country's list of recipes.
+    db.collection(countryCol).updateOne(
+        { name: country },
+        { $pull: { recipes: ObjectId(recipeID) } }
+    );
+
+    // Okay status
+    res.json( emptyErr );
+});
+
+
+
+// GET USER LIKE(S)
 app.post('/api/getLikes', auth, async (req, res) =>
 {
     const { userID } = req.body;
@@ -491,87 +579,7 @@ app.post('/api/getLikes', auth, async (req, res) =>
     res.json(result);
 });
 
-// Tested: yes
-// Add favorite endpoint
-app.post('/api/addFavorite', auth, async (req, res) =>
-{
-    // Input  = User ID, Recipe ID
-    const { userID, recipeID } = req.body;
-    const db = client.db();
-
-    // Check that user and recipe exists
-    const userExists = await atLeastOne(userCol, userID);
-    const recipeExists = await atLeastOne(recipeCol, recipeID);
-
-    // If either user or recipe doesn't exist return error
-    if (!userExists || !recipeExists)
-    {
-        let errors = [];
-
-        if (!userExists) errors.push("userID");
-        if (!recipeExists) errors.push("recipeID");
-        let err = "Invalid " + errors.join(', ');
-
-        return res.status(500).json( { error: err } );
-    }
-
-    // Add recipe to favorites array of user
-    db.collection(userCol).updateOne(
-        { _id: ObjectId(userID) },
-        { $push: { favorites: ObjectId(recipeID) } }
-    );
-
-    // Update favorite count for recipe
-    db.collection(recipeCol).updateOne(
-        { _id: ObjectId(recipeID) },
-        { $inc: { favorites: 1 } }
-    );
-
-    // Okay status
-    res.json( emptyErr );
-});
-
-// Tested: yes
-// Delete favorite endpoint
-app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
-{
-    const { userID, recipeID } = req.body;
-    const db = client.db();
-
-    // Check that user and recipe exists
-    const userExists = await atLeastOne(userCol, userID);
-    const recipeExists = await atLeastOne(recipeCol, recipeID);
-
-    // If either user or recipe doesn't exist return error
-    if (!userExists || !recipeExists)
-    {
-        let errors = [];
-
-        if (!userExists) errors.push("userID");
-        if (!recipeExists) errors.push("recipeID");
-        let err = "Invalid " + errors.join(', ');
-
-        return res.status(500).json( { error: err } );
-    }
-
-    // Remove recipe from favorites array of user
-    db.collection(userCol).updateOne(
-        { _id: ObjectId(userID) },
-        { $pull: { favorites: ObjectId(recipeID) } }
-    );
-
-    // Update favorite count for recipe
-    db.collection(recipeCol).updateOne(
-        { _id: ObjectId(recipeID) },
-        { $inc: { numFavorites: -1 } }
-    );
-
-    // Okay status
-    res.json( emptyErr );
-});
-
-// Tested: yes
-// Add like endpoint
+// ADD USER LIKE
 app.post('/api/addLike/', auth, async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
@@ -609,8 +617,7 @@ app.post('/api/addLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
-// Tested: yes
-// Delete like endpoint
+// DELETE USER LIKE
 app.post('/api/deleteLike/', auth, async (req, res, next) =>
 {
     const { userID, recipeID } = req.body;
@@ -648,8 +655,9 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
-// Tested: yes
-// Get recipes of a given country name
+
+
+// GET RECIPES BY COUNTRY
 app.post('/api/getCountryRecipes', auth, async (req, res) =>
 {
     const { country } = req.body;
@@ -671,6 +679,7 @@ app.post('/api/getCountryRecipes', auth, async (req, res) =>
     res.json(result);
 });
 
+// GET RECIPES BY USER
 app.post('/api/getUserRecipes', auth, async (req, res) =>
 {
     const { userID } = req.body;
@@ -693,8 +702,7 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
     res.json(result);
 });
 
-// Tested: yes
-// Partial search for recipes by name given a search term
+// GET RECIPES BY SEARCH
 app.post('/api/searchRecipe', auth, async (req, res) =>
 {
     let searchTerm = req.body.searchTerm;
@@ -712,43 +720,6 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
     res.json(ret);
 });
 
-// Tested: yes
-// Updates a given user (by id) with new information
-app.post('/api/updateUser', auth, async (req, res) =>
-{
-    const { id, password, profilePic, email } = req.body;
-    const db = client.db();
-
-    // Check if user exists in the database
-    if (await !atLeastOne(userCol, id))
-        return res.status(404).json( { error: "User does not exist." } );
-
-    db.collection(userCol).updateOne(
-        { _id: ObjectId(id) },
-        { $set: {
-                password: hash(password),
-                profilePic: profilePic,
-                email: email
-            } }
-    );
-
-    res.json( emptyErr );
-});
-
-// Get a recipe document given an id string
-app.post('/api/viewRecipe', auth, async (req, res) =>
-{
-    const id = req.body.id;
-    const db = client.db();
-
-    // If the recipe doesn't exist return bad status
-    if (!(await atLeastOne(recipeCol, id)))
-        return res.status(404).json( { error: "Recipe not found" } )
-
-    // Find the document and return
-    let recipeDoc = await db.collection(recipeCol).findOne( { _id: ObjectId(id) } );
-    res.json(recipeDoc);
-});
 
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int
@@ -756,7 +727,6 @@ function createAuthCode() {
     return Math.floor(Math.random() * (99999 - 11111) + 11111);
 }
 
-// Given a collection name, object ID, returns 1 if the object is in the collection.
 async function atLeastOne(col, id)
 {
     const db = client.db();
