@@ -44,7 +44,7 @@ function Example() {
 
 
 
-const Menu = () => {
+const Menu = (props) => {
 
     const [lgShow, setLgShow] = useState(false); 
     return (
@@ -56,7 +56,7 @@ const Menu = () => {
             <Bookmarks title="Bookmarks"/>
             <MyRecipes title="Add Recipe"/>
             <MyRecipes title="My Recipes"/>
-            <MenuLink title="Pick for Me" icon={'cog'} />
+            <MenuLink title="Pick for Me" icon={'cog'} createMarker = {props.createMarker} setMarkerList = {props.setMarkerList} />
         </Container>
     )
 }

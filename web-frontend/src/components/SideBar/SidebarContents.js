@@ -18,12 +18,12 @@ const Container = styled.div`
 
 `
 
-const SidebarContent = () => {
+const SidebarContent = (props) => {
 
     return (
         <Container>
             <Profile />
-            <Menu />
+            <Menu createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
         </Container>
     )
 }

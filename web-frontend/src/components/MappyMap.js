@@ -21,15 +21,51 @@ const images = importAll(require.context('../assets/images/flagpng', false, /\.(
 
 
 const MappyMap = () =>
-
-  // const filteredStations = countryPosition.filter(cntry => cntry.alpha2 == "US")
-  // console.log(countryPosition)  
-
 {
-
+  const [markerList, setMarkerList] = useState([]);
   const lower = countryPosition.id
 
+  function createMarker(recipe)
+  {
+    return(<Marker
+        key={recipe['_id']}
+        position={recipe['coordinates']}
+      >
+        <Popup position={recipe['coordinates']}>
+          <div>
+            <h2>
+
+              < RecipeReviewCard />
+
+            </h2>
+          </div>
+        </Popup>
+      </Marker>);
+  }
+
   const flags = lower + '.png'
+
+  
+        // {countryPosition.map((countryYoink) => (
+        //   <Marker
+        //     key={countryYoink.id}
+        //     position={[countryYoink.latitude, countryYoink.longitude]}
+        //   >
+        //     <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
+        //       <div>
+        //         <h2>
+        //           {/* <img src={images[flags]} />
+
+        //           <img src= {images[countryYoink.id.toLowerCase() + '.png']} /> */}
+
+        //           < RecipeReviewCard / >
+
+        //         </h2>
+        //       </div>
+        //     </Popup>
+        //   </Marker>
+        // ))}
+
 
 
   
@@ -38,38 +74,17 @@ const MappyMap = () =>
 
       <MapContainer center={[50.8333, 4]} zoom={6} minZoom={3} >
 
-        < Sidebar / >
+        < Sidebar createMarker= {createMarker} setMarkerList = {setMarkerList} />
 
 
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
-        {countryPosition.map((countryYoink) => (
-          <Marker
-            key={countryYoink.id}
-            position={[countryYoink.latitude, countryYoink.longitude]}
-          >
-            <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
-              <div>
-                <h2>
-                  {/* <img src={images[flags]} />
-
-                 
-
-                  <img src= {images[countryYoink.id.toLowerCase() + '.png']} /> */}
-
-                  < RecipeReviewCard / >
-
-
-
-                 
-                </h2>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {window.localStorage.setItem('createMarker', createMarker)}
+        {window.localStorage.setItem('setMarkerList', setMarkerList)}
+        
+        {markerList.map(createMarker)}
       </MapContainer>
     );
 };

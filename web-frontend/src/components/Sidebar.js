@@ -6,6 +6,8 @@ import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
 import AddRecipe from './SideBar/Menu/AddRecipe';
 
 
+
+
 function OffCanvasExample({ name, ...props }) {
 
     
@@ -115,7 +117,7 @@ function Readmore() {
 }
 
 
-const Sidebar = () =>
+const Sidebar = (props) =>
 {
  
   const [show, setShow] = useState(false);
@@ -174,7 +176,7 @@ const Sidebar = () =>
             </Offcanvas.Header>
             <Offcanvas.Body>
 
-              <SidebarContent/>
+              <SidebarContent createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
 
 
             </Offcanvas.Body>
