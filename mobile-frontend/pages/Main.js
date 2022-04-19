@@ -412,7 +412,7 @@ export default function Main ({route, navigation})
                 console.warn("Testing" + recipe._id)
                 let tmp = {
                     id: recipe._id,
-                    position: {lat:[recipe.coordinates[0]], lng: [recipe.coordinates[1]]},
+                    position: {lat:[recipe.location.coordinates[1]], lng: [recipe.location.coordinates[0]]},
                     icon: "icon no worky 😔"
                 }
 
@@ -476,7 +476,7 @@ export default function Main ({route, navigation})
          recipes.forEach((recipe) => {
             let tmp = {
                 id: recipe._id,
-                position: {lat:[recipe.coordinates[0]], lng: [recipe.coordinates[1]]},
+                position: {lat:[recipe.location.coordinates[1]], lng: [recipe.location.coordinates[0]]},
                 icon: "icon no worky 😔"
             }
 

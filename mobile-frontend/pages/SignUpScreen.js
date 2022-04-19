@@ -53,7 +53,6 @@ export default function SignUpScreen({navigation}) {
     }
 
     catch(e)
-
     {
       console.warn(e.toString())
       setUser("");

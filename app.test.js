@@ -26,7 +26,7 @@ describe("Testing Login", () => {
 	     })
 	})
 	test("Correct login info returns 200 status", async () => {
-		await request(app).post("localhost:5000/api/login")
+		await request(app).post("http:/localhost:5000/api/login")
 		.send({
 			username: "test",
 			password: "test"
@@ -39,14 +39,14 @@ describe("Testing Login", () => {
 
 describe("Testing Create Recipe", () => {
 	test("Adding a recipe to the database", async () => {
-		await request(app).post("localhost:5000/api/createRecipe")
+		await request(app).post("http:/localhost:5000/api/createRecipe")
 		.send({
 			name: "Unit Testing Recipe",
 			desc: "Unit Testing Recipe",
 	        pic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
 	        country: "Italy",
 	        text: "Unit Testing Recipe",
-	        creator: "625c890a9b12478a46212a3f",
+	        creator: "6254ff2797bf1f078987ac0e",
 	        coordinates: [0,0]
 		})
 		.expect((res) => {
@@ -58,7 +58,7 @@ describe("Testing Create Recipe", () => {
 
 describe("Testing Edit Recipe", () => {
 	test("Editing a recipe", async () => {
-		await request(app).post("localhost:5000/api/editRecipe")
+		await request(app).post("http:/localhost:5000/api/editRecipe")
 		.send({
 			name: "Unit Testing Recipe",
 			desc: "Unit Testing Recipe",
@@ -75,9 +75,9 @@ describe("Testing Edit Recipe", () => {
 
 describe("Testing User Likes and Favorites", () => {
 	test("Getting favorites with invalid userID returns error", async () => {
-		await request(app).post("localhost:5000/api/getFavorites")
+		await request(app).post("http:/localhost:5000/api/getFavorites")
 		.send({
-			userID: "625c890a9b12478a46212333"
+			userID: "6254ff2797bf1f078987ac0k"
 		})
 		.expect((res) => {
 			res.body.status = 500;
@@ -85,18 +85,18 @@ describe("Testing User Likes and Favorites", () => {
 	     })
 	})
 	test("Getting favorites with valid userID returns 200 status", async () => {
-		await request(app).post("localhost:5000/api/getFavorites")
+		await request(app).post("http:/localhost:5000/api/getFavorites")
 		.send({
-			userID: "625c890a9b12478a46212a3f"
+			userID: "6254ff2797bf1f078987ac0e"
 		})
 		.expect((res) => {
 			res.body.status = 200;
 		})
 	})
 	test("Getting likes with invalid userID returns error", async () => {
-		await request(app).post("localhost:5000/api/getLikes")
+		await request(app).post("http:/localhost:5000/api/getLikes")
 		.send({
-			userID: "625c890a9b12478a46212333"
+			userID: "6254ff2797bf1f078987ac0k"
 		})
 		.expect((res) => {
 			res.body.status = 500;
@@ -104,9 +104,9 @@ describe("Testing User Likes and Favorites", () => {
 	     })
 	})
 	test("Getting likes with valid userID returns 200 status", async () => {
-		await request(app).post("localhost:5000/api/getLikes")
+		await request(app).post("http:/localhost:5000/api/getLikes")
 		.send({
-			userID: "625c890a9b12478a46212a3f"
+			userID: "6254ff2797bf1f078987ac0e"
 		})
 		.expect((res) => {
 			res.body.status = 200;
@@ -116,7 +116,7 @@ describe("Testing User Likes and Favorites", () => {
 
 describe("Testing Getting Country Recipes", () => {
 	test("Getting country recipes with invalid country returns error", async () => {
-		await request(app).post("localhost:5000/api/getCountryRecipes")
+		await request(app).post("http:/localhost:5000/api/getCountryRecipes")
 		.send({
 			country: "InvalidCountry"
 		})
@@ -126,7 +126,7 @@ describe("Testing Getting Country Recipes", () => {
 	     })
 	})
 	test("Getting country recipes with valid country returns 200 status code", async () => {
-		await request(app).post("localhost:5000/api/getCountryRecipes")
+		await request(app).post("http:/localhost:5000/api/getCountryRecipes")
 		.send({
 			country: "Italy"
 		})
@@ -138,9 +138,9 @@ describe("Testing Getting Country Recipes", () => {
 
 describe("Testing Edit User", () => {
 	test("Trying to edit a user with invalid userID returns error", async () => {
-		await request(app).post("localhost:5000/api/updateUser")
+		await request(app).post("http:/localhost:5000/api/updateUser")
 		.send({
-			userID: "625c890a9b12478a46212333",
+			userID: "62564608c467830dcfad30f4",
 			password: "test",
 			profilePic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
 			email: "newEmail@gmail.com"
@@ -151,9 +151,9 @@ describe("Testing Edit User", () => {
 	     })
 	})
 	test("Trying to edit a user with valid userID returns 200 status and empty error", async () => {
-		await request(app).post("localhost:5000/api/updateUser")
+		await request(app).post("http:/localhost:5000/api/updateUser")
 		.send({
-			userID: "625c890a9b12478a46212a3f",
+			userID: "62564608c467830dcfad30f5",
 			password: "test",
 			profilePic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
 			email: "newEmail@gmail.com"
@@ -167,9 +167,9 @@ describe("Testing Edit User", () => {
 
 describe("Testing View Recipe", () => {
 	test("Trying to view a recipe with an invalid recipeID returns an error", async () => {
-		await request(app).post("localhost:5000/api/viewRecipe")
+		await request(app).post("http:/localhost:5000/api/viewRecipe")
 		.send({
-			recipeID: "625c8c3b31f81d046773e333"
+			recipeID: "62564608c467830dcfas8jdu"
 		})
 		.expect((res) => {
 			res.body.status = 404,
@@ -177,9 +177,9 @@ describe("Testing View Recipe", () => {
 	     })
 	})
 	test("Trying to view a recipe with a valid recipeID returns a 200 status code", async () => {
-		await request(app).post("localhost:5000/api/viewRecipe")
+		await request(app).post("http:/localhost:5000/api/viewRecipe")
 		.send({
-			recipeID: "625c8c3b31f81d046773ecf3"
+			recipeID: "62564608c467830dcfas8jdu"
 		})
 		.expect((res) => {
 			res.body.status = 200

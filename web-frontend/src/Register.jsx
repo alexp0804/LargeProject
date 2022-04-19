@@ -58,7 +58,7 @@ export default function Register() {
         borderRadius: "7%"
       }}
     >
-      <div className="d-none d-xl-block col-md-6 my-auto">
+      <div className="d-none d-lg-block col-md-4 my-auto">
         <div className="ml-5 ">
           <img
             src="https://cdn.dribbble.com/users/1044993/screenshots/14430492/media/778141084fd91f11c7949ac54de0b635.png"

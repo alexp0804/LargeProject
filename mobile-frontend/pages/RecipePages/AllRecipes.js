@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {TouchableOpacity, ScrollView, Image, Modal, StyleSheet} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
-import { useFocusEffect } from '@react-navigation/native';
+import SearchBar from '../../components/SearchBar';
 import RecipeCard from '../../components/RecipeCard';
 import URL from '../../components/URL';
 
@@ -10,9 +10,12 @@ const url = URL()
 
 export default function AllRecipes({route, navigation})
 {
+    console.warn("Testing 1234")
+    console.warn(route.params.allRecipes)
     var all = route.params.allRecipes
     var likes = route.params.liked
     var favs = route.params.favs
+    const [searchArray, setSearchArray] = useState(route.params.allRecipes)
     likeMap = {}
     favMap = {}
     likes.forEach((rec) => {
@@ -35,25 +38,48 @@ export default function AllRecipes({route, navigation})
 
       console.warn(route.params.allRecipes)
 
+      async function search(text)
+      {
+        try
+        {    
+           console.warn("Getting there")
+           console.warn(text)
+           let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:text}), 
+           headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
+           let txt = await response.text();
+           console.warn(txt);
+           let recipes = JSON.parse(txt);
+           setSearchArray(recipes)
+        }
+        catch(error)
+        {
+            console.warn(error.toString())
+        }
+
+    }
+
+
       return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
-                <View>
-                        {all.map((rec, i) => {
-                            return (
-                                <RecipeCard name={rec.name}
-                                            desc={rec.desc}
-                                            country={rec.country}
-                                            userID={route.params.id}
-                                            recID={rec._id}
-                                            token={route.params.token}
-                                            faved={(rec._id in favMap)}
-                                            liked={(rec._id in likeMap)}
-                                            key={i}
-                                />
-                            )
-                        })}
-                </View>
+                <SearchBar onChangeText={search} placeholder="Search"
+                           />
+                    <View>
+                            {searchArray.map((rec) => {
+                                return (
+                                    <RecipeCard name={rec.name}
+                                                desc={rec.desc}
+                                                country={rec.country}
+                                                userID={route.params.id}
+                                                recID={rec._id}
+                                                token={route.params.token}
+                                                faved={(rec._id in favMap)}
+                                                liked={(rec._id in likeMap)}
+                                                key={rec._id}
+                                    />
+                                )
+                            })}
+                    </View>
             </ScrollView>
         </SafeAreaView>
     )
