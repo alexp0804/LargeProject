@@ -13,6 +13,7 @@ export default function MyRecipes({route, navigation})
     var favs = route.params.favs
     const hashyHash = {}
     const [searchArray, setSearchArray] = useState(route.params.myRec)
+    console.warn(mine)
     likeMap = {}
     favMap = {}
     likes.forEach((rec) => {
@@ -72,8 +73,6 @@ export default function MyRecipes({route, navigation})
 
     }
 
-      console.warn(route.params.myRec)
-      console.warn(searchArray.length)
     //   console.warn("RIGHT HERE\n\n\n\n", JSON.parse(searchArray));
       return (
         <SafeAreaView>

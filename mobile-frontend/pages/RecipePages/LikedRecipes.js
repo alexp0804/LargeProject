@@ -12,7 +12,7 @@ export default function LikedRecipes({route, navigation})
     var favs = route.params.favs
     const hashyHash = {}
     const[searchArray, setSearchArray] = useState(route.params.liked)
-    console.warn(favs)
+    console.warn(likes)
     React.useEffect(() => {
         const nameHeader = navigation.addListener('focus', () => {
             navigation.getParent().setOptions({

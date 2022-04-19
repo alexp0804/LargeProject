@@ -1,8 +1,9 @@
 import React, { useState, Component } from "react";
-import { ScrollView, StyleSheet, View, Image, Text, Dimensions} from "react-native";
+import { ScrollView, StyleSheet, View, Image, Text, Dimensions, Modal} from "react-native";
 import { AntDesign, Ionicons } from '@expo/vector-icons'; 
 import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
+import RecModal from '../components/RecModal';
 
 
 const likeOutline = "ios-thumbs-up-outline",
@@ -16,6 +17,7 @@ export default function RecipeCard({name, desc, country, userID, recID, token, f
 
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? likeFill : likeOutline)
+    const [openModalShowing, setOpenModalShowing] = useState(false)
 
     // Adds given recipe to user likes
     async function addToLikes()
@@ -108,8 +110,29 @@ export default function RecipeCard({name, desc, country, userID, recID, token, f
             removeFromFav()
         }
     }
+    function closeModal()
+    {
+        setOpenModalShowing(false);
+        console.warn(openModalShowing)
+    }
+
     return (
-        <TouchableOpacity activeOpacity={0.75}>
+        <TouchableOpacity activeOpacity={0.75} onPress={() => setOpenModalShowing(true)}>
+            <Modal
+                visible={openModalShowing} animationType="slide" 
+                transparent={true} height="10%">
+                <RecModal
+                    name={name}
+                    desc={desc}
+                    country={country}
+                    userID={userID}
+                    recID={recID}
+                    token={token}
+                    faved={faved}
+                    liked={liked}
+                    onXClick={closeModal}
+                />
+            </Modal>
             {/* Container */}
             <View style={[styles.shared, styles.container]}>
                 <Image 
@@ -144,7 +167,6 @@ export default function RecipeCard({name, desc, country, userID, recID, token, f
                         {country}
                     </Text>
                 </View>
-
             </View>
         </TouchableOpacity>
     )

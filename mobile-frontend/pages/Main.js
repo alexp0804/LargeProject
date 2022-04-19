@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import {CheckBox} from 'react-native-elements';
 import URL from '../components/URL';
+import RecModal from '../components/RecModal';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
@@ -31,6 +32,7 @@ export default function Main ({route, navigation})
    const [likeRecipe, setLikeRecipe] = useState(false)
    const [favoriteRecipe, setFavoriteRecipe] = useState(false)
    const [ingredients, setIngredients] = useState("")
+   const [openModalShowing, setOpenModalShowing] = useState(false)
 
    function mapSettings()
    {
@@ -249,7 +251,7 @@ export default function Main ({route, navigation})
                     console.warn(error.toString())
                 }
 
-                setViewRecVis(true)
+                setOpenModalShowing(true)
             }
             else
             {
@@ -490,6 +492,11 @@ export default function Main ({route, navigation})
        }
 
     }
+    function closeViewModalTest()
+    {
+        setOpenModalShowing(false);
+        console.warn(openModalShowing)
+    }
     
     return(
        <SafeAreaView style={{height:"150%"}}> 
@@ -604,6 +611,21 @@ export default function Main ({route, navigation})
                         checkedColor="green"
                     />
                 </ScrollView>
+            </Modal>
+            <Modal 
+                visible={openModalShowing} animationType="slide" 
+                transparent={true} height="10%">
+                <RecModal
+                    name={recipe.name}
+                    desc={recipe.desc}
+                    country={recipe.country}
+                    userID={route.params.id}
+                    recID={recipe._id}
+                    token={route.params.token}
+                    faved={favoriteRecipe}
+                    liked={likeRecipe}
+                    onXClick={closeViewModalTest}
+                />
             </Modal>
         </SafeAreaView>
         
