@@ -149,11 +149,11 @@ export default function RecipeReviewCard(props) {
             console.log(res['error']);
 
 
-            console.log("SET AS FAVORITE")
-            setbookImage(<BookmarkIcon/>)
-            setFavFlag(!FavFlag);
-            props.favMethod(prevItems => {prevItems.set(props.recipe['_id'], props.recipe); return prevItems;})
-
+            console.log("SET AS FAVORITE");
+            console.log('shit');
+            setFavFlag(true);
+            props.favMethod(prevItems => {console.log(prevItems); prevItems.set(props.recipe['_id'], props.recipe); console.log(prevItems); return prevItems;})
+            setbookImage(<BookmarkIcon/>);
 
         }
         catch(e)
@@ -188,7 +188,7 @@ export default function RecipeReviewCard(props) {
         
             console.log('set as unfav')
             setbookImage(<BookmarkBorderIcon/>)
-            setFavFlag(!FavFlag);
+            setFavFlag(false);
             props.favMethod(prevItems => {prevItems.delete(props.recipe['_id']); return prevItems;})
 
         }
