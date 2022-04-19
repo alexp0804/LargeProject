@@ -690,6 +690,23 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
+app.post('/api/getLikedFavorited', auth, async (req, res) =>
+{
+    const { userID, recipeID } = req.body;
+    const db = client.db();
+
+    let result = {};
+
+    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    if (!user) 
+        res.status(404).json( { error: "User not found" } );
+
+    result.liked = user.likes.some(f => { return f.equals(recipeID) });
+    result.favorited = user.favorites.some(f => { return f.equals(recipeID) });
+
+    res.json(result);
+})
 
 
 // GET RECIPES BY COUNTRY
