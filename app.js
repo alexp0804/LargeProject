@@ -462,7 +462,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         favorites: 0
     };
 
-    if (pic != "")
+    if (pic != "" || pic != null)
     {
         // Upload the image to Cloudinary
         try
