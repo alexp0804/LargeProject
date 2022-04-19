@@ -315,6 +315,7 @@ app.post('/api/editUser', auth, async (req, res) =>
 
 
 
+
 // GET USER FAVORITE(S)
 app.post('/api/getFavorites', auth, async (req, res) =>
 {
