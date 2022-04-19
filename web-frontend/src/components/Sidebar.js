@@ -4,7 +4,6 @@ import SidebarContent from './SideBar/SidebarContents';
 import Bookmarks from './SideBar/Menu/BookmarksModal';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
 import AddRecipe from './SideBar/Menu/AddRecipe';
-import EditRecipe from './EditRecipe';
 
 
 
@@ -100,6 +99,7 @@ function OffCanvasExample({ name, ...props }) {
         { recipeArray.map(createCard) }
          
 
+
         </Offcanvas.Body>
       </Offcanvas>
     </>
@@ -145,15 +145,20 @@ const Sidebar = (props) =>
               <Nav className="me-auto">
                 <AddRecipe title="Add Recipes"/>
 
-                <EditRecipe title="Edit Recipes"/>
-
-
-
                 <Nav.Link>BookMarks</Nav.Link>
-
-
-                <EditRecipe/>
-               
+                <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.2">
+                    Another action
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.3">
+                    Something
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="#action/3.4">
+                    Separated link
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav>
               <Nav>
                 <Readmore /> 
