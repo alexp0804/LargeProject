@@ -8,12 +8,13 @@ const Container = styled.div`
 
 const ProfileImg = styled.img`
     height: 5rem;
+    align: center;
 `
 const ProfileName = styled.h1`
-    font-size: 1rem;
-    font-weight: 300;
+    font-size: 2rem;
+    font-weight: 400;
     padding-top: 1rem;
-    color: #585280;
+    color: 'black';
 	text-align: center;
 `
 

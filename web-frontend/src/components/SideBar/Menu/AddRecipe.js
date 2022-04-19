@@ -62,6 +62,7 @@ const MyRecipes = ({ title, active, icon }) => {
           show={lgShow}
           onHide={() => setLgShow(false)}
           aria-labelledby="example-modal-sizes-title-lg"
+          style = {{zIndex : '2000', marginTop : '4%'}}
         >
           <Modal.Header closeButton>
             <Modal.Title id="example-modal-sizes-title-lg"> Add Recipe:</Modal.Title>
