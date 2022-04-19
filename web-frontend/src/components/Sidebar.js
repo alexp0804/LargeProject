@@ -110,7 +110,7 @@ function Readmore() {
   return (
     <>
       {['end'].map((placement, idx) => (
-        <OffCanvasExample key={idx} placement={placement} name="Read More" />
+        <OffCanvasExample key={idx} placement={placement} name="My Recipes" />
       ))}
     </>
   );
