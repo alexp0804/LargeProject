@@ -746,15 +746,23 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
     if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
-    // Grab the recipe associated with each id
-    let result = await Promise.all(
-                    user.created.map(
-                        async x => await db.collection(recipeCol).findOne( { _id: x } )
-                    )
-                );
-
+    // Iterate backwards so removing elements doesn't mess with indexing
+    for (let i = user.created.length; i >= 0; i--)
+    {
+        // If the recipe isn't in the database
+        if (await atLeastOne(recipeCol, user.created[i]) == 0)
+        {
+            // Remove recipe from user favorites list from database.
+            db.collection(userCol).updateOne(
+                  { _id: ObjectId(userID) },
+                  { $pull: { created: ObjectId(user.created[i]) } }
+            )
+            // Remove recipe from favs
+            user.created.splice(i, 1);
+        }
+    }
     // Return created recipes
-    res.json(result);
+    res.json(user.created);
 });
 
 // GET RECIPES BY SEARCH
@@ -772,7 +780,7 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
 
     const ret = await recipesCursor.toArray();
 
-    res.json(ret);
+    res.json(ret.filter((e) => e != null));
 });
 
 // GET NEARBY RECIPES
