@@ -462,14 +462,17 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         favorites: 0
     };
 
-    // Upload the image to Cloudinary
-    try
+    if (pic != "")
     {
-        recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
-    }
-    catch (e)
-    {
-        res.status(500).json( { error: "Image upload failure." } );
+        // Upload the image to Cloudinary
+        try
+        {
+            recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
+        }
+        catch (e)
+        {
+            res.status(500).json( { error: "Image upload failure." } );
+        }
     }
 
     // Check if the country is in the database
