@@ -73,6 +73,8 @@ export default function MyRecipes({route, navigation})
     }
 
       console.warn(route.params.myRec)
+      console.warn(searchArray.length)
+    //   console.warn("RIGHT HERE\n\n\n\n", JSON.parse(searchArray));
       return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
@@ -80,6 +82,7 @@ export default function MyRecipes({route, navigation})
                            />
                 <View>
                         {searchArray.map((rec) => {
+                            console.warn(rec);
                             return (
                                 <RecipeCard name={rec.name}
                                             desc={rec.desc}
