@@ -81,8 +81,13 @@ const MenuLink = (props) => {
       
           if(res.hasOwnProperty('error'))
             console.log(res['error']);
+
+            let x = res[0]['location']['coordinates'][1]
+            let y = res[0]['location']['coordinates'][0]
+
+            console.log([x,y])
       
-            mappy.panTo(res[0]['coordinates'])
+            mappy.panTo([x, y])
             props.setMarkerList(res);
     
         }

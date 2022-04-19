@@ -49,10 +49,10 @@ const MyRecipes = ({ title, active, icon }) => {
   
         let marky =  l.marker(mappy.getCenter(), {draggable: true}).addTo(mappy);
 
-        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
+        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","", ${marky.getLatLng()["lat"]}, ${marky.getLatLng()["lng"]}, "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
         marky.bindPopup(popup).openPopup();
 
-        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
+        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","", ${marky.getLatLng()["lat"]}, ${marky.getLatLng()["lng"]}, "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
     }
 
     return (

@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import countryPosition from "../data/CountriesUpdated.json"
 import Sidebar from './Sidebar';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipesMap';
-
-
-
 
 
 function importAll(r) {
@@ -17,25 +14,134 @@ function importAll(r) {
 
 const images = importAll(require.context('../assets/images/flagpng', false, /\.(png|jpe?g|svg)$/));
 
-
+const app_name = 'reci-pin';
+function buildPath(route)
+{
+  if (process.env.NODE_ENV === 'production')
+      return 'https://' + app_name + '.herokuapp.com/' + route;
+  else
+      return 'http://localhost:5000/' + route;
+}
 
 
 const MappyMap = () =>
 {
   const [markerList, setMarkerList] = useState([]);
-  const lower = countryPosition.id
+
+  const [favList, setFavList] = useState([]);
+  const [likedList, setLikedList] = useState([]);
+
+  const lower = countryPosition.id;
+
+  const getLikes = async () =>
+  {
+      console.log('getting likes!!')
+      let jsonPayLoad = JSON.stringify({
+          userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
+      });
+
+      try 
+      {
+          // returns liked, favorited
+          const response = await fetch(buildPath("api/getLikes"), {
+              method: "POST",
+              body: jsonPayLoad,
+              headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
+            });
+
+          let res = JSON.parse(await response.text());
+
+          //console.log(res);
+
+         let hashy = new Map();
+
+
+          for (let i = 0; i < res.length; i++)
+          {
+            hashy.set(res[i]['_id'], res)
+          }
+      
+          setLikedList(hashy)
+          console.log(hashy)
+              
+
+
+
+      }
+      catch(e)
+      {
+          console.log(e)
+      }
+  };
+
+  const getFavs = async () =>
+  {
+      console.log('getting likes!!')
+      let jsonPayLoad = JSON.stringify({
+          userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
+      });
+
+      try 
+      {
+          // returns liked, favorited
+          const response = await fetch(buildPath("api/getFavorites"), {
+              method: "POST",
+              body: jsonPayLoad,
+              headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
+            });
+
+          let res = JSON.parse(await response.text());
+
+          console.log(res);
+
+         let hashy = new Map();
+
+
+          for (let i = 0; i < res.length; i++)
+          {
+            hashy.set(res[i]['_id'], res)
+          }
+      
+          setFavList(hashy)
+          console.log(hashy)
+              
+
+
+
+      }
+      catch(e)
+      {
+          console.log(e)
+      }
+  };
+
+  useEffect(() => {getLikes();}, []);
+  useEffect(() => {getFavs();}, []);
+
+
+  
+
+  
 
   function createMarker(recipe)
   {
+      let x = recipe['location']['coordinates'][1]
+      let y = recipe['location']['coordinates'][0]
     return(<Marker
         key={recipe['_id']}
-        position={recipe['coordinates']}
+        position={[x, y]}
       >
-        <Popup position={recipe['coordinates']}>
+        <Popup position={[x, y]}>
           <div>
             <h2>
 
-              < RecipeReviewCard />
+              < RecipeReviewCard 
+              key = {recipe['_id']}
+              recipe = {recipe} 
+              like= {likedList.get(recipe['_id']) != undefined? true: false} 
+              fav = {favList.get(recipe['_id']) != undefined? true: false}
+              likeMethod = {setLikedList}
+              favMethod = {setFavList} />
 
             </h2>
           </div>
@@ -81,9 +187,7 @@ const MappyMap = () =>
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {window.localStorage.setItem('createMarker', createMarker)}
-        {window.localStorage.setItem('setMarkerList', setMarkerList)}
-        
+    
         {markerList.map(createMarker)}
       </MapContainer>
     );
