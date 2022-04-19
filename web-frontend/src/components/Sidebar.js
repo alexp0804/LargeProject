@@ -4,15 +4,18 @@ import SidebarContent from './SideBar/SidebarContents';
 import Bookmarks from './SideBar/Menu/BookmarksModal';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
 import AddRecipe from './SideBar/Menu/AddRecipe';
+import {useMap} from 'react-leaflet';
 
 
 
 
-function OffCanvasExample({ name, ...props }) {
+function OffCanvasExample(props) {
 
     
 
   const [show, setShow] = useState(false);
+
+  let mappy = useMap();
 
   const handleClose = () => setShow(false);
   const handleShow = () => {setShow(true); getUserRecipes();}
@@ -52,7 +55,18 @@ function OffCanvasExample({ name, ...props }) {
         console.log(res['error']);
   
         console.log(res)
-      setArray(res)
+        setArray(res)
+        props.setMarkerList(res);
+
+        if (res.length >= 1)
+        {
+
+            let x = res[0]['location']['coordinates'][1]
+            let y = res[0]['location']['coordinates'][0]
+
+            console.log([x,y])
+            mappy.setView([x,y], 1)
+        }
 
     }
     catch(e)
@@ -84,7 +98,7 @@ function OffCanvasExample({ name, ...props }) {
   return (
     <>
       <Button variant="light" onClick={handleShow} className="me-2">
-        {name}
+        {props.name}
       </Button>
       <Offcanvas backdrop = {true} show={show} onHide={handleClose} {...props}>
         <Offcanvas.Header closeButton>
@@ -102,16 +116,6 @@ function OffCanvasExample({ name, ...props }) {
 
         </Offcanvas.Body>
       </Offcanvas>
-    </>
-  );
-}
-
-function Readmore() {
-  return (
-    <>
-      {['end'].map((placement, idx) => (
-        <OffCanvasExample key={idx} placement={placement} name="My Recipes" />
-      ))}
     </>
   );
 }
@@ -161,7 +165,7 @@ const Sidebar = (props) =>
                 </NavDropdown>
               </Nav>
               <Nav>
-                <Readmore /> 
+                <OffCanvasExample placement={'end'} name="My Recipes" setMarkerList = {props.setMarkerList} />
                 <Nav.Link eventKey={2} href="./home">
                   Logout
                 </Nav.Link>

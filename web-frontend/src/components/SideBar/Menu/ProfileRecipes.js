@@ -64,9 +64,9 @@ export default function RecipeReviewCard(props) {
               <div
                 {...props}
                 style={{
-                    zIndex: "3000",
+                  zIndex: "3000",
                   position: 'absolute',
-                backgroundColor: 'rgba(255, 255, 255, 1)',
+                  backgroundColor: 'rgba(255, 255, 255, 1)',
                   padding: '0px',
                   color: 'black',
                   borderRadius: '0px',
@@ -77,10 +77,10 @@ export default function RecipeReviewCard(props) {
                 className = "row"
               >
             <button className='btn btn-secondary' style = {{marginBottom: "0.5px"}}>
-            <FontAwesomeIcon icon={faPencil} />
+                <FontAwesomeIcon icon={faPencil} />
             </button>
             <button className = "btn btn-danger">
-            <FontAwesomeIcon icon={faTrash} />
+                <FontAwesomeIcon icon={faTrash} />
             </button>
               </div>
             )}
