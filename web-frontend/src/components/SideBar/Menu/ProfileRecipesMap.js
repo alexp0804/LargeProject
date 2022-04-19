@@ -152,7 +152,7 @@ export default function RecipeReviewCard(props) {
             console.log("SET AS FAVORITE")
             setbookImage(<BookmarkIcon/>)
             setFavFlag(!FavFlag);
-            props.favMethod(prevItems => {prevItems.set(props.recipe['_id']); return prevItems;})
+            props.favMethod(prevItems => {prevItems.set(props.recipe['_id'], props.recipe); return prevItems;})
 
 
         }
