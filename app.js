@@ -761,8 +761,15 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
             user.created.splice(i, 1);
         }
     }
+
+    let result = await Promise.all(
+                    user.created.map(  
+                        async x => await db.collection(recipeCol).findOne( { _id: x } )
+                        )
+                    );
+
     // Return created recipes
-    res.json(user.created);
+    res.json(result);
 });
 
 // GET RECIPES BY SEARCH
