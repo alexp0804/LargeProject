@@ -12,11 +12,14 @@ import { green, red } from "@mui/material/colors";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import image from "../../../assets/images/milkshake.jpg";
+import image from "../../../assets/images/keylime.jpg";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import Readmore from "./ReadMore";
 import countryPosition from "../../../data/CountriesUpdated.json";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import NumbersIcon from '@mui/icons-material/Numbers';
 
 function importAll(r) {
   let images = {};
@@ -31,172 +34,177 @@ const images = importAll(
 );
 
 export default function RecipeReviewCard(props) {
-    console.log(props.fav);
+  console.log(props.fav);
   const [expanded, setExpanded] = React.useState(false);
 
   const [lgShow, setLgShow] = useState(false);
 
   // Fav = true, then display BookmarkIcon
-  const[FavFlag, setFavFlag] = useState(props.fav);
-  let x = <BookmarkBorderIcon/>;
+  const [FavFlag, setFavFlag] = useState(props.fav);
+  let x = <BookmarkBorderIcon />;
 
   // if already fav'd
-  if (props.fav)
-    x = <BookmarkIcon/>
+  if (props.fav) x = <BookmarkIcon />;
 
-  const[bookImage, setbookImage] = useState(x); 
+  const [bookImage, setbookImage] = useState(x);
 
-    const app_name = 'reci-pin';
-    function buildPath(route)
-    {
-      if (process.env.NODE_ENV === 'production')
-          return 'https://' + app_name + '.herokuapp.com/' + route;
-      else
-          return 'http://localhost:5000/' + route;
+
+   // Heart = true, then display HeartIcon
+   const [HeartFlag, setHeartFlag] = useState(props.fav);
+   let y = <FavoriteBorderIcon />;
+ 
+   // if already heart'd
+   if (props.like) y = <FavoriteIcon />;
+ 
+   const [heartImage, setheartImage] = useState(y);
+
+  const app_name = "reci-pin";
+  function buildPath(route) {
+    if (process.env.NODE_ENV === "production")
+      return "https://" + app_name + ".herokuapp.com/" + route;
+    else return "http://localhost:5000/" + route;
+  }
+
+  const setLike = async () => {
+    let jsonPayLoad = JSON.stringify({
+      userID: JSON.parse(window.localStorage.getItem("userObject"))["_id"],
+      recipeID: props.recipe["_id"],
+    });
+
+    console.log(jsonPayLoad);
+
+    try {
+      // Do not await fetches anymore
+      const response = await fetch(buildPath("api/addLike"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(
+            window.localStorage.getItem("userObject")
+          )["token"],
+        },
+      });
+
+      let res = JSON.parse(await response.text());
+
+      if (res.hasOwnProperty("error")) console.log(res["error"]);
+
+      setbookImage(<BookmarkIcon />);
+      setFavFlag(!FavFlag);
+    } catch (e) {
+      console.log(e);
     }
+  };
 
-    const setLike = async () => {
+  const deleteLike = async () => {
+    let jsonPayLoad = JSON.stringify({
+      userID: JSON.parse(window.localStorage.getItem("userObject"))["_id"],
+      recipeID: props.recipe["_id"],
+    });
 
-        let jsonPayLoad = JSON.stringify({
-            userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
-            recipeID: props.recipe['_id']
-        });
+    console.log(jsonPayLoad);
 
-        console.log(jsonPayLoad)
+    try {
+      // Do not await fetches anymore
+      const response = await fetch(buildPath("api/deleteLike"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(
+            window.localStorage.getItem("userObject")
+          )["token"],
+        },
+      });
 
+      let res = JSON.parse(await response.text());
 
-        try 
-        {
-        // Do not await fetches anymore
-        const response = await fetch(buildPath("api/addLike"), {
-            method: "POST",
-            body: jsonPayLoad,
-            headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
-            });
+      if (res.hasOwnProperty("error")) console.log(res["error"]);
 
-        let res = JSON.parse(await response.text());
-    
-        if(res.hasOwnProperty('error'))
-            console.log(res['error']);
-        
-            setbookImage(<BookmarkIcon/>)
-            setFavFlag(!FavFlag);
+      setbookImage(<BookmarkBorderIcon />);
+      setFavFlag(!FavFlag);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
+  const setFav = async () => {
+    let jsonPayLoad = JSON.stringify({
+      userID: JSON.parse(window.localStorage.getItem("userObject"))["_id"],
+      recipeID: props.recipe["_id"],
+    });
 
-        }
-        catch(e)
-        {
-            console.log(e)
-        }
-    };
+    console.log(jsonPayLoad);
 
-    const deleteLike = async () => {
+    try {
+      // Do not await fetches anymore
+      const response = await fetch(buildPath("api/addFavorite"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(
+            window.localStorage.getItem("userObject")
+          )["token"],
+        },
+      });
 
-        let jsonPayLoad = JSON.stringify({
-            userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
-            recipeID: props.recipe['_id']
-        });
+      let res = JSON.parse(await response.text());
 
-        console.log(jsonPayLoad)
+      if (res.hasOwnProperty("error")) console.log(res["error"]);
 
+      console.log("SET AS FAVORITE");
+      console.log("shit");
+      setFavFlag(true);
+      props.favMethod((prevItems) => {
+        console.log(prevItems);
+        prevItems.set(props.recipe["_id"], props.recipe);
+        console.log(prevItems);
+        return prevItems;
+      });
+      setbookImage(<BookmarkIcon />);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-        try 
-        {
-        // Do not await fetches anymore
-        const response = await fetch(buildPath("api/deleteLike"), {
-            method: "POST",
-            body: jsonPayLoad,
-            headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
-            });
+  const deleteFav = async () => {
+    let jsonPayLoad = JSON.stringify({
+      userID: JSON.parse(window.localStorage.getItem("userObject"))["_id"],
+      recipeID: props.recipe["_id"],
+    });
 
-        let res = JSON.parse(await response.text());
-    
-        if(res.hasOwnProperty('error'))
-            console.log(res['error']);
-        
-            setbookImage(<BookmarkBorderIcon/>)
-            setFavFlag(!FavFlag);
+    console.log(jsonPayLoad);
 
-        }
-        catch(e)
-        {
-            console.log(e)
-        }
-    };
+    try {
+      // Do not await fetches anymore
+      const response = await fetch(buildPath("api/deleteFavorite"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(
+            window.localStorage.getItem("userObject")
+          )["token"],
+        },
+      });
 
-    const setFav = async () => {
+      let res = JSON.parse(await response.text());
 
-        let jsonPayLoad = JSON.stringify({
-            userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
-            recipeID: props.recipe['_id']
-        });
+      if (res.hasOwnProperty("error")) console.log(res["error"]);
 
-        console.log(jsonPayLoad)
-
-
-        try 
-        {
-        // Do not await fetches anymore
-        const response = await fetch(buildPath("api/addFavorite"), {
-            method: "POST",
-            body: jsonPayLoad,
-            headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
-            });
-
-        let res = JSON.parse(await response.text());
-    
-        if(res.hasOwnProperty('error'))
-            console.log(res['error']);
-
-
-            console.log("SET AS FAVORITE");
-            console.log('shit');
-            setFavFlag(true);
-            props.favMethod(prevItems => {console.log(prevItems); prevItems.set(props.recipe['_id'], props.recipe); console.log(prevItems); return prevItems;})
-            setbookImage(<BookmarkIcon/>);
-
-        }
-        catch(e)
-        {
-            console.log(e)
-        }
-    };
-
-    const deleteFav = async () => {
-
-        let jsonPayLoad = JSON.stringify({
-            userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
-            recipeID: props.recipe['_id']
-        });
-
-        console.log(jsonPayLoad)
-
-
-        try 
-        {
-        // Do not await fetches anymore
-        const response = await fetch(buildPath("api/deleteFavorite"), {
-            method: "POST",
-            body: jsonPayLoad,
-            headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
-            });
-
-        let res = JSON.parse(await response.text());
-    
-        if(res.hasOwnProperty('error'))
-            console.log(res['error']);
-        
-            console.log('set as unfav')
-            setbookImage(<BookmarkBorderIcon/>)
-            setFavFlag(false);
-            props.favMethod(prevItems => {prevItems.delete(props.recipe['_id']); return prevItems;})
-
-        }
-        catch(e)
-        {
-            console.log(e)
-        }
-    };
+      console.log("set as unfav");
+      setbookImage(<BookmarkBorderIcon />);
+      setFavFlag(false);
+      props.favMethod((prevItems) => {
+        prevItems.delete(props.recipe["_id"]);
+        return prevItems;
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -229,36 +237,58 @@ export default function RecipeReviewCard(props) {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings" onClick = {() =>{FavFlag? deleteFav(): setFav();}}>
-              {bookImage} 
+            <IconButton
+              aria-label="settings"
+              onClick={() => {
+                FavFlag ? deleteFav() : setFav();
+              }}
+            >
+              {bookImage}
             </IconButton>
           }
           title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          // subheader="September 14, 2016"
         />
 
         <CardContent>
           <Row>
-            <Col>
-              <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook
-              </Typography>
+            <CardMedia
+              component="img"
+              height="180"
+              image={image}
+              alt="Paella dish"
+            />
+          </Row>
 
-              <Col md={{ span: 3, offset: 6 }}>
-                {" "}
-                <IconButton onClick={() => setLgShow(true)}>
-                  <ReadMoreIcon></ReadMoreIcon>
-                </IconButton>{" "}
-              </Col>
-            </Col>
+          <Row>
+            <Typography variant="body2" color="text.secondary">
+              This impressive paella is a perfect party dish and a fun meal to
+              cook
+            </Typography>
+          </Row>
+
+          <Row>
             <Col>
-              <CardMedia
-                component="img"
-                height="180"
-                image={image}
-                alt="Paella dish"
-              />
+              <IconButton
+                aria-label="add to favorites"
+                onClick={() => {
+                  HeartFlag ? deleteLike() : setLike();
+                }}
+              >
+               {heartImage}
+              </IconButton>
+              {/* 
+                <IconButton aria-label="share" onClick={() => setLgShow(true)}>
+                  <NumbersIcon/>
+                </IconButton> */}
+            </Col>
+
+            <Col></Col>
+
+            <Col md={{ offset: 4 }}>
+              <IconButton onClick={() => setLgShow(true)}>
+                <ReadMoreIcon aria-label="show more"> </ReadMoreIcon>
+              </IconButton>
             </Col>
           </Row>
         </CardContent>
