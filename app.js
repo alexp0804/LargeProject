@@ -1,5 +1,6 @@
 const { Console } = require('console');
 const { create } = require('domain');
+const { CLIENT_RENEG_WINDOW } = require('tls');
 const express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
@@ -313,6 +314,8 @@ app.post('/api/editUser', auth, async (req, res) =>
     res.json( emptyErr );
 });
 
+
+
 // GET USER FAVORITE(S)
 app.post('/api/getFavorites', auth, async (req, res) =>
 {
@@ -451,19 +454,25 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         instructions: instructions,
         ingredients: ingredients,
         country: country,
-        coordinates: coordinates,
+        location: {
+            type: "Point",
+            coordinates: coordinates.reverse()
+        },
         likes: 0,
         favorites: 0
     };
 
-    // Upload the image to Cloudinary
-    try
+    if (pic != "")
     {
-        recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
-    }
-    catch (e)
-    {
-        res.status(500).json( { error: "Image upload failure." } );
+        // Upload the image to Cloudinary
+        try
+        {
+            recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
+        }
+        catch (e)
+        {
+            res.status(500).json( { error: "Image upload failure." } );
+        }
     }
 
     // Check if the country is in the database
@@ -551,6 +560,7 @@ app.post('/api/deleteRecipe', auth, async (req, res) =>
     // Okay status
     res.json( emptyErr );
 });
+
 
 
 // GET RANDOM RECIPE
@@ -683,6 +693,23 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
+app.post('/api/getLikedFavorited', auth, async (req, res) =>
+{
+    const { userID, recipeID } = req.body;
+    const db = client.db();
+
+    let result = {};
+
+    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    if (!user) 
+        res.status(404).json( { error: "User not found" } );
+
+    result.liked = user.likes.some(f => { return f.equals(recipeID) });
+    result.favorited = user.favorites.some(f => { return f.equals(recipeID) });
+
+    res.json(result);
+})
 
 
 // GET RECIPES BY COUNTRY
@@ -748,6 +775,53 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
     res.json(ret);
 });
 
+// GET NEARBY RECIPES
+app.post('/api/getNearbyRecipes', auth, async (req, res) => 
+{   
+    // Location given [x, y] = lat, long
+    // Distance given in miles, float number
+    const { location, distance } = req.body;
+    const db = client.db();
+
+    // Convert distance in miles to km
+    let d = parseInt(distance) * 1609;
+
+    // Get recipes and filter out those that are too far
+    let recipes = await db.collection(recipeCol).find(
+        {
+            location: {
+                $nearSphere: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: location.reverse()
+                    },
+                    $maxDistance: d
+                }
+            }
+        }).toArray();
+
+    res.json(recipes);
+});
+
+function haversine(a, b)
+{
+    const [lat1, lon1] = a,
+          [lat2, lon2] = b
+
+    const rads = x => x * Math.PI / 180;
+
+    const phi_1 = rads(lat1),
+          phi_2 = rads(lat2),
+          dphi = rads(lat2 - lat1),
+          dlambda = rads(lon2 - lon1);
+
+    const t = Math.sin(dphi / 2) * Math.sin(dphi/2) + 
+              Math.cos(phi_1) * Math.cos(phi_2) *
+              Math.sin(dlambda / 2) * Math.sin(dlambda / 2);
+
+    // The secret is 6371e3. Don't look it up.
+    return 6371e3 * 2 * Math.atan2(Math.sqrt(t), Math.sqrt(1 - t)) / 1000;
+}
 
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int

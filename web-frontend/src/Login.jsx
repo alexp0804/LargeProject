@@ -44,8 +44,8 @@ export default function App() {
       if(res.hasOwnProperty('error'))
         setMessage(res['error']);
   
-        
-      window.location.href = "/landing";
+      else
+        window.location.href = "/landing";
     }
     catch(e)
     {
