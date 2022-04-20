@@ -444,10 +444,10 @@ app.post('/api/uploadImage', async (req, res) =>
     }
     catch (e)
     {
-        res.status(500).json( { error:"Image upload failure." } );
+        return res.status(500).json( { error:"Image upload failure.", msg: e } );
     }
     
-    res.json( { url: result } );
+    res.json( { url: result} );
 })
 
 // CREATE RECIPE
@@ -484,7 +484,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         }
         catch (e)
         {
-            res.status(500).json( { error: "Image upload failure.", msg: e } );
+            return res.status(500).json( { error: "Image upload failure.", msg: e } );
         }
     }
 
