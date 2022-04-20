@@ -34,7 +34,7 @@ const images = importAll(
 );
 
 export default function RecipeReviewCard(props) {
-  console.log(props.recipe.ingredients);
+
   const [expanded, setExpanded] = React.useState(false);
 
   const [lgShow, setLgShow] = useState(false);
@@ -209,7 +209,7 @@ export default function RecipeReviewCard(props) {
   return (
     <>
       <Modal
-        style={{ zIndex: "5000", marginTop: "2%" }}
+        style={{ zIndex: "5000", marginTop: "1.7%" }}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}

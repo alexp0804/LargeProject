@@ -8,13 +8,6 @@ import Tabs from 'react-bootstrap/Tabs'
 
 
 function ReadMore(props) {
-    let string = props.recipe.ingredients.split('\n');
-    let directions = props.recipe.instructions.split('\n')
-
-    function bulletIt(ingredientsLine)
-    {
-        return(<li style = {{marginBottom: "1%"}}> {ingredientsLine}  </li>)
-    }
 
   return (
     <Container>
@@ -36,9 +29,9 @@ function ReadMore(props) {
             tabClassName="text-black"
             
           >
-              <div style = {{marginLeft: "2%"}}>
+              <div style = {{marginLeft: "2%", whiteSpace: "pre-wrap"}}>
 
-                {string.map(bulletIt)}
+                {props.recipe.ingredients}
               </div>
           </Tab>
           <Tab
@@ -46,9 +39,10 @@ function ReadMore(props) {
             title="Directions"
             tabClassName="text-black"
           >
-              <ol>
-                  {directions.map(bulletIt)}
-              </ol>
+              <div style = {{marginLeft: "2%", whiteSpace: "pre-wrap"}}>
+
+                {props.recipe.instructions}
+              </div>
           </Tab>
           <Tab
             eventKey="Country Stuff"

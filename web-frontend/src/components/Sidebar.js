@@ -92,6 +92,7 @@ function OffCanvasExample(props) {
             recipeinstructions = {recipe.instructions}
             recipePic = {recipe.pic}
             setMarkerList = {props.setMarkerList}
+            recipe = {recipe}
             setArray = {setArray}
             />
         );

@@ -20,6 +20,7 @@ import { Overlay } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faPencil } from '@fortawesome/free-solid-svg-icons'
+import EditRecipe from './editRecipe.js'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,10 +34,14 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function RecipeReviewCard(props) {
+
+    
   const [expanded, setExpanded] = React.useState(false);
 
   const [show, setShow] = useState(false);
   const target = useRef(null);
+
+  let recipe = props.recipe;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -114,10 +119,12 @@ export default function RecipeReviewCard(props) {
           <Overlay target={target.current} show={show} placement="left">
             {({ placement, arrowProps, show: _show, popper, ...props }) => (
               <div
-                {...props}
+              {...props}
+                id="closeButtons"
                 style={{
-                  zIndex: "3000",
+                  zIndex: "1500",
                   position: 'absolute',
+                  opacity: 1,
                   backgroundColor: 'rgba(255, 255, 255, 0)',
                   padding: '0px',
                   color: 'black',
@@ -128,9 +135,8 @@ export default function RecipeReviewCard(props) {
                 }}
                 className = "row"
               >
-            <button className='btn btn-secondary' style = {{marginBottom: "0.5px"}}>
-                <FontAwesomeIcon icon={faPencil} />
-            </button>
+
+            <EditRecipe recipe = {recipe}/>
             <button className = "btn btn-danger" onClick = {() => deleteRecipe()}> 
                 <FontAwesomeIcon icon={faTrash} />
             </button>

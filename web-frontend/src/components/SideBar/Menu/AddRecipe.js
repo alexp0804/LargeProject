@@ -58,6 +58,7 @@ const MyRecipes = ({ title, active, icon }) => {
     return (
       <>
         <Modal
+          style = {{marginTop: '1.7%'}} 
           size="lg"
           show={lgShow}
           onHide={() => setLgShow(false)}
@@ -158,14 +159,14 @@ const MyRecipes = ({ title, active, icon }) => {
 
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Notes: </Form.Label>
-                  <FormControl as="textarea" aria-label="With textarea"  type="notes"
-                  placeholder="Don't overcook the red sauce!" 
+                  <FormControl as="textarea" aria-label="With textarea"  type="Summary"
+                  placeholder="Savory red sauce and Meatballs you just can't get enough of!" 
                   onChange = {(e) => description = e.target.value}/>
                 </Form.Group>
               </Row>
 
               <Form.Group className="mb-3" id="formGridCheckbox">
-                <Form.Check type="checkbox" label="Make My Recipe Public" />
+                <Form.Check defaultChecked = {true} type="checkbox" label="Make My Recipe Public" />
               </Form.Group>
 
               <Button variant="primary" type="button" onClick = {insertMarker} >
@@ -175,7 +176,7 @@ const MyRecipes = ({ title, active, icon }) => {
           </Modal.Body>
         </Modal>
 
-        <Container onClick={() => setLgShow(true)} active={active}>
+        <Container onClick={() => setLgShow(true)} active={active}  >
           {title}
         </Container>
       </>

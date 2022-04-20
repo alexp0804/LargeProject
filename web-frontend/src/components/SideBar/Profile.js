@@ -1,20 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-import Image from '../../assets/images/profilepics/a5.png'
+import Image from '../../assets/images/git2.png'
 
 const Container = styled.div`
-    margin-top: 4rem;
+    margin-top: 5rem;
 `
 
 const ProfileImg = styled.img`
-    height: 7rem;
-    margin-top: 3rem;
+    height: 5rem;
 `
 const ProfileName = styled.h1`
-    font-size: 1.4rem;
-    font-weight: 400;
+    font-size: 1rem;
+    font-weight: 300;
     padding-top: 1rem;
-    color: 'light-grey';
+    color: #585280;
 	text-align: center;
 `
 

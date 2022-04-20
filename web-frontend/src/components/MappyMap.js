@@ -176,30 +176,6 @@ const MappyMap = () =>
   }
 
   const flags = lower + '.png'
-
-  
-        // {countryPosition.map((countryYoink) => (
-        //   <Marker
-        //     key={countryYoink.id}
-        //     position={[countryYoink.latitude, countryYoink.longitude]}
-        //   >
-        //     <Popup position={[countryYoink.latitude, countryYoink.longitude]}>
-        //       <div>
-        //         <h2>
-        //           {/* <img src={images[flags]} />
-
-        //           <img src= {images[countryYoink.id.toLowerCase() + '.png']} /> */}
-
-        //           < RecipeReviewCard / >
-
-        //         </h2>
-        //       </div>
-        //     </Popup>
-        //   </Marker>
-        // ))}
-
-
-
   
     return (
 
