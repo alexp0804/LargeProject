@@ -9,7 +9,8 @@ import RecModal from '../components/RecModal';
 const url = URL();
 
 export default function Profile ({route, navigation})
-{
+{   console.warn("Testing123")
+    console.warn(route.params)
     const {id, username} = route.params;
     console.warn(id + " " + username)
     const [openModalShowing, setOpenModalShowing] = useState(false)
@@ -21,6 +22,7 @@ export default function Profile ({route, navigation})
                                     "x-access-token":route.params.token}, body:JSON.stringify({userID:route.params.id})});
         let txt = await response.text();
         let userRec = JSON.parse(txt);
+        console.warn("Testy Test")
         console.warn(userRec)
 
         let resp = await fetch(url + "getLikes", {method:"POST", 

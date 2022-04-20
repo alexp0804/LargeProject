@@ -7,7 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 export default function LandingPage({navigation, route})
 {
     const Tab = createBottomTabNavigator();
-    console.warn(route.params.params)
+    console.warn("Testing 5678")
+    console.warn(route.params)
 
   return(
     <Tab.Navigator screenOptions={({ route }) => ({
@@ -38,11 +39,18 @@ export default function LandingPage({navigation, route})
       
     })}>
       <Tab.Screen name= "Profile" component= {Profile} 
-                 initialParams={{id:route.params.params.id, 
-                 username:route.params.params.username, 
-                 token:route.params.params.token}}/>
+                 initialParams={{id:route.params.id, 
+                 username:route.params.user, 
+                 token:route.params.token}}/>
       <Tab.Screen name= "Map" component={Main}
-                 initialParams={{id:route.params.params.id, username:route.params.params.username, token:route.params.params.token}}/> 
+                 initialParams={{id:route.params.id, username:route.params.user, token:route.params.token, value:route.params.value, recipe:{
+                   name:route.params.name,
+                   desc:route.params.desc,
+                   instructions:route.params.instructions,
+                   ingredients:route.params.ingredients,
+                   pic:route.params.pic,
+                   country:route.params.country
+                 }, adding:false}}/> 
     </Tab.Navigator>
   )
 }

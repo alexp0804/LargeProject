@@ -1,5 +1,2121 @@
 [
-    
+    {
+        "name": "Afghanistan",
+        "id": "AF",
+        "capital": "Kabul",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/afg.svg",
+        "latitude": 33,
+        "longitude": 65
+    },
+    {
+        "name": "Albania",
+        "id": "AL",
+        "capital": "Tirana",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/alb.svg",
+        "latitude": 41,
+        "longitude": 20
+    },
+    {
+        "name": "Algeria",
+        "id": "DZ",
+        "capital": "Algiers",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/dza.svg",
+        "latitude": 28,
+        "longitude": 3
+    },
+    {
+        "name": "American Samoa",
+        "id": "AS",
+        "capital": "Pago Pago",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/asm.svg",
+        "latitude": -14.3333,
+        "longitude": -170
+    },
+    {
+        "name": "Andorra",
+        "id": "AD",
+        "capital": "Andorra la Vella",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/and.svg",
+        "latitude": 42.5,
+        "longitude": 1.6
+    },
+    {
+        "name": "Angola",
+        "id": "AO",
+        "capital": "Luanda",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/ago.svg",
+        "latitude": -12.5,
+        "longitude": 18.5
+    },
+    {
+        "name": "Anguilla",
+        "id": "AI",
+        "capital": "The Valley",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/aia.svg",
+        "latitude": 18.25,
+        "longitude": -63.1667
+    },
+    {
+        "name": "Antigua and Barbuda",
+        "id": "AG",
+        "capital": "Saint John's",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/atg.svg",
+        "latitude": 17.05,
+        "longitude": -61.8
+    },
+    {
+        "name": "Argentina",
+        "id": "AR",
+        "capital": "Buenos Aires",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/arg.svg",
+        "latitude": -34,
+        "longitude": -64
+    },
+    {
+        "name": "Armenia",
+        "id": "AM",
+        "capital": "Yerevan",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/arm.svg",
+        "latitude": 40,
+        "longitude": 45
+    },
+    {
+        "name": "Aruba",
+        "id": "AW",
+        "capital": "Oranjestad",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/abw.svg",
+        "latitude": 12.5,
+        "longitude": -69.9667
+    },
+    {
+        "name": "Australia",
+        "id": "AU",
+        "capital": "Canberra",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/aus.svg",
+        "latitude": -27,
+        "longitude": 133
+    },
+    {
+        "name": "Austria",
+        "id": "AT",
+        "capital": "Vienna",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/aut.svg",
+        "latitude": 47.3333,
+        "longitude": 13.3333
+    },
+    {
+        "name": "Azerbaijan",
+        "id": "AZ",
+        "capital": "Baku",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/aze.svg",
+        "latitude": 40.5,
+        "longitude": 47.5
+    },
+    {
+        "name": "Bahamas",
+        "id": "BS",
+        "capital": "Nassau",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/bhs.svg",
+        "latitude": 24.25,
+        "longitude": -76
+    },
+    {
+        "name": "Bahrain",
+        "id": "BH",
+        "capital": "Manama",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/bhr.svg",
+        "latitude": 26,
+        "longitude": 50.55
+    },
+    {
+        "name": "Bangladesh",
+        "id": "BD",
+        "capital": "Dhaka",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/bgd.svg",
+        "latitude": 24,
+        "longitude": 90
+    },
+    {
+        "name": "Barbados",
+        "id": "BB",
+        "capital": "Bridgetown",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/brb.svg",
+        "latitude": 13.1667,
+        "longitude": -59.5333
+    },
+    {
+        "name": "Belarus",
+        "id": "BY",
+        "capital": "Minsk",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/blr.svg",
+        "latitude": 53,
+        "longitude": 28
+    },
+    {
+        "name": "Belgium",
+        "id": "BE",
+        "capital": "Brussels",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/bel.svg",
+        "latitude": 50.8333,
+        "longitude": 4
+    },
+    {
+        "name": "Belize",
+        "id": "BZ",
+        "capital": "Belmopan",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/blz.svg",
+        "latitude": 17.25,
+        "longitude": -88.75
+    },
+    {
+        "name": "Benin",
+        "id": "BJ",
+        "capital": "Porto-Novo",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/ben.svg",
+        "latitude": 9.5,
+        "longitude": 2.25
+    },
+    {
+        "name": "Bermuda",
+        "id": "BM",
+        "capital": "Hamilton",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/bmu.svg",
+        "latitude": 32.3333,
+        "longitude": -64.75
+    },
+    {
+        "name": "Bhutan",
+        "id": "BT",
+        "capital": "Thimphu",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/btn.svg",
+        "latitude": 27.5,
+        "longitude": 90.5
+    },
+    {
+        "name": "Bolivia",
+        "id": "BO",
+        "capital": "Sucre",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/bol.svg",
+        "latitude": -17,
+        "longitude": -65
+    },
+    {
+        "name": "Bosnia and Herzegovina",
+        "id": "BA",
+        "capital": "Sarajevo",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/bih.svg",
+        "latitude": 44,
+        "longitude": 18
+    },
+    {
+        "name": "Botswana",
+        "id": "BW",
+        "capital": "Gaborone",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/bwa.svg",
+        "latitude": -22,
+        "longitude": 24
+    },
+    {
+        "name": "Bouvet Island",
+        "id": "BV",
+        "capital": "",
+        "region": "AN",
+        "flag": "https://restcountries.eu/data/bvt.svg",
+        "latitude": -54.4333,
+        "longitude": 3.4
+    },
+    {
+        "name": "Brazil",
+        "id": "BR",
+        "capital": "Brasília",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/bra.svg",
+        "latitude": -10,
+        "longitude": -55
+    },
+    {
+        "name": "British Indian Ocean Territory",
+        "id": "IO",
+        "capital": "Diego Garcia",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/iot.svg",
+        "latitude": -6,
+        "longitude": 71.5
+    },
+    {
+        "name": "Brunei Darussalam",
+        "id": "BN",
+        "capital": "Bandar Seri Begawan",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/brn.svg",
+        "latitude": 4.5,
+        "longitude": 114.6667
+    },
+    {
+        "name": "Bulgaria",
+        "id": "BG",
+        "capital": "Sofia",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/bgr.svg",
+        "latitude": 43,
+        "longitude": 25
+    },
+    {
+        "name": "Burkina Faso",
+        "id": "BF",
+        "capital": "Ouagadougou",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/bfa.svg",
+        "latitude": 13,
+        "longitude": -2
+    },
+    {
+        "name": "Burundi",
+        "id": "BI",
+        "capital": "Bujumbura",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/bdi.svg",
+        "latitude": -3.5,
+        "longitude": 30
+    },
+    {
+        "name": "Cambodia",
+        "id": "KH",
+        "capital": "Phnom Penh",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/khm.svg",
+        "latitude": 13,
+        "longitude": 105
+    },
+    {
+        "name": "Cameroon",
+        "id": "CM",
+        "capital": "Yaoundé",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/cmr.svg",
+        "latitude": 6,
+        "longitude": 12
+    },
+    {
+        "name": "Canada",
+        "id": "CA",
+        "capital": "Ottawa",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/can.svg",
+        "latitude": 60,
+        "longitude": -95
+    },
+    {
+        "name": "Cape Verde",
+        "id": "CV",
+        "capital": "Praia",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/cpv.svg",
+        "latitude": 16,
+        "longitude": -24
+    },
+    {
+        "name": "Cayman Islands",
+        "id": "KY",
+        "capital": "George Town",
+        "region": "NA",
+        "demonym": "Caymanian",
+        "flag": "https://restcountries.eu/data/cym.svg",
+        "latitude": 19.5,
+        "longitude": -80.5
+    },
+    {
+        "name": "Central African Republic",
+        "id": "CF",
+        "capital": "Bangui",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/caf.svg",
+        "latitude": 7,
+        "longitude": 21
+    },
+    {
+        "name": "Chad",
+        "id": "TD",
+        "capital": "N'Djamena",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/tcd.svg",
+        "latitude": 15,
+        "longitude": 19
+    },
+    {
+        "name": "Chile",
+        "id": "CL",
+        "capital": "Santiago",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/chl.svg",
+        "latitude": -30,
+        "longitude": -71
+    },
+    {
+        "name": "China",
+        "id": "CN",
+        "capital": "Beijing",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/chn.svg",
+        "latitude": 35,
+        "longitude": 105
+    },
+    {
+        "name": "Christmas Island",
+        "id": "CX",
+        "capital": "Flying Fish Cove",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/cxr.svg",
+        "latitude": -10.5,
+        "longitude": 105.6667
+    },
+    {
+        "name": "Cocos (Keeling) Islands",
+        "id": "CC",
+        "capital": "West Island",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/cck.svg",
+        "latitude": -12.5,
+        "longitude": 96.8333
+    },
+    {
+        "name": "Colombia",
+        "id": "CO",
+        "capital": "Bogotá",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/col.svg",
+        "latitude": 4,
+        "longitude": -72
+    },
+    {
+        "name": "Comoros",
+        "id": "KM",
+        "capital": "Moroni",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/com.svg",
+        "latitude": -12.1667,
+        "longitude": 44.25
+    },
+    {
+        "name": "Congo",
+        "id": "CG",
+        "capital": "Brazzaville",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/cog.svg",
+        "latitude": -1,
+        "longitude": 15
+    },
+    {
+        "name": "Democratic Republic of the Congo",
+        "id": "CD",
+        "capital": "Kinshasa",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/cod.svg",
+        "latitude": 0,
+        "longitude": 25
+    },
+    {
+        "name": "Cook Islands",
+        "id": "CK",
+        "capital": "Avarua",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/cok.svg",
+        "latitude": -21.2333,
+        "longitude": -159.7667
+    },
+    {
+        "name": "Costa Rica",
+        "id": "CR",
+        "capital": "San José",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/cri.svg",
+        "latitude": 10,
+        "longitude": -84
+    },
+    {
+        "name": "Croatia",
+        "id": "HR",
+        "capital": "Zagreb",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/hrv.svg",
+        "latitude": 8,
+        "longitude": -5
+    },
+    {
+        "name": "Cuba",
+        "id": "CU",
+        "capital": "Havana",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/cub.svg",
+        "latitude": 45.1667,
+        "longitude": 15.5
+    },
+    {
+        "name": "Cyprus",
+        "id": "CY",
+        "capital": "Nicosia",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/cyp.svg",
+        "latitude": 21.5,
+        "longitude": -80
+    },
+    {
+        "name": "Czech Republic",
+        "id": "CZ",
+        "capital": "Prague",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/cze.svg",
+        "latitude": 35,
+        "longitude": 33
+    },
+    {
+        "name": "Côte d'Ivoire",
+        "id": "CI",
+        "capital": "Yamoussoukro",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/civ.svg",
+        "latitude": 49.75,
+        "longitude": 15.5
+    },
+    {
+        "name": "Denmark",
+        "id": "DK",
+        "capital": "Copenhagen",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/dnk.svg",
+        "latitude": 56,
+        "longitude": 10
+    },
+    {
+        "name": "Djibouti",
+        "id": "DJ",
+        "capital": "Djibouti",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/dji.svg",
+        "latitude": 11.5,
+        "longitude": 43
+    },
+    {
+        "name": "Dominica",
+        "id": "DM",
+        "capital": "Roseau",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/dma.svg",
+        "latitude": 15.4167,
+        "longitude": -61.3333
+    },
+    {
+        "name": "Dominican Republic",
+        "id": "DO",
+        "capital": "Santo Domingo",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/dom.svg",
+        "latitude": 19,
+        "longitude": -70.6667
+    },
+    {
+        "name": "Ecuador",
+        "id": "EC",
+        "capital": "Quito",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/ecu.svg",
+        "latitude": -2,
+        "longitude": -77.5
+    },
+    {
+        "name": "Egypt",
+        "id": "EG",
+        "capital": "Cairo",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/egy.svg",
+        "latitude": 27,
+        "longitude": 30
+    },
+    {
+        "name": "El Salvador",
+        "id": "SV",
+        "capital": "San Salvador",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/slv.svg",
+        "latitude": 13.8333,
+        "longitude": -88.9167
+    },
+    {
+        "name": "Equatorial Guinea",
+        "id": "GQ",
+        "capital": "Malabo",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/gnq.svg",
+        "latitude": 2,
+        "longitude": 10
+    },
+    {
+        "name": "Eritrea",
+        "id": "ER",
+        "capital": "Asmara",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/eri.svg",
+        "latitude": 15,
+        "longitude": 39
+    },
+    {
+        "name": "Estonia",
+        "id": "EE",
+        "capital": "Tallinn",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/est.svg",
+        "latitude": 59,
+        "longitude": 26
+    },
+    {
+        "name": "Ethiopia",
+        "id": "ET",
+        "capital": "Addis Ababa",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/eth.svg",
+        "latitude": 8,
+        "longitude": 38
+    },
+    {
+        "name": "Falkland Islands (Malvinas)",
+        "id": "FK",
+        "capital": "Stanley",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/flk.svg",
+        "latitude": -51.75,
+        "longitude": -59
+    },
+    {
+        "name": "Faroe Islands",
+        "id": "FO",
+        "capital": "Tórshavn",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/fro.svg",
+        "latitude": 62,
+        "longitude": -7
+    },
+    {
+        "name": "Fiji",
+        "id": "FJ",
+        "capital": "Suva",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/fji.svg",
+        "latitude": -18,
+        "longitude": 175
+    },
+    {
+        "name": "Finland",
+        "id": "FI",
+        "capital": "Helsinki",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/fin.svg",
+        "latitude": 64,
+        "longitude": 26
+    },
+    {
+        "name": "France",
+        "id": "FR",
+        "capital": "Paris",
+        "region": "EU",
+        "demonym": "French",
+        "flag": "https://restcountries.eu/data/fra.svg",
+        "latitude": 46,
+        "longitude": 2
+    },
+    {
+        "name": "French Guiana",
+        "id": "GF",
+        "capital": "Cayenne",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/guf.svg",
+        "latitude": 4,
+        "longitude": -53
+    },
+    {
+        "name": "French Polynesia",
+        "id": "PF",
+        "capital": "Papeetē",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/pyf.svg",
+        "latitude": -15,
+        "longitude": -140
+    },
+    {
+        "name": "French Southern Territories",
+        "id": "TF",
+        "capital": "Port-aux-Français",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/atf.svg",
+        "latitude": -43,
+        "longitude": 67
+    },
+    {
+        "name": "Gabon",
+        "id": "GA",
+        "capital": "Libreville",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/gab.svg",
+        "latitude": -1,
+        "longitude": 11.75
+    },
+    {
+        "name": "Gambia",
+        "id": "GM",
+        "capital": "Banjul",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/gmb.svg",
+        "latitude": 13.4667,
+        "longitude": -16.5667
+    },
+    {
+        "name": "Georgia",
+        "id": "GE",
+        "capital": "Tbilisi",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/geo.svg",
+        "latitude": 42,
+        "longitude": 43.5
+    },
+    {
+        "name": "Germany",
+        "id": "DE",
+        "capital": "Berlin",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/deu.svg",
+        "latitude": 51,
+        "longitude": 9
+    },
+    {
+        "name": "Ghana",
+        "id": "GH",
+        "capital": "Accra",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/gha.svg",
+        "latitude": 8,
+        "longitude": -2
+    },
+    {
+        "name": "Gibraltar",
+        "id": "GI",
+        "capital": "Gibraltar",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/gib.svg",
+        "latitude": 36.1833,
+        "longitude": -5.3667
+    },
+    {
+        "name": "Greece",
+        "id": "GR",
+        "capital": "Athens",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/grc.svg",
+        "latitude": 39,
+        "longitude": 22
+    },
+    {
+        "name": "Greenland",
+        "id": "GL",
+        "capital": "Nuuk",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/grl.svg",
+        "latitude": 72,
+        "longitude": -40
+    },
+    {
+        "name": "Grenada",
+        "id": "GD",
+        "capital": "St. George's",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/grd.svg",
+        "latitude": 12.1167,
+        "longitude": -61.6667
+    },
+    {
+        "name": "Guadeloupe",
+        "id": "GP",
+        "capital": "Basse-Terre",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/glp.svg",
+        "latitude": 16.25,
+        "longitude": -61.5833
+    },
+    {
+        "name": "Guam",
+        "id": "GU",
+        "capital": "Hagåtña",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/gum.svg",
+        "latitude": 13.4667,
+        "longitude": 144.7833
+    },
+    {
+        "name": "Guatemala",
+        "id": "GT",
+        "capital": "Guatemala City",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/gtm.svg",
+        "latitude": 15.5,
+        "longitude": -90.25
+    },
+    {
+        "name": "Guernsey",
+        "id": "GG",
+        "capital": "St. Peter Port",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/ggy.svg",
+        "latitude": 49.5,
+        "longitude": -2.56
+    },
+    {
+        "name": "Guinea",
+        "id": "GN",
+        "capital": "Conakry",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/gin.svg",
+        "latitude": 11,
+        "longitude": -10
+    },
+    {
+        "name": "Guinea-Bissau",
+        "id": "GW",
+        "capital": "Bissau",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/gnb.svg",
+        "latitude": 12,
+        "longitude": -15
+    },
+    {
+        "name": "Guyana",
+        "id": "GY",
+        "capital": "Georgetown",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/guy.svg",
+        "latitude": 5,
+        "longitude": -59
+    },
+    {
+        "name": "Haiti",
+        "id": "HT",
+        "capital": "Port-au-Prince",
+        "region": "Americas",
+        "flag": "https://restcountries.eu/data/hti.svg",
+        "latitude": 19,
+        "longitude": -72.4167
+    },
+    {
+        "name": "Heard Island and McDonald Islands",
+        "id": "HM",
+        "capital": "",
+        "region": "",
+        "flag": "https://restcountries.eu/data/hmd.svg",
+        "latitude": -53.1,
+        "longitude": 72.5167
+    },
+    {
+        "name": "Vatican City State",
+        "id": "VA",
+        "capital": "Rome",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/vat.svg",
+        "latitude": 41.9,
+        "longitude": 12.45
+    },
+    {
+        "name": "Honduras",
+        "id": "HN",
+        "capital": "Tegucigalpa",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/hnd.svg",
+        "latitude": 15,
+        "longitude": -86.5
+    },
+    {
+        "name": "Hong Kong",
+        "id": "HK",
+        "capital": "City of Victoria",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/hkg.svg",
+        "latitude": 22.25,
+        "longitude": 114.1667
+    },
+    {
+        "name": "Hungary",
+        "id": "HU",
+        "capital": "Budapest",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/hun.svg",
+        "latitude": 47,
+        "longitude": 20
+    },
+    {
+        "name": "Iceland",
+        "id": "IS",
+        "capital": "Reykjavík",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/isl.svg",
+        "latitude": 65,
+        "longitude": -18
+    },
+    {
+        "name": "India",
+        "id": "IN",
+        "capital": "New Delhi",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/ind.svg",
+        "latitude": 20,
+        "longitude": 77
+    },
+    {
+        "name": "Indonesia",
+        "id": "ID",
+        "capital": "Jakarta",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/idn.svg",
+        "latitude": -5,
+        "longitude": 120
+    },
+    {
+        "name": "Islamic Republic of Iran",
+        "id": "IR",
+        "capital": "Tehran",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/irn.svg",
+        "latitude": 32,
+        "longitude": 53
+    },
+    {
+        "name": "Iraq",
+        "id": "IQ",
+        "capital": "Baghdad",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/irq.svg",
+        "latitude": 33,
+        "longitude": 44
+    },
+    {
+        "name": "Ireland",
+        "id": "IE",
+        "capital": "Dublin",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/irl.svg",
+        "latitude": 53,
+        "longitude": -8
+    },
+    {
+        "name": "Isle of Man",
+        "id": "IM",
+        "capital": "Douglas",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/imn.svg",
+        "latitude": 54.23,
+        "longitude": -4.55
+    },
+    {
+        "name": "Israel",
+        "id": "IL",
+        "capital": "Jerusalem",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/isr.svg",
+        "latitude": 31.5,
+        "longitude": 34.75
+    },
+    {
+        "name": "Italy",
+        "id": "IT",
+        "capital": "Rome",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/ita.svg",
+        "latitude": 42.8333,
+        "longitude": 12.8333
+    },
+    {
+        "name": "Jamaica",
+        "id": "JM",
+        "capital": "Kingston",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/jam.svg",
+        "latitude": 18.25,
+        "longitude": -77.5
+    },
+    {
+        "name": "Japan",
+        "id": "JP",
+        "capital": "Tokyo",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/jpn.svg",
+        "latitude": 36,
+        "longitude": 138
+    },
+    {
+        "name": "Jersey",
+        "id": "JE",
+        "capital": "Saint Helier",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/jey.svg",
+        "latitude": 49.21,
+        "longitude": -2.13
+    },
+    {
+        "name": "Jordan",
+        "id": "JO",
+        "capital": "Amman",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/jor.svg",
+        "latitude": 31,
+        "longitude": 36
+    },
+    {
+        "name": "Kazakhstan",
+        "id": "KZ",
+        "capital": "Astana",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/kaz.svg",
+        "latitude": 48,
+        "longitude": 68
+    },
+    {
+        "name": "Kenya",
+        "id": "KE",
+        "capital": "Nairobi",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/ken.svg",
+        "latitude": 1,
+        "longitude": 38
+    },
+    {
+        "name": "Kiribati",
+        "id": "KI",
+        "capital": "South Tarawa",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/kir.svg",
+        "latitude": 1.4167,
+        "longitude": 173
+    },
+    {
+        "name": "Kuwait",
+        "id": "KW",
+        "capital": "Kuwait City",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/kwt.svg",
+        "latitude": 29.3375,
+        "longitude": 47.6581
+    },
+    {
+        "name": "Kyrgyzstan",
+        "id": "KG",
+        "capital": "Bishkek",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/kgz.svg",
+        "latitude": 41,
+        "longitude": 75
+    },
+    {
+        "name": "Lao People's Democratic Republic",
+        "id": "LA",
+        "capital": "Vientiane",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/lao.svg",
+        "latitude": 18,
+        "longitude": 105
+    },
+    {
+        "name": "Latvia",
+        "id": "LV",
+        "capital": "Riga",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/lva.svg",
+        "latitude": 57,
+        "longitude": 25
+    },
+    {
+        "name": "Lebanon",
+        "id": "LB",
+        "capital": "Beirut",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/lbn.svg",
+        "latitude": 33.8333,
+        "longitude": 35.8333
+    },
+    {
+        "name": "Lesotho",
+        "id": "LS",
+        "capital": "Maseru",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/lso.svg",
+        "latitude": -29.5,
+        "longitude": 28.5
+    },
+    {
+        "name": "Liberia",
+        "id": "LR",
+        "capital": "Monrovia",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/lbr.svg",
+        "latitude": 6.5,
+        "longitude": -9.5
+    },
+    {
+        "name": "Libya",
+        "id": "LY",
+        "capital": "Tripoli",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/lby.svg",
+        "latitude": 25,
+        "longitude": 17
+    },
+    {
+        "name": "Liechtenstein",
+        "id": "LI",
+        "capital": "Vaduz",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/lie.svg",
+        "latitude": 47.1667,
+        "longitude": 9.5333
+    },
+    {
+        "name": "Lithuania",
+        "id": "LT",
+        "capital": "Vilnius",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/ltu.svg",
+        "latitude": 56,
+        "longitude": 24
+    },
+    {
+        "name": "Luxembourg",
+        "id": "LU",
+        "capital": "Luxembourg",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/lux.svg",
+        "latitude": 49.75,
+        "longitude": 6.1667
+    },
+    {
+        "name": "Macao",
+        "id": "MO",
+        "capital": "",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/mac.svg",
+        "latitude": 22.1667,
+        "longitude": 113.55
+    },
+    {
+        "name": "The Republic of Macedonia",
+        "id": "MK",
+        "capital": "Skopje",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/mkd.svg",
+        "latitude": 41.8333,
+        "longitude": 22
+    },
+    {
+        "name": "Madagascar",
+        "id": "MG",
+        "capital": "Antananarivo",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/mdg.svg",
+        "latitude": -20,
+        "longitude": 47
+    },
+    {
+        "name": "Malawi",
+        "id": "MW",
+        "capital": "Lilongwe",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/mwi.svg",
+        "latitude": -13.5,
+        "longitude": 34
+    },
+    {
+        "name": "Malaysia",
+        "id": "MY",
+        "capital": "Kuala Lumpur",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/mys.svg",
+        "latitude": 2.5,
+        "longitude": 112.5
+    },
+    {
+        "name": "Maldives",
+        "id": "MV",
+        "capital": "Malé",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/mdv.svg",
+        "latitude": 3.25,
+        "longitude": 73
+    },
+    {
+        "name": "Mali",
+        "id": "ML",
+        "capital": "Bamako",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/mli.svg",
+        "latitude": 17,
+        "longitude": -4
+    },
+    {
+        "name": "Malta",
+        "id": "MT",
+        "capital": "Valletta",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/mlt.svg",
+        "latitude": 35.8333,
+        "longitude": 14.5833
+    },
+    {
+        "name": "Marshall Islands",
+        "id": "MH",
+        "capital": "Majuro",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/mhl.svg",
+        "latitude": 9,
+        "longitude": 168
+    },
+    {
+        "name": "Martinique",
+        "id": "MQ",
+        "capital": "Fort-de-France",
+        "region": "Americas",
+        "flag": "https://restcountries.eu/data/mtq.svg",
+        "latitude": 14.6667,
+        "longitude": -61
+    },
+    {
+        "name": "Mauritania",
+        "id": "MR",
+        "capital": "Nouakchott",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/mrt.svg",
+        "latitude": 20,
+        "longitude": -12
+    },
+    {
+        "name": "Mauritius",
+        "id": "MU",
+        "capital": "Port Louis",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/mus.svg",
+        "latitude": -20.2833,
+        "longitude": 57.55
+    },
+    {
+        "name": "Mayotte",
+        "id": "YT",
+        "capital": "Mamoudzou",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/myt.svg",
+        "latitude": -12.8333,
+        "longitude": 45.1667
+    },
+    {
+        "name": "Mexico",
+        "id": "MX",
+        "capital": "Mexico City",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/mex.svg",
+        "latitude": 23,
+        "longitude": -102
+    },
+    {
+        "name": "Federated States of Micronesia",
+        "id": "FM",
+        "capital": "Palikir",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/fsm.svg",
+        "latitude": 6.9167,
+        "longitude": 158.25
+    },
+    {
+        "name": "Republic of Moldova",
+        "id": "MD",
+        "capital": "Chișinău",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/mda.svg",
+        "latitude": 47,
+        "longitude": 29
+    },
+    {
+        "name": "Monaco",
+        "id": "MC",
+        "capital": "Monaco",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/mco.svg",
+        "latitude": 43.7333,
+        "longitude": 7.4
+    },
+    {
+        "name": "Mongolia",
+        "id": "MN",
+        "capital": "Ulan Bator",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/mng.svg",
+        "latitude": 46,
+        "longitude": 105
+    },
+    {
+        "name": "Montenegro",
+        "id": "ME",
+        "capital": "Podgorica",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/mne.svg",
+        "latitude": 42,
+        "longitude": 19
+    },
+    {
+        "name": "Montserrat",
+        "id": "MS",
+        "capital": "Plymouth",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/msr.svg",
+        "latitude": 16.75,
+        "longitude": -62.2
+    },
+    {
+        "name": "Morocco",
+        "id": "MA",
+        "capital": "Rabat",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/mar.svg",
+        "latitude": 32,
+        "longitude": -5
+    },
+    {
+        "name": "Mozambique",
+        "id": "MZ",
+        "capital": "Maputo",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/moz.svg",
+        "latitude": -18.25,
+        "longitude": 35
+    },
+    {
+        "name": "Myanmar",
+        "id": "MM",
+        "capital": "Naypyidaw",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/mmr.svg",
+        "latitude": 22,
+        "longitude": 98
+    },
+    {
+        "name": "Namibia",
+        "id": "NA",
+        "capital": "Windhoek",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/nam.svg",
+        "latitude": -22,
+        "longitude": 17
+    },
+    {
+        "name": "Nauru",
+        "id": "NR",
+        "capital": "Yaren",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/nru.svg",
+        "latitude": -0.5333,
+        "longitude": 166.9167
+    },
+    {
+        "name": "Nepal",
+        "id": "NP",
+        "capital": "Kathmandu",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/npl.svg",
+        "latitude": 28,
+        "longitude": 84
+    },
+    {
+        "name": "Netherlands",
+        "id": "NL",
+        "capital": "Amsterdam",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/nld.svg",
+        "latitude": 52.5,
+        "longitude": 5.75
+    },
+    {
+        "name": "New Caledonia",
+        "id": "NC",
+        "capital": "Nouméa",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/ncl.svg",
+        "latitude": -21.5,
+        "longitude": 165.5
+    },
+    {
+        "name": "New Zealand",
+        "id": "NZ",
+        "capital": "Wellington",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/nzl.svg",
+        "latitude": -41,
+        "longitude": 174
+    },
+    {
+        "name": "Nicaragua",
+        "id": "NI",
+        "capital": "Managua",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/nic.svg",
+        "latitude": 13,
+        "longitude": -85
+    },
+    {
+        "name": "Niger",
+        "id": "NE",
+        "capital": "Niamey",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/ner.svg",
+        "latitude": 16,
+        "longitude": 8
+    },
+    {
+        "name": "Nigeria",
+        "id": "NG",
+        "capital": "Abuja",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/nga.svg",
+        "latitude": 10,
+        "longitude": 8
+    },
+    {
+        "name": "Niue",
+        "id": "NU",
+        "capital": "Alofi",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/niu.svg",
+        "latitude": -19.0333,
+        "longitude": -169.8667
+    },
+    {
+        "name": "Norfolk Island",
+        "id": "NF",
+        "capital": "Kingston",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/nfk.svg",
+        "latitude": -29.0333,
+        "longitude": 167.95
+    },
+    {
+        "name": "North Korea",
+        "id": "KP",
+        "capital": "Pyongyang",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/prk.svg",
+        "latitude": 40,
+        "longitude": 127
+    },
+    {
+        "name": "Northern Mariana Islands",
+        "id": "MP",
+        "capital": "Saipan",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/mnp.svg",
+        "latitude": 15.2,
+        "longitude": 145.75
+    },
+    {
+        "name": "Norway",
+        "id": "NO",
+        "capital": "Oslo",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/nor.svg",
+        "latitude": 62,
+        "longitude": 10
+    },
+    {
+        "name": "Oman",
+        "id": "OM",
+        "capital": "Muscat",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/omn.svg",
+        "latitude": 21,
+        "longitude": 57
+    },
+    {
+        "name": "Pakistan",
+        "id": "PK",
+        "capital": "Islamabad",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/pak.svg",
+        "latitude": 30,
+        "longitude": 70
+    },
+    {
+        "name": "Palau",
+        "id": "PW",
+        "capital": "Ngerulmud",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/plw.svg",
+        "latitude": 7.5,
+        "longitude": 134.5
+    },
+    {
+        "name": "State of Palestine",
+        "id": "PS",
+        "capital": "Ramallah",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/pse.svg",
+        "latitude": 32,
+        "longitude": 35.25
+    },
+    {
+        "name": "Panama",
+        "id": "PA",
+        "capital": "Panama City",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/pan.svg",
+        "latitude": 9,
+        "longitude": -80
+    },
+    {
+        "name": "Papua New Guinea",
+        "id": "PG",
+        "capital": "Port Moresby",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/png.svg",
+        "latitude": -6,
+        "longitude": 147
+    },
+    {
+        "name": "Paraguay",
+        "id": "PY",
+        "capital": "Asunción",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/pry.svg",
+        "latitude": -23,
+        "longitude": -58
+    },
+    {
+        "name": "Peru",
+        "id": "PE",
+        "capital": "Lima",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/per.svg",
+        "latitude": -10,
+        "longitude": -76
+    },
+    {
+        "name": "Philippines",
+        "id": "PH",
+        "capital": "Manila",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/phl.svg",
+        "latitude": 13,
+        "longitude": 122
+    },
+    {
+        "name": "Pitcairn",
+        "id": "PN",
+        "capital": "Adamstown",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/pcn.svg",
+        "latitude": -24.7,
+        "longitude": -127.4
+    },
+    {
+        "name": "Poland",
+        "id": "PL",
+        "capital": "Warsaw",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/pol.svg",
+        "latitude": 52,
+        "longitude": 20
+    },
+    {
+        "name": "Portugal",
+        "id": "PT",
+        "capital": "Lisbon",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/prt.svg",
+        "latitude": 39.5,
+        "longitude": -8
+    },
+    {
+        "name": "Puerto Rico",
+        "id": "PR",
+        "capital": "San Juan",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/pri.svg",
+        "latitude": 18.25,
+        "longitude": -66.5
+    },
+    {
+        "name": "Qatar",
+        "id": "QA",
+        "capital": "Doha",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/qat.svg",
+        "latitude": 25.5,
+        "longitude": 51.25
+    },
+    {
+        "name": "Réunion",
+        "id": "RE",
+        "capital": "Saint-Denis",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/reu.svg",
+        "latitude": -21.1,
+        "longitude": 55.6
+    },
+    {
+        "name": "Romania",
+        "id": "RO",
+        "capital": "Bucharest",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/rou.svg",
+        "latitude": 46,
+        "longitude": 25
+    },
+    {
+        "name": "Russian Federation",
+        "id": "RU",
+        "capital": "Moscow",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/rus.svg",
+        "latitude": 60,
+        "longitude": 100
+    },
+    {
+        "name": "Rwanda",
+        "id": "RW",
+        "capital": "Kigali",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/rwa.svg",
+        "latitude": -2,
+        "longitude": 30
+    },
+    {
+        "name": "Saint Helena, Ascension and Tristan da Cunha",
+        "id": "SH",
+        "capital": "Jamestown",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/shn.svg",
+        "latitude": -15.9333,
+        "longitude": -5.7
+    },
+    {
+        "name": "Saint Kitts and Nevis",
+        "id": "KN",
+        "capital": "Basseterre",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/kna.svg",
+        "latitude": 17.3333,
+        "longitude": -62.75
+    },
+    {
+        "name": "Saint Lucia",
+        "id": "LC",
+        "capital": "Castries",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/lca.svg",
+        "latitude": 13.8833,
+        "longitude": -61.1333
+    },
+    {
+        "name": "Saint Pierre and Miquelon",
+        "id": "PM",
+        "capital": "Saint-Pierre",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/spm.svg",
+        "latitude": 46.8333,
+        "longitude": -56.3333
+    },
+    {
+        "name": "Saint Vincent and the Grenadines",
+        "id": "VC",
+        "capital": "Kingstown",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/vct.svg",
+        "latitude": 13.25,
+        "longitude": -61.2
+    },
+    {
+        "name": "Samoa",
+        "id": "WS",
+        "capital": "Apia",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/wsm.svg",
+        "latitude": -13.5833,
+        "longitude": -172.3333
+    },
+    {
+        "name": "San Marino",
+        "id": "SM",
+        "capital": "City of San Marino",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/smr.svg",
+        "latitude": 43.7667,
+        "longitude": 12.4167
+    },
+    {
+        "name": "Sao Tome and Principe",
+        "id": "ST",
+        "capital": "São Tomé",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/stp.svg",
+        "latitude": 1,
+        "longitude": 7
+    },
+    {
+        "name": "Saudi Arabia",
+        "id": "SA",
+        "capital": "Riyadh",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/sau.svg",
+        "latitude": 25,
+        "longitude": 45
+    },
+    {
+        "name": "Senegal",
+        "id": "SN",
+        "capital": "Dakar",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/sen.svg",
+        "latitude": 14,
+        "longitude": -14
+    },
+    {
+        "name": "Serbia",
+        "id": "RS",
+        "capital": "Belgrade",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/srb.svg",
+        "latitude": 44,
+        "longitude": 21
+    },
+    {
+        "name": "Seychelles",
+        "id": "SC",
+        "capital": "Victoria",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/syc.svg",
+        "latitude": -4.5833,
+        "longitude": 55.6667
+    },
+    {
+        "name": "Sierra Leone",
+        "id": "SL",
+        "capital": "Freetown",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/sle.svg",
+        "latitude": 8.5,
+        "longitude": -11.5
+    },
+    {
+        "name": "Singapore",
+        "id": "SG",
+        "capital": "Singapore",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/sgp.svg",
+        "latitude": 1.3667,
+        "longitude": 103.8
+    },
+    {
+        "name": "Slovakia",
+        "id": "SK",
+        "capital": "Bratislava",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/svk.svg",
+        "latitude": 48.6667,
+        "longitude": 19.5
+    },
+    {
+        "name": "Slovenia",
+        "id": "SI",
+        "capital": "Ljubljana",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/svn.svg",
+        "latitude": 46,
+        "longitude": 15
+    },
+    {
+        "name": "Solomon Islands",
+        "id": "SB",
+        "capital": "Honiara",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/slb.svg",
+        "latitude": -8,
+        "longitude": 159
+    },
+    {
+        "name": "Somalia",
+        "id": "SO",
+        "capital": "Mogadishu",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/som.svg",
+        "latitude": 10,
+        "longitude": 49
+    },
+    {
+        "name": "South Africa",
+        "id": "ZA",
+        "capital": "Pretoria",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/zaf.svg",
+        "latitude": -29,
+        "longitude": 24
+    },
+    {
+        "name": "South Georgia and the South Sandwich Islands",
+        "id": "GS",
+        "capital": "King Edward Point",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/sgs.svg",
+        "latitude": -54.5,
+        "longitude": -37
+    },
+    {
+        "name": "South Korea",
+        "id": "KR",
+        "capital": "Seoul",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/kor.svg",
+        "latitude": 37,
+        "longitude": 127.5
+    },
+    {
+        "name": "Spain",
+        "id": "ES",
+        "capital": "Madrid",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/esp.svg",
+        "latitude": 40,
+        "longitude": -4
+    },
+    {
+        "name": "Sri Lanka",
+        "id": "LK",
+        "capital": "Colombo",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/lka.svg",
+        "latitude": 7,
+        "longitude": 81
+    },
+    {
+        "name": "Sudan",
+        "id": "SD",
+        "capital": "Khartoum",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/sdn.svg",
+        "latitude": 15,
+        "longitude": 30
+    },
+    {
+        "name": "Suriname",
+        "id": "SR",
+        "capital": "Paramaribo",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/sur.svg",
+        "latitude": 4,
+        "longitude": -56
+    },
+    {
+        "name": "Svalbard and Jan Mayen",
+        "id": "SJ",
+        "capital": "Longyearbyen",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/sjm.svg",
+        "latitude": 78,
+        "longitude": 20
+    },
+    {
+        "name": "Swaziland",
+        "id": "SZ",
+        "capital": "Lobamba",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/swz.svg",
+        "latitude": -26.5,
+        "longitude": 31.5
+    },
+    {
+        "name": "Sweden",
+        "id": "SE",
+        "capital": "Stockholm",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/swe.svg",
+        "latitude": 62,
+        "longitude": 15
+    },
+    {
+        "name": "Switzerland",
+        "id": "CH",
+        "capital": "Bern",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/che.svg",
+        "latitude": 47,
+        "longitude": 8
+    },
+    {
+        "name": "Syrian Arab Republic",
+        "id": "SY",
+        "capital": "Damascus",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/syr.svg",
+        "latitude": 35,
+        "longitude": 38
+    },
+    {
+        "name": "Taiwan",
+        "id": "TW",
+        "capital": "Taipei",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/twn.svg",
+        "latitude": 23.5,
+        "longitude": 121
+    },
+    {
+        "name": "Tajikistan",
+        "id": "TJ",
+        "capital": "Dushanbe",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/tjk.svg",
+        "latitude": 39,
+        "longitude": 71
+    },
+    {
+        "name": "Tanzania",
+        "id": "TZ",
+        "capital": "Dodoma",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/tza.svg",
+        "latitude": -6,
+        "longitude": 35
+    },
+    {
+        "name": "Thailand",
+        "id": "TH",
+        "capital": "Bangkok",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/tha.svg",
+        "latitude": 15,
+        "longitude": 100
+    },
+    {
+        "name": "Timor-Leste",
+        "id": "TL",
+        "capital": "Dili",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/tls.svg",
+        "latitude": -8.55,
+        "longitude": 125.5167
+    },
+    {
+        "name": "Togo",
+        "id": "TG",
+        "capital": "Lomé",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/tgo.svg",
+        "latitude": 8,
+        "longitude": 1.1667
+    },
+    {
+        "name": "Tokelau",
+        "id": "TK",
+        "capital": "Fakaofo",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/tkl.svg",
+        "latitude": -9,
+        "longitude": -172
+    },
+    {
+        "name": "Tonga",
+        "id": "TO",
+        "capital": "Nuku'alofa",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/ton.svg",
+        "latitude": -20,
+        "longitude": -175
+    },
+    {
+        "name": "Trinidad and Tobago",
+        "id": "TT",
+        "capital": "Port of Spain",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/tto.svg",
+        "latitude": 11,
+        "longitude": -61
+    },
+    {
+        "name": "Tunisia",
+        "id": "TN",
+        "capital": "Tunis",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/tun.svg",
+        "latitude": 34,
+        "longitude": 9
+    },
+    {
+        "name": "Turkey",
+        "id": "TR",
+        "capital": "Ankara",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/tur.svg",
+        "latitude": 39,
+        "longitude": 35
+    },
+    {
+        "name": "Turkmenistan",
+        "id": "TM",
+        "capital": "Ashgabat",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/tkm.svg",
+        "latitude": 40,
+        "longitude": 60
+    },
+    {
+        "name": "Turks and Caicos Islands",
+        "id": "TC",
+        "capital": "Cockburn Town",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/tca.svg",
+        "latitude": 21.75,
+        "longitude": -71.5833
+    },
+    {
+        "name": "Tuvalu",
+        "id": "TV",
+        "capital": "Funafuti",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/tuv.svg",
+        "latitude": -8,
+        "longitude": 178
+    },
+    {
+        "name": "Uganda",
+        "id": "UG",
+        "capital": "Kampala",
+        "region": "AF",
+        "flag": "https://restcountries.eu/data/uga.svg",
+        "latitude": 1,
+        "longitude": 32
+    },
+    {
+        "name": "Ukraine",
+        "id": "UA",
+        "capital": "Kiev",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/ukr.svg",
+        "latitude": 49,
+        "longitude": 32
+    },
+    {
+        "name": "United Arab Emirates",
+        "id": "AE",
+        "capital": "Abu Dhabi",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/are.svg",
+        "latitude": 24,
+        "longitude": 54
+    },
+    {
+        "name": "United Kingdom",
+        "id": "GB",
+        "capital": "London",
+        "region": "EU",
+        "flag": "https://restcountries.eu/data/gbr.svg",
+        "latitude": 54,
+        "longitude": -2
+    },
+    {
+        "name": "United States",
+        "id": "US",
+        "capital": "Washington, D.C.",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/usa.svg",
+        "latitude": 38,
+        "longitude": -97
+    },
+    {
+        "name": "United States Minor Outlying Islands",
+        "id": "UM",
+        "capital": "",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/umi.svg",
+        "latitude": 19.2833,
+        "longitude": 166.6
+    },
+    {
+        "name": "Uruguay",
+        "id": "UY",
+        "capital": "Montevideo",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/ury.svg",
+        "latitude": -33,
+        "longitude": -56
+    },
+    {
+        "name": "Uzbekistan",
+        "id": "UZ",
+        "capital": "Tashkent",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/uzb.svg",
+        "latitude": 41,
+        "longitude": 64
+    },
+    {
+        "name": "Vanuatu",
+        "id": "VU",
+        "capital": "Port Vila",
+        "region": "OC",
+        "flag": "https://restcountries.eu/data/vut.svg",
+        "latitude": -16,
+        "longitude": 167
+    },
+    {
+        "name": "Venezuela",
+        "id": "VE",
+        "capital": "Caracas",
+        "region": "SA",
+        "flag": "https://restcountries.eu/data/ven.svg",
+        "latitude": 8,
+        "longitude": -66
+    },
+    {
+        "name": "Viet Nam",
+        "id": "VN",
+        "capital": "Hanoi",
+        "region": "AS",
+        "flag": "https://restcountries.eu/data/vnm.svg",
+        "latitude": 16,
+        "longitude": 106
+    },
+    {
+        "name": "Virgin Islands (British)",
+        "id": "VG",
+        "capital": "Road Town",
+        "region": "NA",
+        "flag": "https://restcountries.eu/data/vgb.svg",
+        "latitude": 18.5,
+        "longitude": -64.5
+    },
     {
         "name": "Virgin Islands (U.S.)",
         "id": "VI",
