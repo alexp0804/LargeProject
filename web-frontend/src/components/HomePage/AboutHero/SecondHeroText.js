@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import Register from "../../Register";
+import Register from "../../../Register";
 import {  Modal, Button, FormControl, Offcanvas } from 'react-bootstrap'
 
 function Signup() {
@@ -82,17 +82,21 @@ function Readmore() {
 
 
 
-const HeroText = () => {
+const SecondHeroText = () => {
   return (
     <Container>
        {/* <h5>Hungry???? Idk</h5> */}
-      <h1>ReciPin</h1>
-      <h1>Recipes.</h1>
-      <h1>Anytime.</h1>
-      <h1>Anywhere.</h1>
+      <h1>When it comes to a great recipe, you know it when you see it.</h1>
+      <h4>
+</h4>
+<br/>
+      <h1></h1>
+      <h1>Curated recipes from locals all around the world </h1>
+
+      <br/>
+      <p>Take a stroll around our map. Challenge yourself to make something new! Upload your own recipes, bookmark, like, explore. </p>
       <BtnContainer>
-        < Readmore / > 
-        < Signup / >
+        
       </BtnContainer> 
       
     </Container>
@@ -138,8 +142,8 @@ const Container = styled.div`
     margin-bottom: 1rem;
   }
   h1 {
-   font-size: 3.5rem;
-    font-weight: 1000;
+   font-size: 1.8rem;
+    font-weight: 800;
 
     &:nth-of-type(1) {
       color: black;
@@ -160,4 +164,4 @@ const Container = styled.div`
   }
 `;
 
-export default HeroText;
+export default SecondHeroText;

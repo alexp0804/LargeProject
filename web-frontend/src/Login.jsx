@@ -2,6 +2,8 @@ import "./styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import IceCream from "./assets/images/Doodles/Reading.png"
+import Cat from "./assets/images/Doodles/plant.png"
 
 // This function is necessary to deploy both on heroku and localhost.
 // You must use this to get the buildPath of any endpoint you call
@@ -67,23 +69,24 @@ export default function App() {
       }}
     >
       <div className="d-none d-lg-block col-md-4 my-auto">
-        <div className="ml-5">
+        <div >
           <img
-            src="https://cdn.dribbble.com/users/1044993/screenshots/14430492/media/778141084fd91f11c7949ac54de0b635.png"
+            src={IceCream}
             alt="logo"
             className="mx-auto"
             style={{
-              height: "200px",
-              width: "200px",
-              objectFit: "cover",
-              borderRadius: "100%",
+              height: "70%",
+              width: "280px",
+              paddingRight: "4rem",
               border: "none"
             }}
           />
         </div>
       </div>
       <div id="" className="p-6 flex-fill">
-        <h1 className="text-center text-dark flex-fill pt-5 "> Sign In </h1>
+        <h1 className="text-center text-dark flex-fill pt-5 "> Sign In  
+        
+        </h1>
         <form className="px-5" onSubmit={loginUser}>
           <p className="text-danger text-center pt-4">{message}</p>
 
@@ -144,6 +147,7 @@ export default function App() {
             type="submit"
             id="loginButton"
             className=" btn btn-primary my-3"
+            style={{background: "black", borderBlockColor: "black"}}
           >
             {" "}
             Sign In

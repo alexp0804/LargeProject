@@ -18,8 +18,7 @@ function Login() {
       </Button>
 
       <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-        </Modal.Header>
+       
         <Modal.Body closeButton>
            
 
@@ -98,11 +97,11 @@ export default Navbar;
 
 const Button = styled.button`
   font-size: 0.8rem;
-  background: #8c1000;
+  background: black;
   border: none;
   padding: 0.8rem 1.1rem;
   color: #fff;
-  border-radius: 1rem;
+  border-radius: .3rem;
   box-shadow: 0px 13px 24px -7px ;
   transition: all 0.3s ease-in-out;
   margin-left: 0.5rem;
@@ -129,7 +128,7 @@ const MenuLink = styled.a`
 
   &:hover {
     color: #7781d4;
-    background: #e7e9fc;
+    // background: #e7e9fc;
   }
 `;
 

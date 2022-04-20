@@ -1,24 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import image from "../../assets/images/CoffeeDoddle2.png"
-import bg from "../../assets/images/green5.jpg";
-import HeroText from "./HeroText";
+import image from "../../../assets/images/Doodles/Swinging.png"
+import HeroText from "../HeroText";
+import SecondHeroText from "./SecondHeroText";
 import Tilt from 'react-parallax-tilt';
-import { green } from "@mui/material/colors";
 // import Tilt from "react-tilt";
 
-const Hero = () => {
+const SecondHero = () => {
   return (
-    <Container style={{ backgroundColor : "white"}}>
+    <Container style={{ backgroundColor : "#e8f4f4"}}>
       <Wrapper>
         <InnerWrapper>
           <Left>
-            <HeroText />
+            <Tilt>
+              <Img src={image}/>
+            </Tilt>
           </Left>
           <Right>
-            <Tilt>
-              <Img src={image} alt="@gouthamgtronics" />
-            </Tilt>
+          <SecondHeroText />
           </Right>
         </InnerWrapper>
       </Wrapper>
@@ -34,14 +33,10 @@ const Left = styled.div`
   }
 `;
 
-// const Gradient = styled.div`
-// background: rgb(23,115,67);
-// background: linear-gradient(90deg, rgba(23,115,67,1) 0%, rgba(0,140,67,1) 35%, rgba(176,177,197,1) 100%);
-// `;
 
 
 const Right = styled.div`
-  width: 60%;
+  width: 40%;
   @media (max-width: 670px) {
     width: 100%;
     /* padding: 1rem; */
@@ -93,4 +88,4 @@ const Container = styled.div`
   background-position: center;
 `;
 
-export default Hero;
+export default SecondHero;
