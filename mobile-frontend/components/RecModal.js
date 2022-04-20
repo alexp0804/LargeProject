@@ -88,8 +88,20 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
         }
     }
 
+    function added()
+    {
+        if (adding)
+        {
+            return(
+                <Text style={{textAlign:"center", fontSize:20, fontWeight:"bold"}}>
+                    It turned out great!
+                </Text>
+            )
+        }
+    }
     return (
         <View style={styles.main}>
+            {added()}
             <ImageBackground
                 source={{uri: pic}}
                 style={styles.img}

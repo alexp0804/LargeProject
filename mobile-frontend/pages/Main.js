@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import {CheckBox} from 'react-native-elements';
 import URL from '../components/URL';
 import RecModal from '../components/RecModal';
+import { NavigationContainer } from '@react-navigation/native';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
@@ -22,8 +23,6 @@ export default function Main ({route, navigation})
    const [blur, setBlur] = useState(1);
    const [overAmt, setOverAmt] = useState(-1)
    const [recipe, setRecipe] = useState({})
-   const [updateMapVis, setUpdateMapVis] = useState(false)
-   const [viewRecVis, setViewRecVis] = useState(false)
    const [likeRecipe, setLikeRecipe] = useState(false)
    const [favoriteRecipe, setFavoriteRecipe] = useState(false)
    const [openModalShowing, setOpenModalShowing] = useState(false)
@@ -166,7 +165,6 @@ export default function Main ({route, navigation})
          if(route.params.adding == true)
          {
             addRecipe(message.payload.touchLatLng)
-            setUpdateMapVis(true)
             
          }
      }
@@ -267,6 +265,7 @@ export default function Main ({route, navigation})
             let txt= await response.text()
             console.warn(txt)
             let res = JSON.parse(txt)
+            console.warn("Testing456")
             console.warn(res)
 
             if (res.error == null)
@@ -281,6 +280,8 @@ export default function Main ({route, navigation})
                 temp.push(temporary)
                 console.warn("testing")
                 setMarkerArray(temp)
+                setOpenModalShowing(true);
+                navigation.setParams({adding:false})
             
             }
         }
@@ -404,18 +405,7 @@ export default function Main ({route, navigation})
         setModalVisible(false);
    }
 
-   function closeAddModal()
-   {
-      setUpdateMapVis(false)
-   }
 
-   function closeViewRecipeModal()
-   {
-      setViewRecVis(false)
-      console.warn("This is working")
-      setLikeRecipe(false)
-      setFavoriteRecipe(false)
-   }
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
@@ -513,55 +503,6 @@ export default function Main ({route, navigation})
                 </View>
             </Modal>
             
-            <Modal animationType="slide" transparent={false} visible={updateMapVis}>
-                <View style={{marginTop:"10%"}}>
-                    <TouchableOpacity onPress={closeAddModal}>
-                        <Feather name="x" size={28} color="black"/>
-                    </TouchableOpacity>
-                    <Text style={{textAlign:"center"}}>
-                        You just added a recipe!
-                    </Text>
-                </View>
-            </Modal>
-            <Modal animationType="slide" transparent={false} visible={viewRecVis}>
-                <ScrollView style={{marginTop:"10%"}}>
-                    <TouchableOpacity onPress={closeViewRecipeModal}>
-                        <Feather name="x" size={28} color="black"/>
-                    </TouchableOpacity>
-                    <Text style={{textAlign:"center"}}>
-                        Recipe: {recipe.name}
-                    </Text>
-                    <Text>
-                        Description: {recipe.desc}
-                    </Text>
-                    <Text>
-                        Pic: {recipe.pic}
-                    </Text>
-                    <Text>
-                        Directions: {recipe.instructions}
-                    </Text>
-                    <Text>
-                        Country: {recipe.country}
-                    </Text>
-                    <Text>
-                        Ingredients: {recipe.ingredients}
-                    </Text>
-                    <CheckBox 
-                        title="Like this Recipe" 
-                        checked={likeRecipe} 
-                        onPress={() => checkRecipe("like")} 
-                        checkedTitle="Remove from liked recipes"
-                        checkedColor="green"
-                    />
-                    <CheckBox 
-                        title="Favorite this Recipe" 
-                        checked={favoriteRecipe} 
-                        onPress={() => checkRecipe("favorite")} 
-                        checkedTitle="Remove from favorite recipes"
-                        checkedColor="green"
-                    />
-                </ScrollView>
-            </Modal>
             <Modal 
                 visible={openModalShowing} animationType="slide" 
                 transparent={true} height="10%">
@@ -575,6 +516,7 @@ export default function Main ({route, navigation})
                     faved={favoriteRecipe}
                     liked={likeRecipe}
                     onXClick={closeViewModalTest}
+                    adding={route.params.adding}
                 />
             </Modal>
         </SafeAreaView>

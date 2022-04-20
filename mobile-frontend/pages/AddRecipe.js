@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import NameRecipe from './CreateRecipe/NameRecipe';
 import RecDescription from './CreateRecipe/RecDescription';
@@ -8,18 +9,18 @@ import Pic from './CreateRecipe/Pic';
 import CountrySelection from './CreateRecipe/CountrySelection';
 
 
-export default function AddRecipe({route, navigation}, setName, setDesc, setInstructions, setIngredients, setPic, setCountry)
+export default function AddRecipe({route, navigation})
 {
-    const Tab = createBottomTabNavigator();
+    const Stack = createNativeStackNavigator();
 
     return(    
-        <Tab.Navigator>
-            <Tab.Screen name="NameRecipe" component={NameRecipe}/>
-            <Tab.Screen name= "RecDescription" component={RecDescription} options={{headerShown:false, title:"Description"}} />
-            <Tab.Screen name= "Ingredients" component={Ingredients} options={{headerShown:false}} />
-            <Tab.Screen name= "Instructions" component={Instructions} options={{headerShown:false}} />
-            <Tab.Screen name= "CountrySelection" component={CountrySelection} options={{headerShown:false, title:"Country"}}/>
-            <Tab.Screen name= "Pic" component={Pic} options={{headerShown:false}}/>
-        </Tab.Navigator>
+        <Stack.Navigator>
+            <Stack.Screen name="NameRecipe" component={NameRecipe} options={{headerShown:false}}/>
+            <Stack.Screen name= "RecDescription" component={RecDescription} options={{headerShown:false, title:"Description"}} />
+            <Stack.Screen name= "Ingredients" component={Ingredients} options={{headerShown:false}} />
+            <Stack.Screen name= "Instructions" component={Instructions} options={{headerShown:false}} />
+            <Stack.Screen name= "CountrySelection" component={CountrySelection} options={{headerShown:false, title:"Country"}}/>
+            <Stack.Screen name= "Pic" component={Pic} options={{headerShown:false}}/>
+        </Stack.Navigator>
     )
 }

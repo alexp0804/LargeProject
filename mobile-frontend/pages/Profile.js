@@ -5,7 +5,6 @@ import Input from '../components/Input';
 import URL from '../components/URL';
 import RecModal from '../components/RecModal';
 import { StackActions } from '@react-navigation/native';
-import { ProgressSteps, ProgressStep } from "react-native-progress-steps"
 import EditModal from '../components/EditModal';
 import { useEffect } from 'react/cjs/react.production.min';
 import * as ImagePicker from 'expo-image-picker'
