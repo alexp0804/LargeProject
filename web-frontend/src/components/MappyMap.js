@@ -129,7 +129,7 @@ const MappyMap = () =>
           console.log(res);
 
 
-        await new Promise(resolve => setTimeout(resolve,500));
+        await new Promise(resolve => setTimeout(resolve,1500));
       
         setMarkerList(res);
               

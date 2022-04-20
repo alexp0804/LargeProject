@@ -34,7 +34,7 @@ const images = importAll(
 );
 
 export default function RecipeReviewCard(props) {
-  console.log(props.fav);
+  console.log(props.recipe.ingredients);
   const [expanded, setExpanded] = React.useState(false);
 
   const [lgShow, setLgShow] = useState(false);
@@ -209,7 +209,7 @@ export default function RecipeReviewCard(props) {
   return (
     <>
       <Modal
-        style={{ zIndex: "2000", marginTop: "5%" }}
+        style={{ zIndex: "5000", marginTop: "2%" }}
         size="lg"
         show={lgShow}
         onHide={() => setLgShow(false)}
@@ -217,15 +217,15 @@ export default function RecipeReviewCard(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">
-            Bookmarks:
+            {props.recipe.name}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Readmore />
+          <Readmore recipe = {props.recipe} />
         </Modal.Body>
       </Modal>
 
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ maxWidth: 345, minWidth: 300 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: green[500] }} aria-label="recipe">
@@ -246,7 +246,7 @@ export default function RecipeReviewCard(props) {
               {bookImage}
             </IconButton>
           }
-          title="Shrimp and Chorizo Paella"
+          title= {props.recipe.name}
           // subheader="September 14, 2016"
         />
 
@@ -262,8 +262,7 @@ export default function RecipeReviewCard(props) {
 
           <Row>
             <Typography variant="body2" color="text.secondary">
-              This impressive paella is a perfect party dish and a fun meal to
-              cook
+              {props.recipe.desc}
             </Typography>
           </Row>
 
