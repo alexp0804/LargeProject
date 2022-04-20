@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, ScrollView, Image, Modal, StyleSheet} from 'react-native';
+import {TouchableOpacity, ScrollView, Image, Modal, Platform, StyleSheet, ImagePickerIOS} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
 import Input from '../components/Input';
 import URL from '../components/URL';
 import RecModal from '../components/RecModal';
 import { StackActions } from '@react-navigation/native';
 import EditModal from '../components/EditModal';
+import { useEffect } from 'react/cjs/react.production.min';
+import * as ImagePicker from 'expo-image-picker'
 
 
 const url = URL();
@@ -14,8 +16,44 @@ export default function Profile ({route, navigation})
 {
     var goingToMine = false;
     const {id, username} = route.params;
-    console.warn(id + " " + username)
     const [openModalShowing, setOpenModalShowing] = useState(false)
+    const [imageURI, setImageURI] = useState(null)
+
+    let openImagePickerAsync = async() =>
+    {
+        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (permissionResult.granted === false)
+            return;
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            base64: true
+        });
+
+        let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
+
+        if (pickerResult.cancelled === true)
+            return;
+
+        setImageURI(base64img);
+        await queryAddPicTest();
+    };
+
+
+    async function queryAddPicTest()
+    {
+        let response = await fetch(url + 'uploadImage', {
+                            method: 'POST',
+                            body: JSON.stringify( { pic: imageURI } ), 
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-access-token': route.params.token
+                            }});
+
+        let txt = await response.text();
+        let res = JSON.parse(txt);
+    }
 
     async function viewRecipes()
     {
@@ -23,29 +61,29 @@ export default function Profile ({route, navigation})
                                     "x-access-token":route.params.token}, body:JSON.stringify({userID:route.params.id})});
         let txt = await response.text();
         let userRec = JSON.parse(txt);
+<<<<<<< HEAD
+=======
         console.warn("Testy Test")
         console.warn(userRec)
+>>>>>>> 5e96ef4538ef206bd3d6fae963a26e7c2de267d9
 
         let resp = await fetch(url + "getLikes", {method:"POST", 
                                     body: JSON.stringify({userID: route.params.id}), 
                                 headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
         let text = await resp.text()
         let likes = JSON.parse(text)
-        console.warn(likes)
 
         let resp2 = await fetch(url + "getFavorites", {method:"POST", 
                                 body: JSON.stringify({userID: route.params.id}), 
                                 headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
         let text2 = await resp2.text()
         let favorites = JSON.parse(text2)
-        console.warn(favorites)
 
         let resp3 = await fetch(url + "searchRecipe", {method:"POST", 
                                 body: JSON.stringify({searchTerm: ""}), 
                                 headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
         let text3 = await resp3.text()
         let allRecipes = JSON.parse(text3)
-        console.warn(allRecipes)
 
         if (!goingToMine)
         {
@@ -93,7 +131,7 @@ export default function Profile ({route, navigation})
                         source={{
                         uri: 'https://cdn.discordapp.com/attachments/963149385875738684/963149436173832222/darth_early_2020_pfp.jpg',
                         }}>
-                    </Image>
+                    </Image>                
                     <Text style={{textAlign:"center", fontWeight:"900", fontSize:30, marginTop:"3%"}}>
                         {route.params.username}
                     </Text>
@@ -115,7 +153,14 @@ export default function Profile ({route, navigation})
                             activeOpacity= {0.5} onPress={() => handleGoToMine()} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
                             borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
                             <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
-                                Testing Button :eyes:
+                                My Recipes
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity= {0.5} onPress={openImagePickerAsync} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
+                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
+                            <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
+                                Test button :) :o
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
