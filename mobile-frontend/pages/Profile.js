@@ -61,11 +61,6 @@ export default function Profile ({route, navigation})
                                     "x-access-token":route.params.token}, body:JSON.stringify({userID:route.params.id})});
         let txt = await response.text();
         let userRec = JSON.parse(txt);
-<<<<<<< HEAD
-=======
-        console.warn("Testy Test")
-        console.warn(userRec)
->>>>>>> 5e96ef4538ef206bd3d6fae963a26e7c2de267d9
 
         let resp = await fetch(url + "getLikes", {method:"POST", 
                                     body: JSON.stringify({userID: route.params.id}), 
