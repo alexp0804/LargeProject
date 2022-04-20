@@ -11,28 +11,24 @@ const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
 const url = URL()
 
+
 export default function Main ({route, navigation})
 {  
    const [filterLikes, setFilterLikes] = useState(false)
    const [filterFavorites, setFilterFavorites] = useState(false)
    const [filterMine, setFilterMine] = useState(false)
    const [modalVisible, setModalVisible] = useState(false);
-   const [addRecipeVis, setAddRecipeVis] = useState(false)
    const [markerArray, setMarkerArray] = useState([])
    const [blur, setBlur] = useState(1);
    const [overAmt, setOverAmt] = useState(-1)
-   const [desc, setDesc] = useState("")
-   const [name, setName] = useState("")
-   const [directions, setDirections] = useState("")
-   const [addingRecip, setAddingRecip] = useState(false)
    const [recipe, setRecipe] = useState({})
-   const [country, setCountry] = useState("")
    const [updateMapVis, setUpdateMapVis] = useState(false)
    const [viewRecVis, setViewRecVis] = useState(false)
    const [likeRecipe, setLikeRecipe] = useState(false)
    const [favoriteRecipe, setFavoriteRecipe] = useState(false)
-   const [ingredients, setIngredients] = useState("")
    const [openModalShowing, setOpenModalShowing] = useState(false)
+
+   console.warn(route.params)
 
    function mapSettings()
    {
@@ -42,6 +38,7 @@ export default function Main ({route, navigation})
          setBlur(i * 10);
      }
    }
+   
 
    function compareRecipe (id, array, box)
    {
@@ -156,37 +153,19 @@ export default function Main ({route, navigation})
         }
    }
 
-   function addRecipeModal()
+   function addRecipeNav()
    {
-        setAddRecipeVis(true)
+        navigation.navigate("AddRecipe")
    }
 
-   function addingRecipe(name, desc, directions, country, ingredients, id)
-   {
-        setAddRecipeVis(false)
-        setAddingRecip(true)
-        setRecipe({
-            name:name,
-            desc:desc,
-            instructions:directions,
-            country:country,
-            creator:id,
-            ingredients:ingredients,
-            pic:"test"
-        })
-        console.warn("Testing new rec stuff")
-        console.warn(ingredients)
-        console.warn(recipe)
-   }
 
    async function mapMessage(message)
    {
      if(message.event === "onMapClicked")
      {
-         if(addingRecip == true)
+         if(route.params.adding == true)
          {
             addRecipe(message.payload.touchLatLng)
-            setAddingRecip(false)
             setUpdateMapVis(true)
             
          }
@@ -269,13 +248,13 @@ export default function Main ({route, navigation})
    async function addRecipe(coords)
    {
         let tmp = {
-            name:recipe.name,
-            desc:recipe.desc,
-            instructions:recipe.instructions,
-            country:recipe.country,
-            creator:recipe.creator,
-            pic:recipe.pic,
-            ingreditents:recipe.ingredients,
+            name:route.params.name,
+            desc:route.params.desc,
+            instructions:route.params.instructions,
+            country:route.params.country,
+            creator:route.params.id,
+            pic:route.params.pic,
+            ingreditents:route.params.ingredients,
             coordinates:[coords.lat, coords.lng],
             token: route.params.token
         }
@@ -288,7 +267,7 @@ export default function Main ({route, navigation})
             let txt= await response.text()
             console.warn(txt)
             let res = JSON.parse(txt)
-            console.warn(res.error)
+            console.warn(res)
 
             if (res.error == null)
             {
@@ -311,13 +290,6 @@ export default function Main ({route, navigation})
         }
    }
 
-   function closeRecipe()
-   {
-       console.warn(desc)
-       console.warn(name)
-       console.warn(directions)
-       setAddRecipeVis(false)
-   }
 
    async function closeModal()
    {
@@ -414,7 +386,7 @@ export default function Main ({route, navigation})
                 console.warn("Testing" + recipe._id)
                 let tmp = {
                     id: recipe._id,
-                    position: {lat:[recipe.location.coordinates[1]], lng: [recipe.location.coordinates[0]]},
+                    position: {lat:[recipe.location.coordinates[0]], lng: [recipe.location.coordinates[1]]},
                     icon: "icon no worky 😔"
                 }
 
@@ -447,7 +419,7 @@ export default function Main ({route, navigation})
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
-                <TouchableOpacity onPress={() => addRecipeModal()} style={{borderColor:"blue", borderWidth:2}}>
+                <TouchableOpacity onPress={() => addRecipeNav()} style={{borderColor:"blue", borderWidth:2}}>
                   <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
           ),
@@ -472,7 +444,7 @@ export default function Main ({route, navigation})
            let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:""}), 
            headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
            let txt = await response.text();
-           console.warn(txt);
+           console.warn("Testing 123456")
            let recipes = JSON.parse(txt);
 
          recipes.forEach((recipe) => {
@@ -484,6 +456,7 @@ export default function Main ({route, navigation})
 
             tempArray.push(tmp);            
         })
+        console.warn(tempArray)
         setMarkerArray(tempArray);
        }
        catch(error)
@@ -539,30 +512,7 @@ export default function Main ({route, navigation})
                     />
                 </View>
             </Modal>
-            <Modal animationType="slide"
-                transparent={false}
-                visible={addRecipeVis}
-            >
-                <ScrollView style={{width:"100%", height:"95%", marginTop:"10%"}}>
-                    <TouchableOpacity onPress={closeRecipe}>
-                       <Feather name="x" size={28} color="black"/>
-                    </TouchableOpacity>
-                    <Text style={{textAlign:"center"}}>
-                        Add Recipe
-                    </Text>
-                    <TextInput placeholderTextColor="black" placeholder='Enter recipe name' value={name} onChangeText={setName} style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TextInput placeholderTextColor="black" placeholder='Enter description' value={desc} onChangeText= {setDesc}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TextInput placeholderTextColor="black" placeholder='Enter directions'  value={directions} onChangeText={setDirections}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TextInput placeholderTextColor="black" placeholder='Enter country'  value={country} onChangeText={setCountry}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TextInput placeholderTextColor="black" placeholder='Enter ingredients'  value={ingredients} onChangeText={setIngredients}style={{padding:"5%", borderColor:"black", borderWidth:2}}/>
-                    <TouchableOpacity activeOpacity= {0.5} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
-                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} onPress={() => addingRecipe(name, desc, directions, country, ingredients, route.params.id)}>
-                        <Text>
-                            Add Recipe
-                        </Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </Modal>
+            
             <Modal animationType="slide" transparent={false} visible={updateMapVis}>
                 <View style={{marginTop:"10%"}}>
                     <TouchableOpacity onPress={closeAddModal}>

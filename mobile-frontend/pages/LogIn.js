@@ -47,13 +47,17 @@ export default function LogIn( { navigation } )
             // If successful, navigate to the landing page with the user info
             else
             {
-                navigation.dispatch(StackActions.replace("Landing", {
-                    params: {
+                console.warn("TESTING")
+                console.warn(res._id)
+                console.warn(res.username)
+                console.warn(res.token)
+                navigation.dispatch(StackActions.replace("Mid", {
                         id: res._id,
                         username: res.username,
-                        token: res.token
+                        token: res.token,
+                        value:"Test"
                     },
-                }));
+                ));
             }
         }
         // Something went wrong during login.
@@ -76,8 +80,8 @@ export default function LogIn( { navigation } )
                         Anytime.{'\n'}
                         Anywhere.{'\n'}
                     </Text>
-                    <Image source="../assets/map_tilt.png">
-                    </Image>
+                    {/* <Image source="../assets/map_tilt.png">
+                    </Image> */}
                 
                 </View>
                 

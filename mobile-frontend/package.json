@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "4": "^0.0.0",
     "@ant-design/icons": "^4.7.0",
     "@expo/ngrok": "^4.1.0",
     "@react-native-community/blur": "^3.6.0",
@@ -31,6 +32,7 @@
     "react-native-blur": "^3.2.2",
     "react-native-bootstrap-styles": "^4.5.0-r",
     "react-native-checkbox-reanimated": "^0.1.1",
+    "react-native-element-dropdown": "^1.8.8",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-image-crop-picker": "^0.37.3",
