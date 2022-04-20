@@ -484,7 +484,7 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         }
         catch (e)
         {
-            res.status(500).json( { error: "Image upload failure." } );
+            res.status(500).json( { error: "Image upload failure.", msg: e } );
         }
     }
 
