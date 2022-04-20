@@ -41,7 +41,8 @@ export default function LandingPage({navigation, route})
       <Tab.Screen name= "Profile" component= {Profile} 
                  initialParams={{id:route.params.id, 
                  username:route.params.user, 
-                 token:route.params.token}}/>
+                 token:route.params.token,
+                 pic:route.params.pic}}/>
       <Tab.Screen name= "Map" component={Main}
                  initialParams={{id:route.params.id, username:route.params.user, token:route.params.token, value:route.params.value, recipe:{
                    name:route.params.name,

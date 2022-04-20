@@ -4,20 +4,60 @@ import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import * as ImagePicker from 'expo-image-picker'
 
 const url = URL();
-export default function EditModal({name, desc, country, ingredients, instructions, recID, token, onXClick})
+export default function EditModal({name, desc, country, pic, ingredients, instructions, recID, token, onXClick})
 {
     const [textRecName, setTextRecName] = useState(name)
     const [textCountryName, setTextCountryName] = useState(country)
     const [textDesc, setTextDesc] = useState(desc)
     const [textIngredients, setTextIngredients] = useState(ingredients)
     const [textInst, setTextInst] = useState(instructions)
+    const [editPic, setEditPic] = useState(pic)
+
+    let openImagePickerAsync = async() =>
+    {
+        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (permissionResult.granted === false)
+            return;
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            base64: true
+        });
+
+        console.log(pickerResult)
+
+        let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
+
+        if (pickerResult.cancelled === true)
+            return;
+
+        await updateRecImg(base64img);
+    };
+
+    async function updateRecImg(uri)
+    {
+        let response = await fetch(url + 'uploadImage', {
+                            method: 'POST',
+                            body: JSON.stringify( { pic: uri } ), 
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-access-token': token
+                            }});
+
+        let txt = await response.text();
+        console.log(txt)
+        let res = JSON.parse(txt);
+        setEditPic(res.url)
+    }
 
     async function fireEditData()
     {
-        let arr = [textRecName, textIngredients, textInst, textDesc]
-        let ops = ["name", "ingredients", "instructions", "desc"]
+        let arr = [textRecName, textIngredients, textInst, textDesc, editPic]
+        let ops = ["name", "ingredients", "instructions", "desc", "pic"]
         for (var i = 0; i < arr.length; i++)
         {
             try
@@ -43,11 +83,14 @@ export default function EditModal({name, desc, country, ingredients, instruction
     return (
         <View style={styles.main}>
             <ImageBackground
-                source={{uri: 'https://cdn.discordapp.com/attachments/963149385875738684/965435683554598982/keylime.jpg'}}
+                source={{uri: editPic}}
                 style={styles.img}
             >
                 <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
                     <Feather style={{marginLeft:"2%", marginTop:"2%"}} name="x" size={28} color="black"/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={openImagePickerAsync}activeOpacity={0.5}>
+                    
                 </TouchableOpacity>
             </ImageBackground>
             <KeyboardAwareScrollView style={styles.scroll}>

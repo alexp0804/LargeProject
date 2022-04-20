@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
 const url = URL();
-export default function RecModal({name, desc, country, userID, recID, token, faved, liked, onXClick, adding})
+export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, onXClick})
 {
     console.warn(name)
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
@@ -103,7 +103,7 @@ export default function RecModal({name, desc, country, userID, recID, token, fav
         <View style={styles.main}>
             {added()}
             <ImageBackground
-                source={{uri: 'https://cdn.discordapp.com/attachments/963149385875738684/965435683554598982/keylime.jpg'}}
+                source={{uri: pic}}
                 style={styles.img}
             >
                 <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
@@ -121,8 +121,7 @@ export default function RecModal({name, desc, country, userID, recID, token, fav
                     Ingredients:
                 </Text>
                 <Text style={styles.bodyText}>
-                    - List the ingredients idk lololol{"\n"}- I can use new lines bc I'm hardcoding :)
-                    {"\n"}- Not sure how we can do this tho{"\n"}- We'd have to do some parsing
+                    {ingredients}
                 </Text>
                 <Text style={styles.sectionTitles}>
                     Description:
@@ -134,8 +133,7 @@ export default function RecModal({name, desc, country, userID, recID, token, fav
                     Steps:
                 </Text>
                 <Text style={styles.bodyText}>
-                    Step 1: Be a bozo{"\n"}Step 2: Change ur name to Patrick
-                    {"\n"}Step 3: Become even more of a bozo{"\n"}Step 4: 🤡🤡🤡🤡🤡
+                    {instructions}
                 </Text>
             </ScrollView>
             <View style={styles.footer}>

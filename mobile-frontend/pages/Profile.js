@@ -18,6 +18,8 @@ export default function Profile ({route, navigation})
     const {id, username} = route.params;
     const [openModalShowing, setOpenModalShowing] = useState(false)
     const [imageURI, setImageURI] = useState(null)
+    const [pfp, setPfp] = useState(route.params.pic)
+    console.log(pfp)
 
     let openImagePickerAsync = async() =>
     {
@@ -31,28 +33,50 @@ export default function Profile ({route, navigation})
             base64: true
         });
 
+        console.log(pickerResult)
+
         let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
 
         if (pickerResult.cancelled === true)
             return;
 
         setImageURI(base64img);
-        await queryAddPicTest();
+        await updatePfp(base64img);
     };
 
-
-    async function queryAddPicTest()
+    async function updatePfp(uri)
     {
+        console.log(imageURI)
         let response = await fetch(url + 'uploadImage', {
                             method: 'POST',
-                            body: JSON.stringify( { pic: imageURI } ), 
+                            body: JSON.stringify( { pic: uri } ), 
                             headers: {
                                 'Content-Type': 'application/json',
                                 'x-access-token': route.params.token
                             }});
 
         let txt = await response.text();
+        console.log(txt)
         let res = JSON.parse(txt);
+
+        let response2 = await fetch(url + 'editUser', {
+                            method: 'POST',
+                            body: JSON.stringify( {userID: route.params.id, newField: "profilePic", newValue: res.url}),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-access-token': route.params.token
+                            }})
+        let txt2 = await response2.text();
+        let res2 = JSON.parse(txt2)
+        if (res2.error != "")
+        {
+            alert("An error occured in updated your profile picture")
+            return;
+        }
+        else
+        {
+            setPfp(res.url)
+        }
     }
 
     async function viewRecipes()
@@ -124,7 +148,7 @@ export default function Profile ({route, navigation})
                     <Image
                         style={{width:200, height:200, borderRadius:1000000, alignSelf:"center", marginTop: "15%"}}
                         source={{
-                        uri: 'https://cdn.discordapp.com/attachments/963149385875738684/963149436173832222/darth_early_2020_pfp.jpg',
+                        uri: pfp,
                         }}>
                     </Image>                
                     <Text style={{textAlign:"center", fontWeight:"900", fontSize:30, marginTop:"3%"}}>
@@ -155,7 +179,7 @@ export default function Profile ({route, navigation})
                             activeOpacity= {0.5} onPress={openImagePickerAsync} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
                             borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
                             <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
-                                Test button :) :o
+                                Update profile picture
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity

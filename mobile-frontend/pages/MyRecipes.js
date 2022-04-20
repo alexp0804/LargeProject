@@ -71,6 +71,7 @@ export default function MyRecipes({route, navigation})
                                     name={rec.name}
                                     desc={rec.desc}
                                     country={rec.country}
+                                    pic={rec.pic}
                                     ingredients="heheieihf"
                                     instructions="hehehehe"
                                     userID={route.params.id}

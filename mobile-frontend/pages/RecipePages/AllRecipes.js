@@ -70,6 +70,9 @@ export default function AllRecipes({route, navigation})
                                     <RecipeCard name={rec.name}
                                                 desc={rec.desc}
                                                 country={rec.country}
+                                                pic={rec.pic}
+                                                ingredients={rec.ingredients}
+                                                instructions={rec.instructions}
                                                 userID={route.params.id}
                                                 recID={rec._id}
                                                 token={route.params.token}
