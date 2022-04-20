@@ -8,6 +8,7 @@ import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
+import {useMap} from 'react-leaflet';
 
 const Container = styled.div`
 border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
@@ -42,8 +43,9 @@ font-weight: 300;
 color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"};
 `
 
-const Search2 = ({ title, active, icon }) => {
+const Search2 = (props, { title, active, icon }) => {
 	const [recipes, setRecipes] = useState([]);
+	const map = useMap();
 
 	async function searchRecipes(inputValue) {
 		const app_name = 'reci-pin';
@@ -87,6 +89,20 @@ const Search2 = ({ title, active, icon }) => {
 			}else if (reason === 'input' && value == "") // Otherwise we clear the options if the search is blank.
 			{
 				setRecipes([]);
+			}
+		}}
+		onChange={(event: object, value: string, reason: string) => {
+			// Once the user selects a recipe, we pan to it's location.
+			if (reason === 'selectOption')
+			{
+				let lat = value.location.coordinates[0];
+				let lng = value.location.coordinates[1];
+
+				let options = { animate:true, duration:1.2, easeLinearity:0.5 };
+
+				map.flyTo([lng + 4, lat], 6, options);
+
+				props.handleClose();
 			}
 		}}
 		renderInput={(params) => (

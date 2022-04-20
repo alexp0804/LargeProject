@@ -11,7 +11,7 @@ import {useMap} from 'react-leaflet';
 
 function OffCanvasExample(props) {
 
-    
+
 
   const [show, setShow] = useState(false);
 
@@ -40,8 +40,7 @@ function OffCanvasExample(props) {
 
     console.log(jsonPayLoad)
 
-
-    try 
+    try
     {
       // Do not await fetches anymore
       const response = await fetch(buildPath("api/getUserRecipes"), {
@@ -50,10 +49,10 @@ function OffCanvasExample(props) {
         headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
         });
       let res = JSON.parse(await response.text());
-  
+
       if(res.hasOwnProperty('error'))
         console.log(res['error']);
-  
+
         console.log(res)
         setArray(res)
         props.setMarkerList(res);
@@ -110,12 +109,12 @@ function OffCanvasExample(props) {
         </Offcanvas.Header>
         <Offcanvas.Body>
 
-          My Recipes: 
+          My Recipes:
 
           <br />
 
         { recipeArray.map(createCard) }
-         
+
 
 
         </Offcanvas.Body>
@@ -127,7 +126,7 @@ function OffCanvasExample(props) {
 
 const Sidebar = (props) =>
 {
- 
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -140,8 +139,6 @@ const Sidebar = (props) =>
       backdrop: false,
     }
   ];
-
-
 
     return (
       <body>
@@ -184,7 +181,7 @@ const Sidebar = (props) =>
             </Offcanvas.Header>
             <Offcanvas.Body>
 
-              <SidebarContent createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
+              <SidebarContent handleClose = {handleClose} createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
 
 
             </Offcanvas.Body>

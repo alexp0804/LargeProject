@@ -5,7 +5,7 @@ import Profile from './Profile'
 
 const Container = styled.div`
     // background-color: ${({ theme }) => theme.secondary};
-    background-color: #f8f8f8; 
+    background-color: #f8f8f8;
     position: fixed;
     left: 0;
     top: 0;
@@ -19,11 +19,10 @@ const Container = styled.div`
 `
 
 const SidebarContent = (props) => {
-
     return (
         <Container>
             <Profile />
-            <Menu createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
+            <Menu handleClose = {props.handleClose} createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
         </Container>
     )
 }

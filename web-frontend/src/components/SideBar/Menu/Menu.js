@@ -18,7 +18,7 @@ const Container = styled.div`
 function Example() {
     const [smShow, setSmShow] = useState(false);
     const [lgShow, setLgShow] = useState(false);
-  
+
     return (
       <>
         {/* <Button onClick={() => setLgShow(true)}>Large modal</Button> */}
@@ -40,18 +40,18 @@ function Example() {
       </>
     );
   }
-  
+
 
 
 
 const Menu = (props) => {
 
-    const [lgShow, setLgShow] = useState(false); 
+    const [lgShow, setLgShow] = useState(false);
     return (
 
         <Container>
 
-            < Search2 / > 
+            < Search2 handleClose = {props.handleClose} / >
             <Featured title="Featured Recipes"/>
             <Bookmarks title="Bookmarks"/>
             <MyRecipes title="Add Recipe"/>
