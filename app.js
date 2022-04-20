@@ -771,7 +771,18 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
+// GET COUNTRIES WITHIN RECTANGLE
+app.post('/api/getRecipesInBounds', auth, async (req, res) =>
+{
+    const { bottomLeft, topRight } = req.body;
+    const db = client.db();
 
+    let result = await db.collection(recipeCol).find( {
+        location: { $geoWithin: { $box: [ bottomLeft, topRight ] } }
+    } );
+
+    res.json(await result.toArray());    
+});
 
 // GET RECIPES BY COUNTRY
 app.post('/api/getCountryRecipes', auth, async (req, res) =>
