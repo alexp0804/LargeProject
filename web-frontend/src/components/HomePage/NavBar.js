@@ -51,8 +51,7 @@ function Register() {
       </Button>
 
       <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-        </Modal.Header>
+        
         <Modal.Body closeButton>
            
 
@@ -60,14 +59,7 @@ function Register() {
 
 
         </Modal.Body>
-        {/* <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="secondary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer> */}
+    
       </Modal>
     </>
   );

@@ -11,6 +11,8 @@ import Login from "./Login";
 import Register from "./Register";
 import Landing from "./Landing";
 import WelcomePage from "./pages/WelcomePage";
+import PasswordReset from './pages/PasswordReset';
+import EmailVerification from './pages/EmailVerfied';
 import './App.css';
 
 
@@ -23,6 +25,8 @@ ReactDOM.render(
         <Route path="/register" element = {<Register />}/>
         <Route path="/landing" element = {<Landing />}/>
         <Route path="/home" element = {<WelcomePage/>}/>
+        <Route path="/email" element = {<EmailVerification/>}/>
+        <Route path="/reset" element = {<PasswordReset/>}/>
     </Routes>
     </BrowserRouter>
   </StrictMode>,

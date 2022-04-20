@@ -2,6 +2,7 @@ import "./styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import IceCream from "./assets/images/AddressPin.png"
 
 
 // This function is necessary to deploy both on heroku and localhost.
@@ -69,16 +70,15 @@ export default function Register() {
       }}
     >
       <div className="d-none d-lg-block col-md-4 my-auto">
-        <div className="ml-5 ">
-          <img
-            src="https://cdn.dribbble.com/users/1044993/screenshots/14430492/media/778141084fd91f11c7949ac54de0b635.png"
+        <div>
+        <img
+            src={IceCream}
             alt="logo"
             className="mx-auto"
             style={{
-              height: "200px",
-              width: "200px",
-              objectFit: "cover",
-              borderRadius: "100%",
+              height: "70%",
+              width: "280px",
+              paddingRight: "2rem",
               border: "none"
             }}
           />
@@ -154,6 +154,7 @@ export default function Register() {
             type="submit"
             id="loginButton"
             className=" btn btn-primary mt-4"
+            style={{background: "black", borderBlockColor: "black", border: "black"}}
           >
             {" "}
             Register

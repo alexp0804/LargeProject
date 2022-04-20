@@ -65,6 +65,11 @@ const ThirdHero = () => {
 
 
           </Row>
+
+
+          <br/>
+
+          <br/> 
         </InnerWrapper>
       </Wrapper>
     </Container>

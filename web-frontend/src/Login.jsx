@@ -147,7 +147,7 @@ export default function App() {
             type="submit"
             id="loginButton"
             className=" btn btn-primary my-3"
-            style={{background: "black", borderBlockColor: "black"}}
+            style={{background: "black", borderBlockColor: "black", border: "black"}}
           >
             {" "}
             Sign In

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import Register from "../../Register";
 import {  Modal, Button, FormControl, Offcanvas } from 'react-bootstrap'
+import Swing from "../../assets/images/Doodles/Swinging.png"
 
 function Signup() {
   const [show, setShow] = useState(false);
@@ -58,11 +59,7 @@ function OffCanvasExample({ name, ...props }) {
           <Offcanvas.Title>ReciPin</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          Welcome to ReciPin!
-
-         Group 11 created this project to make finding recipes so much more fun. Map stuff Recipe stuff x x x 
-
-         < duck / >
+        
 
         </Offcanvas.Body>
       </Offcanvas>
