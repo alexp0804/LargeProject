@@ -1,7 +1,6 @@
 import React from 'react'; 
 import styled from "styled-components";
 import image from "../assets/images/Doodles/BlueIceCreamDoodle.png"
-import Tilt from 'react-parallax-tilt';
 import EmailText from '../components/HomePage/Email/Reset/EmailText';
 
 
@@ -11,9 +10,9 @@ const EmailVerification = () => {
           <Wrapper>
             <InnerWrapper>
               <Left>
-                <Tilt>
+            
                   <Img src={image}/>
-                </Tilt>
+                
               </Left>
               <Right>
               <EmailText />

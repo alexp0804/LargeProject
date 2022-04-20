@@ -51,7 +51,7 @@ function OffCanvasExample({ name, ...props }) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} className="me-2">
+      <Button variant="primary" onClick={handleClose} className="me-2">
         {name}
       </Button>
       <Offcanvas show={show} onHide={handleClose} {...props}>
@@ -89,7 +89,6 @@ const HeroText = () => {
       <h1>Anywhere.</h1>
       <BtnContainer>
         < Readmore / > 
-        < Signup / >
       </BtnContainer> 
       
     </Container>
@@ -103,20 +102,24 @@ const BtnContainer = styled.div`
     border: none;
     padding: 0.9rem 1.1rem;
     color: #fff;
+    width: 50%;
     border-radius: .3rem;
     transition: all 0.3s ease-in-out;
     margin: 0.5rem;
     font-size: 0.8rem;
     cursor: pointer;
     &:hover {
-      box-shadow: 0px 17px 16px -11px #81d1ff;
+      box-shadow: 0px 17px 16px -11px transparent;
       transform: translateY(-5px);
+      background: #ff6161;
+      color: black;
     }
   }
 
   .readmore {
     color: #fff;
     background: #8c1000;
+    width: 50%;
     border: 3px solid ;
     
     &:hover {

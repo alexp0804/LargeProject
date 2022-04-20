@@ -99,8 +99,10 @@ const Button = styled.button`
   margin-left: 0.5rem;
   cursor: pointer;
   &:hover {
-    box-shadow: 0px 17px 16px -11px ;
+    box-shadow: 0px 17px 16px -11px transparent;
     transform: translateY(-5px);
+    background: #ff6161;
+    color: black;
   }
 
   @media (max-width: 670px) {
@@ -201,18 +203,3 @@ const LinkWrapper = styled.div`
   }
 `;
 
-const Hamburger = styled.div`
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  span {
-    height: 2px;
-    width: 25px;
-    background: #f774c5;
-    margin-bottom: 4px;
-    border-radius: 5px;
-  }
-  @media (max-width: 768px) {
-    display: flex;
-  }
-`;

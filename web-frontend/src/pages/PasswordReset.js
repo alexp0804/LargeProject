@@ -1,7 +1,6 @@
 import React from 'react'; 
 import styled from "styled-components";
 import image from "../assets/images/Doodles/reset.png"
-import Tilt from 'react-parallax-tilt';
 import ResetText from '../components/HomePage/Email/Reset/ResetText';
 
 
@@ -14,9 +13,7 @@ const PasswordReset = () => {
               <ResetText />
             </Left>
             <Right>
-              <Tilt>
                 <Img src={image} />
-              </Tilt>
             </Right>
           </InnerWrapper>
         </Wrapper>
