@@ -37,9 +37,85 @@ const emailPlatform = {
           </html>`
 };
 
-const successPage = `<html>
-                     <p style="background-color:red;">Some text</p>
-                     </html>`;
+const successPage = `<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            background-color: lightblue;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
+        }
+        .wrapper {
+            height: 100vh;
+            width: 100vw;
+        }
+        .innerWrapper {
+            max-width: 1000px;
+            height: 100%;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; 
+        }
+        .innerInnerWrapper {
+            max-width: 1000px;
+            display: flex;
+            margin: auto;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .left {
+            width: 40%;
+        }
+        .right {
+            width: 40%;
+
+        }
+        img {
+            width: 100%;
+        }
+        .buttonContainer {
+            margin-top: 100px;
+            margin: 10px;
+            background: #2d3d8b;
+            border-radius: 5px;
+            width: 50%;
+            padding: 15px;
+
+            display: flex;
+            justify-content: center;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+    </style> 
+    <body>
+        <div class="wrapper">
+            <div class="innerWrapper">
+                <div class="innerInnerWrapper">
+                    <div class="left">
+                        <img src="https://res.cloudinary.com/deks041ua/image/upload/v1650482160/doodle.png">
+                    </div>
+                    <div class="right">
+                        <div class="textContanier">
+                            <h1>Congrats. You're verified!<br>Are you hungy? I am.</h1>
+                        </div>
+                        <div class="buttonContainer">
+                            <a href="https://reci-pin.herokuapp.com/">Back to home</a>
+                        </div>
+                    </div>
+               </div>
+           </div>
+       </div>
+   </body> 
+</html>`;
 
 const senderEmail = process.env.SENDER_EMAIL;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
