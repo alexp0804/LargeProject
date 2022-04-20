@@ -50,7 +50,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Cloudinary set up 
+// Cloudinary set up
 cloudinary.config({
     cloud_name: "deks041ua",
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -58,11 +58,10 @@ cloudinary.config({
 });
 
 // Get port
-app.set('port', (process.env.PORT || 5000));
+app.set('port', PORT);
 
 // Base URL
-// TODO: make this get heroku or localhost based on prod/local
-const baseURL = "http://localhost:5000";
+const baseURL = (process.env.NODE_ENV === "production") ? "https://reci-pin.herokuapp.com" : "http://localhost:5000";
 
 // Connecting to the MongoDB database
 const MongoClient = require('mongodb').MongoClient;
@@ -234,7 +233,7 @@ app.post('/api/getResetCode', auth, async (req, res) =>
     // Check that email is valid
     const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
 
-    if (!valid) 
+    if (!valid)
         return res.status(500).json( { error: "Invalid email address." } );
 
     const authCode = createAuthCode();
@@ -275,13 +274,13 @@ app.post('/api/validateResetCode', async (req, res) =>
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
 
     // Not found
-    if (!user) 
+    if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
-    
+
     // Compare given code to one in db
     if (String(user.auth) != String(givenCode))
         return res.status(500).json( { error: "Code does not match." } );
-    
+
     res.json( emptyErr );
 });
 
@@ -292,9 +291,9 @@ app.post('/api/editUser', auth, async (req, res) =>
 
     // Find the user
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
-    
+
     // Not found
-    if (!user) 
+    if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
     // Valid field?
@@ -304,7 +303,7 @@ app.post('/api/editUser', auth, async (req, res) =>
     // Check if field is password
     if (newField === "password")
         newValue = hash(newValue);
-    
+
     // Update the value
     await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
                                             { $set: { [newField]: newValue } });
@@ -350,7 +349,7 @@ app.post('/api/getFavorites', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    favs.map(  
+                    favs.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -609,7 +608,7 @@ app.post('/api/getLikes', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    likes.map(  
+                    likes.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -702,7 +701,7 @@ app.post('/api/getLikedFavorited', auth, async (req, res) =>
 
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
 
-    if (!user) 
+    if (!user)
         res.status(404).json( { error: "User not found" } );
 
     result.liked = user.likes.some(f => { return f.equals(recipeID) });
@@ -723,10 +722,10 @@ app.post('/api/getCountryRecipes', auth, async (req, res) =>
 
     if (!found)
         res.status(404).json( { error: "Country not found" } );
-    
+
     // Get the actual recipe object associated with each id
     let result = await Promise.all(
-                    found.recipes.map(  
+                    found.recipes.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -763,7 +762,7 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    user.created.map(  
+                    user.created.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -791,8 +790,8 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
 });
 
 // GET NEARBY RECIPES
-app.post('/api/getNearbyRecipes', auth, async (req, res) => 
-{   
+app.post('/api/getNearbyRecipes', auth, async (req, res) =>
+{
     // Location given [x, y] = lat, long
     // Distance given in miles, float number
     const { location, distance } = req.body;
@@ -830,7 +829,7 @@ function haversine(a, b)
           dphi = rads(lat2 - lat1),
           dlambda = rads(lon2 - lon1);
 
-    const t = Math.sin(dphi / 2) * Math.sin(dphi/2) + 
+    const t = Math.sin(dphi / 2) * Math.sin(dphi/2) +
               Math.cos(phi_1) * Math.cos(phi_2) *
               Math.sin(dlambda / 2) * Math.sin(dlambda / 2);
 
