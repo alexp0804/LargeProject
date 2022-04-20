@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import {TouchableOpacity, ScrollView, Image, Modal, StyleSheet} from 'react-native';
 import {SafeAreaView, Text, View} from 'react-native-picasso';
-import SearchBar from '../../components/SearchBar';
-import RecipeCard from '../../components/RecipeCard';
-import URL from '../../components/URL';
-
+import SearchBar from '../components/SearchBar';
+import URL from '../components/URL';
+import RecipeCard from '../components/RecipeCard';
 const url = URL()
 export default function MyRecipes({route, navigation})
 {
-    var mine = route.params.myRec
+    var mine = route.params.myRecipes
     var likes = route.params.liked
     var favs = route.params.favs
     const hashyHash = {}
-    const [searchArray, setSearchArray] = useState(route.params.myRec)
-    console.warn(mine)
+    const [searchArray, setSearchArray] = useState(route.params.myRecipes)
     likeMap = {}
     favMap = {}
     likes.forEach((rec) => {
@@ -22,15 +20,6 @@ export default function MyRecipes({route, navigation})
     favs.forEach((rec) => {
         favMap[rec._id] = rec
     })
-    React.useEffect(() => {
-        const nameHeader = navigation.addListener('focus', () => {
-            navigation.getParent().setOptions({
-                title: "My Recipes"
-              });
-        });
-    
-        return nameHeader;
-      }, [navigation]);
 
       async function search(text)
       {
@@ -69,33 +58,32 @@ export default function MyRecipes({route, navigation})
         {
             console.warn(error.toString())
         }
-
-
     }
-
-    //   console.warn("RIGHT HERE\n\n\n\n", JSON.parse(searchArray));
       return (
         <SafeAreaView>
             <ScrollView style={{width:"100%", height:"100%"}}>
                 <SearchBar onChangeText={search} placeholder="Search"
                            />
-                <View>
+                    <View>
                         {searchArray.map((rec) => {
-                            console.warn(rec);
                             return (
-                                <RecipeCard name={rec.name}
-                                            desc={rec.desc}
-                                            country={rec.country}
-                                            userID={route.params.id}
-                                            recID={rec._id}
-                                            token={route.params.token}
-                                            faved={(rec._id in favMap)}
-                                            liked={(rec._id in likeMap)}
-                                            key={rec._id}
+                                <RecipeCard 
+                                    name={rec.name}
+                                    desc={rec.desc}
+                                    country={rec.country}
+                                    ingredients="heheieihf"
+                                    instructions="hehehehe"
+                                    userID={route.params.id}
+                                    recID={rec._id}
+                                    token={route.params.token}
+                                    faved={(rec._id in favMap)}
+                                    liked={(rec._id in likeMap)}
+                                    isMyRec={true}
+                                    key={rec._id}
                                 />
                             )
                         })}
-                </View>
+                    </View>
             </ScrollView>
         </SafeAreaView>
     )

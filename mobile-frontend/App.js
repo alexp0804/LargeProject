@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Verify from './pages/Verify';
 import ViewRecipes from './pages/ViewRecipePage';
 import Mid from './pages/Mid'
+import MyRecipes from './pages/MyRecipes';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export default function App() {
         <Stack.Screen name= "Sign Up" component = {SignUpScreen} options= {{title: "" , headerTransparent: true}} />
         <Stack.Screen name= "Verify" component= {Verify} options= {{headerShown: false}}/>
         <Stack.Screen name= "ViewRecipes" component= {ViewRecipes} options= {{headerShown: true}}/>
+        <Stack.Screen name= "MyRecipes" component= {MyRecipes} options= {{title: "My Created Recipes", headerShown: true}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
