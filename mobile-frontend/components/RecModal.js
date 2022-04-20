@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
 const url = URL();
-export default function RecModal({name, desc, country, userID, recID, token, faved, liked, onXClick})
+export default function RecModal({name, desc, country, userID, recID, token, faved, liked, onXClick, adding})
 {
     console.warn(name)
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
@@ -88,8 +88,20 @@ export default function RecModal({name, desc, country, userID, recID, token, fav
         }
     }
 
+    function added()
+    {
+        if (adding)
+        {
+            return(
+                <Text style={{textAlign:"center", fontSize:20, fontWeight:"bold"}}>
+                    It turned out great!
+                </Text>
+            )
+        }
+    }
     return (
         <View style={styles.main}>
+            {added()}
             <ImageBackground
                 source={{uri: 'https://cdn.discordapp.com/attachments/963149385875738684/965435683554598982/keylime.jpg'}}
                 style={styles.img}
