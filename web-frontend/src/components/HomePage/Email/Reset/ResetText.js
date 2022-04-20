@@ -2,33 +2,59 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import Register from "../../../../Register";
-import {  Modal, Button, FormControl, Nav } from 'react-bootstrap'
+import {  Form, Button, FormControl, Nav } from 'react-bootstrap'
 import { Link } from "react-router-dom";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 
 
 
 
-const EmailText = () => {
+const ResetText = () => {
   return (
     <Container>
       {/* <h5>Hungry???? Idk</h5> */}
-      <h1>Congrats. You're verfied! Are you hungry? I am. </h1>
-      <h4></h4>
+      <h1>What a mess. Don't worry, we'll clean it up. </h1>
       <br />
-      <h1></h1>
-      <h1> </h1>
+      <h4>What's your email? </h4>
+    
+      
 
       {/* <Nav.Link eventKey={2} href="./home">
         Logout
       </Nav.Link> */}
 
-      <BtnContainer>
+      {/* <BtnContainer>
         <Link to="/home">
         <button>Back to home </button>
         </Link>
      
-      </BtnContainer>
+      </BtnContainer> */}
+
+      <Form>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else. Except this entire class. 
+          </Form.Text>
+        </Form.Group>
+        <Button variant="primary" type="submit" style = {{backgroundColor : "#c6faac", border : "none", color : "black", width: "50%"}}>
+          Submit
+        </Button>
+      </Form>
+
+
+      <br/>
+
+
+     
+      <Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        Nice — <strong>Go check your email!</strong>
+      </Alert>
+
 
 
     </Container>
@@ -95,6 +121,28 @@ const Container = styled.div`
       font-weight: 700;
     }
   }
+
+  h4 {
+    font-size: 1.3rem;
+     font-weight: 650;
+ 
+     &:nth-of-type(1) {
+       color: black;
+     }
+     &:nth-of-type(2) {
+       color: black;
+       font-weight: 700;
+     }
+     &:nth-of-type(3) {
+       color: black;
+       font-weight: 700;
+     
+     }
+     &:nth-of-type(4) {
+       color: black;
+       font-weight: 700;
+     }
+   }
 `;
 
-export default EmailText;
+export default ResetText;
