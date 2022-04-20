@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Verify from './pages/Verify';
 import ViewRecipes from './pages/ViewRecipePage';
+import MyRecipes from './pages/MyRecipes';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name= "Landing" component= {LandingPage} options={{headerShown: false}}/>
         <Stack.Screen name= "Verify" component= {Verify} options= {{headerShown: false}}/>
         <Stack.Screen name= "ViewRecipes" component= {ViewRecipes} options= {{headerShown: true}}/>
+        <Stack.Screen name= "MyRecipes" component= {MyRecipes} options= {{title: "My Created Recipes", headerShown: true}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

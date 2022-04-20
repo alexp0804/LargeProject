@@ -139,15 +139,14 @@ export default function RecModal({name, desc, country, userID, recID, token, fav
                 </View>
             </View>
         </View>
-
     )
 }
 
 const styles = StyleSheet.create({
     main: {
         marginTop:"25%",
-        height:730,
-        width:400,
+        height:"78%",
+        width:"95%",
         margin:20,
         backgroundColor:"white",
         borderRadius: 20,
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
     },
     img: {
         alignSelf:'center',
-        width:400,
+        width:407,
         height:200,
         marginTop:"-4%",
         borderRadius:40
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
         fontStyle:'italic'
     },
     sectionTitles: {
-        marginTop:25,
+        marginTop:"7%",
         fontSize:20,
         fontWeight:"600",
     },
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         marginBottom:"-4%",
         backgroundColor: "#e6e6e6",
-        width: 400,
-        height: 50
+        width: "109%",
+        height: "8%"
     }
 })

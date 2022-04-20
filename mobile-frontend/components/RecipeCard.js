@@ -4,6 +4,7 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 import RecModal from '../components/RecModal';
+import EditModal from '../components/EditModal';
 
 
 const likeOutline = "ios-thumbs-up-outline",
@@ -11,8 +12,9 @@ const likeOutline = "ios-thumbs-up-outline",
 
 const url = URL();
 
-export default function RecipeCard({name, desc, country, userID, recID, token, faved, liked})
+export default function RecipeCard({name, desc, country, ingredients, instructions, userID, recID, token, faved, liked, isMyRec})
 {
+    console.warn(liked)
     const stdHeaders = {'Content-Type': 'application/json', 'x-access-token': token}
 
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
@@ -116,11 +118,26 @@ export default function RecipeCard({name, desc, country, userID, recID, token, f
         console.warn(openModalShowing)
     }
 
-    return (
-        <TouchableOpacity activeOpacity={0.75} onPress={() => setOpenModalShowing(true)}>
-            <Modal
-                visible={openModalShowing} animationType="slide" 
-                transparent={true} height="10%">
+    function decideWhichModal()
+    {
+        if (isMyRec)
+        {
+            return (
+                <EditModal
+                    name={name}
+                    desc={desc}
+                    country={country}
+                    ingredients={ingredients}
+                    instructions={instructions}
+                    recID={recID}
+                    token={token}
+                    onXClick={closeModal}
+                />
+            )
+        }
+        else
+        {
+            return (
                 <RecModal
                     name={name}
                     desc={desc}
@@ -132,6 +149,16 @@ export default function RecipeCard({name, desc, country, userID, recID, token, f
                     liked={liked}
                     onXClick={closeModal}
                 />
+            )
+        }
+    }
+
+    return (
+        <TouchableOpacity activeOpacity={0.75} onPress={() => setOpenModalShowing(true)}>
+            <Modal
+                visible={openModalShowing} animationType="slide" 
+                transparent={true} height="10%">
+                {decideWhichModal()}
             </Modal>
             {/* Container */}
             <View style={[styles.shared, styles.container]}>
