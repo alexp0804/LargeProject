@@ -438,12 +438,13 @@ app.post('/api/uploadImage', async (req, res) =>
     const { pic } = req.body;
     let result;
 
-    try {
-        result = (await cloudinary.upload.upload(pic)).secure_url;
+    try
+    {
+        result = (await cloudinary.uploader.upload(pic)).secure_url;
     }
     catch (e)
     {
-        res.status(500).json({error:"Image upload failure."});
+        res.status(500).json( { error:"Image upload failure." } );
     }
     
     res.json( { url: result } );
