@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
 const url = URL();
-export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, onXClick})
+export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, onXClick, adding})
 {
     console.warn(name)
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")

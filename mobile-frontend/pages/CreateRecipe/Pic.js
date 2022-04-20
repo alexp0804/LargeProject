@@ -1,10 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { ScrollView, TouchableOpacity, Text, TextInput, View } from 'react-native'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/routers';
+import * as ImagePicker from 'expo-image-picker'
+import URL from '../../components/URL';
 
+const url = URL()
 export default function Pic({route, navigation})
 {
+    let countryFlagImg = `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryMap[route.params.country]}.png`
+    const [recImg, setRecImg] = useState(null)
     function closeNav()
     {
         navigation.dispatch(StackActions.replace("Landing", {screen:"Map" ,params:{adding:false}}));
@@ -12,9 +17,48 @@ export default function Pic({route, navigation})
 
     function backToMap()
     {
+        let finalRecImg = (recImg === null || recImg === "") ? countryFlagImg : recImg
         navigation.dispatch(StackActions.replace("Landing", {screen:"Map" ,params:{adding:true, name:route.params.name, desc:route.params.desc, 
                                                              instructions:route.params.instructions, ingredients:route.params.ingredients, 
-                                                             country:route.params.country, pic:"Test"}}));
+                                                             country:route.params.country, pic:finalRecImg}}));
+    }
+
+    let openImagePickerAsync = async() =>
+    {
+        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (permissionResult.granted === false)
+            return;
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            base64: true
+        });
+
+        console.log(pickerResult)
+
+        let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
+
+        if (pickerResult.cancelled === true)
+            return;
+
+        await addRecImg(base64img);
+    };
+
+    async function addRecImg(uri)
+    {
+        let response = await fetch(url + 'uploadImage', {
+                            method: 'POST',
+                            body: JSON.stringify( { pic: uri } ), 
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-access-token': route.params.token
+                            }});
+
+        let txt = await response.text();
+        console.log(txt)
+        let res = JSON.parse(txt);
+        setRecImg(res.url)
     }
 
     return(
@@ -31,8 +75,13 @@ export default function Pic({route, navigation})
                 Hit the Check Mark.{"\n"}
                 Tap anywhere on the map.
             </Text>
-            <TextInput placeholderTextColor="black" multiline={true} placeholder='Input Instructions' style={{paddingTop:"5%", marginTop:"25%", marginLeft:"5%",
-                        marginRight:"5%", borderColor:"#addfad", borderBottomWidth:4, fontSize:25, textAlign:"center", maxHeight:"13%"}}/>
+            <TouchableOpacity
+                activeOpacity= {0.5} onPress={openImagePickerAsync} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
+                borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
+                <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
+                    Click Here to Upload Photo
+                </Text>
+            </TouchableOpacity>
             <View style={{flexDirection:"row", marginTop:"25%", alignSelf:"center"}}>
                 <TouchableOpacity style={{ backgroundColor:"#addfad", width:"25%", borderRadius:7,  alignSelf:"center"}} 
                 onPress={() => navigation.navigate("CountrySelection" , {name:route.params.name, desc:route.params.desc, 

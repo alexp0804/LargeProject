@@ -252,7 +252,7 @@ export default function Main ({route, navigation})
             country:route.params.country,
             creator:route.params.id,
             pic:route.params.pic,
-            ingreditents:route.params.ingredients,
+            ingredients:route.params.ingredients,
             coordinates:[coords.lat, coords.lng],
             token: route.params.token
         }
@@ -510,6 +510,9 @@ export default function Main ({route, navigation})
                     name={recipe.name}
                     desc={recipe.desc}
                     country={recipe.country}
+                    pic={recipe.pic}
+                    ingredients={recipe.ingredients}
+                    instructions={recipe.instructions}
                     userID={route.params.id}
                     recID={recipe._id}
                     token={route.params.token}

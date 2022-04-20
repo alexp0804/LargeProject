@@ -20,7 +20,7 @@ export default function AddRecipe({route, navigation})
             <Stack.Screen name= "Ingredients" component={Ingredients} options={{headerShown:false}} />
             <Stack.Screen name= "Instructions" component={Instructions} options={{headerShown:false}} />
             <Stack.Screen name= "CountrySelection" component={CountrySelection} options={{headerShown:false, title:"Country"}}/>
-            <Stack.Screen name= "Pic" component={Pic} options={{headerShown:false}}/>
+            <Stack.Screen name= "Pic" component={Pic} options={{headerShown:false}} initialParams={{token: route.params.token}}/>
         </Stack.Navigator>
     )
 }
