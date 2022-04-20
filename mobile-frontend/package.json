@@ -33,6 +33,7 @@
     "react-native-checkbox-reanimated": "^0.1.1",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.1.0",
+    "react-native-image-crop-picker": "^0.37.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-leaflet-view": "^0.1.2",
     "react-native-multi-steps": "^0.1.4",
@@ -44,7 +45,8 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
     "react-native-webview": "11.15.0",
-    "reanimated": "^0.0.1-alpha"
+    "reanimated": "^0.0.1-alpha",
+    "expo-image-picker": "~12.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

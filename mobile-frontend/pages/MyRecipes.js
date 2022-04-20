@@ -33,7 +33,7 @@ export default function MyRecipes({route, navigation})
             console.warn(text)
             console.warn(hashyHash)
             let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:text}), 
-            headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
+                                    headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
             let txt = await response.text();
             console.warn("This WAS working")
             console.warn(txt);
