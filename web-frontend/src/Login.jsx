@@ -2,7 +2,19 @@ import "./styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faFingerprint } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import buildPath from "./dependency";
+import IceCream from "./assets/images/Doodles/Reading.png"
+import Cat from "./assets/images/Doodles/plant.png"
+
+// This function is necessary to deploy both on heroku and localhost.
+// You must use this to get the buildPath of any endpoint you call
+const app_name = 'reci-pin';
+function buildPath(route)
+{
+    if (process.env.NODE_ENV === 'production')
+        return 'https://' + app_name + '.herokuapp.com/' + route;
+    else
+        return 'http://localhost:5000/' + route;
+}
 
 export default function App() {
   // react hook (useState)
@@ -15,32 +27,33 @@ export default function App() {
     event.preventDefault();
 
     let jsonPayLoad = JSON.stringify({
-      username: userName.value,
-      password: password.value
-    });
+        username: userName.value,
+        password: password.value,
+      });
 
-    try
+
+    try 
     {
+      // Do not await fetches anymore
       const response = await fetch(buildPath("api/login"), {
         method: "POST",
         body: jsonPayLoad,
         headers: { "Content-Type": "application/json" }
-      });
-
+        });
       let res = JSON.parse(await response.text());
-
-      console.log(res);
+      localStorage.setItem('userObject', JSON.stringify(res))
+  
+      if(res.hasOwnProperty('error'))
+        setMessage(res['error']);
+  
+      else
+        window.location.href = "/landing";
     }
-    catch (e)
+    catch(e)
     {
-      console.log("oops");
+        setMessage(e)
     }
 
-
-
-    setMessage("worked");
-
-    window.location.href = "/landing";
 
     return;
   };
@@ -55,24 +68,25 @@ export default function App() {
         borderRadius: "7%"
       }}
     >
-      <div className="d-none d-xl-block col-md-6 my-auto">
-        <div className="ml-5 ">
+      <div className="d-none d-lg-block col-md-4 my-auto">
+        <div >
           <img
-            src="https://cdn.dribbble.com/users/1044993/screenshots/14430492/media/778141084fd91f11c7949ac54de0b635.png"
+            src={IceCream}
             alt="logo"
             className="mx-auto"
             style={{
-              height: "200px",
-              width: "200px",
-              objectFit: "cover",
-              borderRadius: "100%",
+              height: "70%",
+              width: "280px",
+              paddingRight: "4rem",
               border: "none"
             }}
           />
         </div>
       </div>
-      <div id="" className="p-6">
-        <h1 className="text-center text-dark flex-fill pt-5 "> Sign In </h1>
+      <div id="" className="p-6 flex-fill">
+        <h1 className="text-center text-dark flex-fill pt-5 "> Sign In  
+        
+        </h1>
         <form className="px-5" onSubmit={loginUser}>
           <p className="text-danger text-center pt-4">{message}</p>
 
@@ -114,17 +128,26 @@ export default function App() {
               value=""
               id="flexCheckDefault"
             />
-            <label
-              className="form-check-label text-dark"
-              htmlFor="flexCheckDefault"
-            >
-              Remember me
-            </label>
+            <div className = "d-flex justify-content-between">
+                <label
+                className="form-check-label text-dark"
+                htmlFor="flexCheckDefault"
+                >
+                    Remember me     
+                </label> 
+                
+                <a href="./register" className="text-dark">
+                    <u>    Forgot password?</u>
+                </a>
+                
+            </div>
+
           </div>
           <button
             type="submit"
             id="loginButton"
             className=" btn btn-primary my-3"
+            style={{background: "black", borderBlockColor: "black", border: "black"}}
           >
             {" "}
             Sign In
@@ -134,6 +157,7 @@ export default function App() {
               <u> Create an account</u>
             </a>
           </p>
+          
         </form>
       </div>
     </div>

@@ -1,28 +1,31 @@
-import React from "react";
+import React from 'react'; 
 import styled from "styled-components";
-import image from "../../assets/images/CoffeeDoddle2.png"
-import HeroText from "./HeroText";
-import Tilt from 'react-parallax-tilt';
-// import Tilt from "react-tilt";
+import image from "../assets/images/Doodles/BlueIceCreamDoodle.png"
+import EmailText from '../components/HomePage/Email/Reset/EmailText';
 
-const Hero = () => {
-  return (
-    <Container style={{ backgroundColor : "white"}}>
-      <Wrapper>
-        <InnerWrapper>
-          <Left>
-            <HeroText />
-          </Left>
-          <Right>
-            <Tilt>
-              <Img src={image} alt="@gouthamgtronics" />
-            </Tilt>
-          </Right>
-        </InnerWrapper>
-      </Wrapper>
-    </Container>
-  );
+
+const EmailVerification = () => {
+    return (
+        <Container style={{ backgroundColor : "lightblue"}}>
+          <Wrapper>
+            <InnerWrapper>
+              <Left>
+            
+                  <Img src={image}/>
+                
+              </Left>
+              <Right>
+              <EmailText />
+              </Right>
+            </InnerWrapper>
+          </Wrapper>
+        </Container>
+      );
 };
+
+export default EmailVerification; 
+
+
 
 const Left = styled.div`
   width: 40%;
@@ -32,27 +35,16 @@ const Left = styled.div`
   }
 `;
 
-// const Gradient = styled.div`
-// background: rgb(23,115,67);
-// background: linear-gradient(90deg, rgba(23,115,67,1) 0%, rgba(0,140,67,1) 35%, rgba(176,177,197,1) 100%);
-// `;
 
 
 const Right = styled.div`
-  width: 60%;
+  width: 40%;
   @media (max-width: 670px) {
     width: 100%;
     /* padding: 1rem; */
   }
 `;
 
-// const TiltWrapper = styled(Tilt)`
-//   width: 60%;
-//   min-width: 400px;
-//   @media (max-width: 670px) {
-//     display: none;
-//   }
-// `;
 
 const Img = styled.img`
   width: 100%;
@@ -91,4 +83,3 @@ const Container = styled.div`
   background-position: center;
 `;
 
-export default Hero;

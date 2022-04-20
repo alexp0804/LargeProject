@@ -14,13 +14,14 @@ const ProfileName = styled.h1`
     font-weight: 300;
     padding-top: 1rem;
     color: #585280;
+	text-align: center;
 `
 
 const Profile = () => {
     return (
         <Container>
             <ProfileImg src={Image} />
-            <ProfileName>Scott Grant</ProfileName>
+            <ProfileName>{JSON.parse(window.localStorage.getItem('userObject'))['username']}</ProfileName>
         </Container>
     )
 }
