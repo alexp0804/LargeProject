@@ -5,20 +5,22 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 import RecModal from '../components/RecModal';
 import EditModal from '../components/EditModal';
-
+import CountryHash from '../components/CountryCodes'
 
 const likeOutline = "ios-thumbs-up-outline",
       likeFill = "ios-thumbs-up";
 
 const url = URL();
 
-export default function RecipeCard({name, desc, country, ingredients, instructions, userID, recID, token, faved, liked, isMyRec})
+export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, isMyRec})
 {
     console.warn(liked)
     const stdHeaders = {'Content-Type': 'application/json', 'x-access-token': token}
 
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? likeFill : likeOutline)
+    console.log(pic)
+    recPic = (pic === null || pic === "") ? `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryMap[country]}.png` : pic
     const [openModalShowing, setOpenModalShowing] = useState(false)
 
     // Adds given recipe to user likes
@@ -127,6 +129,7 @@ export default function RecipeCard({name, desc, country, ingredients, instructio
                     name={name}
                     desc={desc}
                     country={country}
+                    pic={recPic}
                     ingredients={ingredients}
                     instructions={instructions}
                     recID={recID}
@@ -142,6 +145,9 @@ export default function RecipeCard({name, desc, country, ingredients, instructio
                     name={name}
                     desc={desc}
                     country={country}
+                    pic={recPic}
+                    ingredients={ingredients}
+                    instructions={instructions}
                     userID={userID}
                     recID={recID}
                     token={token}
@@ -164,7 +170,7 @@ export default function RecipeCard({name, desc, country, ingredients, instructio
             <View style={[styles.shared, styles.container]}>
                 <Image 
                     style={[styles.image]} 
-                    source={{uri: 'https://cdn.discordapp.com/attachments/963149385875738684/965435683554598982/keylime.jpg'}}
+                    source={{uri: recPic}}
                 />
 
                 {/* Title */}

@@ -10,6 +10,7 @@ export default function LikedRecipes({route, navigation})
 {
     var likes = route.params.liked
     var favs = route.params.favs
+    console.log(likes)
     const hashyHash = {}
     const[searchArray, setSearchArray] = useState(route.params.liked)
     console.warn(likes)
@@ -79,14 +80,17 @@ export default function LikedRecipes({route, navigation})
                     {searchArray.map((rec) => {
                         return (
                             <RecipeCard name={rec.name}
-                                        desc={rec.desc}
-                                        country={rec.country}
-                                        userID={route.params.id}
-                                        recID={rec._id}
-                                        token={route.params.token}
-                                        faved={(rec._id in favMap)}
-                                        liked={true}
-                                        key={rec._id}
+                                desc={rec.desc}
+                                country={rec.country}
+                                pic={rec.pic}
+                                ingredients={rec.ingredients}
+                                instructions={rec.instructions}
+                                userID={route.params.id}
+                                recID={rec._id}
+                                token={route.params.token}
+                                faved={(rec._id in favMap)}
+                                liked={true}
+                                key={rec._id}
                             />
                         )
                     })}

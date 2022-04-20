@@ -55,6 +55,7 @@ export default function LogIn( { navigation } )
                         id: res._id,
                         username: res.username,
                         token: res.token,
+                        pic: res.profilePic,
                         value:"Test"
                     },
                 ));

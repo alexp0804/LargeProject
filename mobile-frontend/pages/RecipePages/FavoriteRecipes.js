@@ -82,14 +82,17 @@ export default function FavoriteRecipes({route, navigation})
                         {searchArray.map((rec, i) => {
                             return (
                                 <RecipeCard name={rec.name}
-                                            desc={rec.desc}
-                                            country={rec.country}
-                                            userID={route.params.id}
-                                            recID={rec._id}
-                                            token={route.params.token}
-                                            faved={true}
-                                            liked={(rec._id in likeMap)}
-                                            key={rec._id}
+                                    desc={rec.desc}
+                                    country={rec.country}
+                                    pic={rec.pic}
+                                    ingredients={rec.ingredients}
+                                    instructions={rec.instructions}
+                                    userID={route.params.id}
+                                    recID={rec._id}
+                                    token={route.params.token}
+                                    faved={true}
+                                    liked={(rec._id in likeMap)}
+                                    key={rec._id}
                                 />
                             )
                         })}
