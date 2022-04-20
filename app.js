@@ -433,7 +433,21 @@ app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
+app.post('/api/uploadImage', async (req, res) => 
+{
+    const { pic } = req.body;
+    let result;
 
+    try {
+        result = (await cloudinary.upload.upload(pic)).secure_url;
+    }
+    catch (e)
+    {
+        res.status(500).json({error:"Image upload failure."});
+    }
+    
+    res.json( { url: result } );
+})
 
 // CREATE RECIPE
 app.post('/api/createRecipe', auth, async (req, res) =>
