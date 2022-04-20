@@ -1,6 +1,5 @@
 const { Console } = require('console');
 const { create } = require('domain');
-const { CLIENT_RENEG_WINDOW } = require('tls');
 const express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
@@ -50,7 +49,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Cloudinary set up
+// Cloudinary set up 
 cloudinary.config({
     cloud_name: "deks041ua",
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -58,10 +57,11 @@ cloudinary.config({
 });
 
 // Get port
-app.set('port', PORT);
+app.set('port', (process.env.PORT || 5000));
 
 // Base URL
-const baseURL = (process.env.NODE_ENV === "production") ? "https://reci-pin.herokuapp.com" : "http://localhost:5000";
+// TODO: make this get heroku or localhost based on prod/local
+const baseURL = "http://localhost:5000";
 
 // Connecting to the MongoDB database
 const MongoClient = require('mongodb').MongoClient;
@@ -95,6 +95,8 @@ app.use((req, res, next) =>
     );
     next();
 });
+
+
 
 
 // USER LOGIN
@@ -232,7 +234,7 @@ app.post('/api/getResetCode', auth, async (req, res) =>
     // Check that email is valid
     const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
 
-    if (!valid)
+    if (!valid) 
         return res.status(500).json( { error: "Invalid email address." } );
 
     const authCode = createAuthCode();
@@ -273,13 +275,13 @@ app.post('/api/validateResetCode', async (req, res) =>
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
 
     // Not found
-    if (!user)
+    if (!user) 
         return res.status(500).json( { error: "Invalid User ID" } );
-
+    
     // Compare given code to one in db
     if (String(user.auth) != String(givenCode))
         return res.status(500).json( { error: "Code does not match." } );
-
+    
     res.json( emptyErr );
 });
 
@@ -290,9 +292,9 @@ app.post('/api/editUser', auth, async (req, res) =>
 
     // Find the user
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
-
+    
     // Not found
-    if (!user)
+    if (!user) 
         return res.status(500).json( { error: "Invalid User ID" } );
 
     // Valid field?
@@ -302,7 +304,19 @@ app.post('/api/editUser', auth, async (req, res) =>
     // Check if field is password
     if (newField === "password")
         newValue = hash(newValue);
-
+    
+    // Check if field is picture, if so upload it
+    if (newField === "profilePic")
+    {
+        try
+        {
+            newValue = (await cloudinary.uploader.upload(newField)).secure_url;
+        }
+        catch (e)
+        {
+            return res.status(500).json( { error: "Image upload failure." } );
+        }
+    }
     // Update the value
     await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
                                             { $set: { [newField]: newValue } });
@@ -310,9 +324,6 @@ app.post('/api/editUser', auth, async (req, res) =>
     // We okay
     res.json( emptyErr );
 });
-
-
-
 
 // GET USER FAVORITE(S)
 app.post('/api/getFavorites', auth, async (req, res) =>
@@ -348,7 +359,7 @@ app.post('/api/getFavorites', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    favs.map(
+                    favs.map(  
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -433,22 +444,7 @@ app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
-app.post('/api/uploadImage', async (req, res) => 
-{
-    const { pic } = req.body;
-    let result;
 
-    try
-    {
-        result = (await cloudinary.uploader.upload(pic)).secure_url;
-    }
-    catch (e)
-    {
-        return res.status(500).json( { error:"Image upload failure.", msg: e } );
-    }
-    
-    res.json( { url: result} );
-})
 
 // CREATE RECIPE
 app.post('/api/createRecipe', auth, async (req, res) =>
@@ -467,25 +463,19 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         instructions: instructions,
         ingredients: ingredients,
         country: country,
-        location: {
-            type: "Point",
-            coordinates: coordinates.reverse()
-        },
+        coordinates: coordinates,
         likes: 0,
         favorites: 0
     };
 
-    if (pic != "" || pic != null)
+    // Upload the image to Cloudinary
+    try
     {
-        // Upload the image to Cloudinary
-        try
-        {
-            recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
-        }
-        catch (e)
-        {
-            return res.status(500).json( { error: "Image upload failure.", msg: e } );
-        }
+        recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
+    }
+    catch (e)
+    {
+        res.status(500).json( { error: "Image upload failure." } );
     }
 
     // Check if the country is in the database
@@ -515,7 +505,6 @@ app.post('/api/createRecipe', auth, async (req, res) =>
 
     res.json( { recipeID: recipeID } );
 });
-
 
 // UPDATE RECIPE
 app.post('/api/editRecipe', auth, async (req, res) =>
@@ -576,7 +565,6 @@ app.post('/api/deleteRecipe', auth, async (req, res) =>
 });
 
 
-
 // GET RANDOM RECIPE
 app.post('/api/randomRecipe', auth, async (req, res) =>
 {
@@ -623,7 +611,7 @@ app.post('/api/getLikes', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    likes.map(
+                    likes.map(  
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -707,23 +695,6 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
-app.post('/api/getLikedFavorited', auth, async (req, res) =>
-{
-    const { userID, recipeID } = req.body;
-    const db = client.db();
-
-    let result = {};
-
-    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
-
-    if (!user)
-        res.status(404).json( { error: "User not found" } );
-
-    result.liked = user.likes.some(f => { return f.equals(recipeID) });
-    result.favorited = user.favorites.some(f => { return f.equals(recipeID) });
-
-    res.json(result);
-})
 
 
 // GET RECIPES BY COUNTRY
@@ -737,10 +708,10 @@ app.post('/api/getCountryRecipes', auth, async (req, res) =>
 
     if (!found)
         res.status(404).json( { error: "Country not found" } );
-
+    
     // Get the actual recipe object associated with each id
     let result = await Promise.all(
-                    found.recipes.map(
+                    found.recipes.map(  
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -760,27 +731,12 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
     if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
-    // Iterate backwards so removing elements doesn't mess with indexing
-    for (let i = user.created.length; i >= 0; i--)
-    {
-        // If the recipe isn't in the database
-        if (await atLeastOne(recipeCol, user.created[i]) == 0)
-        {
-            // Remove recipe from user favorites list from database.
-            db.collection(userCol).updateOne(
-                  { _id: ObjectId(userID) },
-                  { $pull: { created: ObjectId(user.created[i]) } }
-            )
-            // Remove recipe from favs
-            user.created.splice(i, 1);
-        }
-    }
-
+    // Grab the recipe associated with each id
     let result = await Promise.all(
                     user.created.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
-                        )
-                    );
+                    )
+                );
 
     // Return created recipes
     res.json(result);
@@ -801,56 +757,9 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
 
     const ret = await recipesCursor.toArray();
 
-    res.json(ret.filter((e) => e != null));
+    res.json(ret);
 });
 
-// GET NEARBY RECIPES
-app.post('/api/getNearbyRecipes', auth, async (req, res) =>
-{
-    // Location given [x, y] = lat, long
-    // Distance given in miles, float number
-    const { location, distance } = req.body;
-    const db = client.db();
-
-    // Convert distance in miles to km
-    let d = parseInt(distance) * 1609;
-
-    // Get recipes and filter out those that are too far
-    let recipes = await db.collection(recipeCol).find(
-        {
-            location: {
-                $nearSphere: {
-                    $geometry: {
-                        type: "Point",
-                        coordinates: location.reverse()
-                    },
-                    $maxDistance: d
-                }
-            }
-        }).toArray();
-
-    res.json(recipes);
-});
-
-function haversine(a, b)
-{
-    const [lat1, lon1] = a,
-          [lat2, lon2] = b
-
-    const rads = x => x * Math.PI / 180;
-
-    const phi_1 = rads(lat1),
-          phi_2 = rads(lat2),
-          dphi = rads(lat2 - lat1),
-          dlambda = rads(lon2 - lon1);
-
-    const t = Math.sin(dphi / 2) * Math.sin(dphi/2) +
-              Math.cos(phi_1) * Math.cos(phi_2) *
-              Math.sin(dlambda / 2) * Math.sin(dlambda / 2);
-
-    // The secret is 6371e3. Don't look it up.
-    return 6371e3 * 2 * Math.atan2(Math.sqrt(t), Math.sqrt(1 - t)) / 1000;
-}
 
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int
