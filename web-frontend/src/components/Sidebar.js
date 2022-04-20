@@ -65,7 +65,7 @@ function OffCanvasExample(props) {
             let y = res[0]['location']['coordinates'][0]
 
             console.log([x,y])
-            mappy.setView([x,y], 1)
+            mappy.setView(mappy.getCenter(), 1)
         }
 
     }
@@ -85,11 +85,14 @@ function OffCanvasExample(props) {
         return (
             <RecipeReviewCard
             key = {recipe._id}
+            recipeID = {recipe._id}
             recipeTitle = {recipe.name}
             recipeSummary = {recipe.desc}
             recipeIngredients = {recipe.ingredients}
             recipeinstructions = {recipe.instructions}
             recipePic = {recipe.pic}
+            setMarkerList = {props.setMarkerList}
+            setArray = {setArray}
             />
         );
     }

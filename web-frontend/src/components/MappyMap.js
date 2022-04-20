@@ -1,3 +1,4 @@
+import SelectInput from '@mui/material/Select/SelectInput';
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import countryPosition from "../data/CountriesUpdated.json"
@@ -35,7 +36,6 @@ const MappyMap = () =>
 
   const getLikes = async () =>
   {
-      console.log('getting likes!!')
       let jsonPayLoad = JSON.stringify({
           userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
       });
@@ -51,8 +51,6 @@ const MappyMap = () =>
 
           let res = JSON.parse(await response.text());
 
-          //console.log(res);
-
          let hashy = new Map();
 
 
@@ -62,7 +60,6 @@ const MappyMap = () =>
           }
       
           setLikedList(hashy)
-          console.log(hashy)
               
 
 
@@ -76,7 +73,6 @@ const MappyMap = () =>
 
   const getFavs = async () =>
   {
-      console.log('getting likes!!')
       let jsonPayLoad = JSON.stringify({
           userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
       });
@@ -92,7 +88,6 @@ const MappyMap = () =>
 
           let res = JSON.parse(await response.text());
 
-          console.log(res);
 
          let hashy = new Map();
 
@@ -103,7 +98,40 @@ const MappyMap = () =>
           }
       
           setFavList(hashy)
-          console.log(hashy)
+
+
+      }
+      catch(e)
+      {
+          console.log(e)
+      }
+  };
+
+  const getRecipesInView = async (center ,distances) =>
+  {
+
+      let jsonPayLoad = JSON.stringify({
+            location: center,
+            distance: distances
+      });
+
+      try 
+      {
+          // returns liked, favorited
+          const response = await fetch(buildPath("api/getNearbyRecipes"), {
+              method: "POST",
+              body: jsonPayLoad,
+              headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
+            });
+
+          let res = JSON.parse(await response.text());
+
+          console.log(res);
+
+
+        await new Promise(resolve => setTimeout(resolve,500));
+      
+        setMarkerList(res);
               
 
 
@@ -115,11 +143,9 @@ const MappyMap = () =>
       }
   };
 
+  useEffect(() => {getRecipesInView([50.8333, 4], 900.3);}, []);
   useEffect(() => {getLikes();}, []);
   useEffect(() => {getFavs();}, []);
-
-
-  
 
   
 

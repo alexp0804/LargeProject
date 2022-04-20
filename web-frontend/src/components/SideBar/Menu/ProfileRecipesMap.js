@@ -90,8 +90,8 @@ export default function RecipeReviewCard(props) {
 
       if (res.hasOwnProperty("error")) console.log(res["error"]);
 
-      setbookImage(<BookmarkIcon />);
-      setFavFlag(!FavFlag);
+      setheartImage(<FavoriteIcon />);
+      setHeartFlag(!HeartFlag);
     } catch (e) {
       console.log(e);
     }
@@ -122,8 +122,8 @@ export default function RecipeReviewCard(props) {
 
       if (res.hasOwnProperty("error")) console.log(res["error"]);
 
-      setbookImage(<BookmarkBorderIcon />);
-      setFavFlag(!FavFlag);
+      setheartImage(< FavoriteBorderIcon/>);
+      setHeartFlag(!HeartFlag);
     } catch (e) {
       console.log(e);
     }

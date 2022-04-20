@@ -42,6 +42,58 @@ export default function RecipeReviewCard(props) {
     setExpanded(!expanded);
   };
 
+  const app_name = 'reci-pin';
+  function buildPath(route)
+  {
+      if (process.env.NODE_ENV === 'production')
+          return 'https://' + app_name + '.herokuapp.com/' + route;
+      else
+          return 'http://localhost:5000/' + route;
+  }
+
+    function deleteRecipe()
+    {
+        // If the user does not want to delete we return right away
+        if (!window.confirm("Are you okay with deleting this recipe?"))
+            return;
+
+        deleteRecipeAPI();
+    }
+
+  const deleteRecipeAPI = async() =>
+  {
+
+    let jsonPayLoad = JSON.stringify({
+        recipeID: props.recipeID
+        });
+
+    console.log(jsonPayLoad)
+    
+    
+    try 
+    {
+        // Do not await fetches anymore
+        const response = await fetch(buildPath("api/deleteRecipe"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
+        });
+
+        let res = JSON.parse(await response.text());
+    
+        if(res.hasOwnProperty('error'))
+        console.log(res['error']);
+
+        props.setMarkerList(prevItems => { return prevItems.filter((item, index) => {return item['_id'] !== props.recipeID;} )});
+        props.setArray(prevItems => { return prevItems.filter((item, index) => {return item['_id'] !== props.recipeID;} )});
+
+    }
+    catch(e)
+    {
+        console.log(e)
+    }
+  }
+
 //   <IconButton aria-label="settings" onClick = {() => {}}> 
 //   <MoreVertIcon />
 // </IconButton>
@@ -66,7 +118,7 @@ export default function RecipeReviewCard(props) {
                 style={{
                   zIndex: "3000",
                   position: 'absolute',
-                  backgroundColor: 'rgba(255, 255, 255, 1)',
+                  backgroundColor: 'rgba(255, 255, 255, 0)',
                   padding: '0px',
                   color: 'black',
                   borderRadius: '0px',
@@ -79,7 +131,7 @@ export default function RecipeReviewCard(props) {
             <button className='btn btn-secondary' style = {{marginBottom: "0.5px"}}>
                 <FontAwesomeIcon icon={faPencil} />
             </button>
-            <button className = "btn btn-danger">
+            <button className = "btn btn-danger" onClick = {() => deleteRecipe()}> 
                 <FontAwesomeIcon icon={faTrash} />
             </button>
               </div>
