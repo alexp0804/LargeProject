@@ -366,7 +366,7 @@ app.post('/api/resetPassword', async (req, res) =>
     if (String(user.auth) != String(givenCode))
         return res.status(500).json( { error: "Code does not match." } );
 
-    await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
+    await db.collection(userCol).updateOne( { email: email },
                                             { $set: { password: hash(newPassword) } });
 
     res.json( emptyErr );
