@@ -14,7 +14,7 @@ const likeOutline = "ios-thumbs-up-outline",
 
 const url = URL();
 
-export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, isMyRec})
+export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, isMyRec, updateMaps})
 {
     const stdHeaders = {'Content-Type': 'application/json', 'x-access-token': token}
 
@@ -100,6 +100,7 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
             setLikeIcon(likeOutline)
             removeFromLikes()
         }
+        updateMaps()
     }
     function decideIfFav(fav)
     {
@@ -113,6 +114,7 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
             setFavIcon("hearto")
             removeFromFav()
         }
+        updateMaps()
     }
     function closeModal()
     {

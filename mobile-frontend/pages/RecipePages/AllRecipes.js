@@ -19,12 +19,16 @@ export default function AllRecipes({route, navigation})
     const [clickedFav, setClickedFav] = useState(false)
     likeMap = {}
     favMap = {}
-    likes.forEach((rec) => {
-        likeMap[rec._id] = rec
-    })
-    favs.forEach((rec) => {
-        favMap[rec._id] = rec
-    })
+    updateLikeAndFavMaps()
+    function updateLikeAndFavMaps()
+    {
+        likes.forEach((rec) => {
+            likeMap[rec._id] = rec
+        })
+        favs.forEach((rec) => {
+            favMap[rec._id] = rec
+        })
+    }
     React.useEffect(() => {
         const nameHeader = navigation.addListener('focus', () => {
             navigation.getParent().setOptions({
@@ -173,6 +177,7 @@ export default function AllRecipes({route, navigation})
                                                 token={route.params.token}
                                                 faved={(rec._id in favMap)}
                                                 liked={(rec._id in likeMap)}
+                                                updateMaps={updateLikeAndFavMaps}
                                                 key={rec._id}
                                     />
                                 )
