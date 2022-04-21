@@ -1,6 +1,7 @@
 const PORT = process.env.PORT || 5000,
       app = require("./app"),
-      express = require("express");
+      express = require("express"),
+      path = require('path');
 
 app.listen(PORT, () =>
 {
