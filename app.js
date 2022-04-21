@@ -326,12 +326,15 @@ app.post('/api/getResetCode', async (req, res) =>
 
     // Construct email
     const htmlToSend = `<html>
-                            <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
-                                <h1> Hello! </h1>
-                                <p style="margin-bottom:30px;"> Reset your password by entering this code:</p>
-                                <p style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">CODE</p>
-                            </div>
-                        </html>`.replace("CODE", String(authCode));
+    <div style="margin-top:50px; text-align: center; font-family: Arial;">
+        <h1> Hello! </h1>
+        <p style="text-align: center; font-family: Arial;"> You can reset your password by entering this code:   </p>
+        <div style="display: flex; justify-content: center;">
+            <p style="background:blue; color:white; margin:10px; padding:10px; width: 20%; border-radius:5px; text-decoration:none;">CODE</p>
+        </div>
+        <p style="font-style: italic; font-size: small;"> If you did not attempt to reset your password, simply ignore this email. </p>
+    </div>
+</html>`.replace("CODE", String(authCode));
 
     const msg = {
         to: email,
@@ -347,21 +350,24 @@ app.post('/api/getResetCode', async (req, res) =>
     res.json( emptyErr );
 });
 
-app.post('/api/validateResetCode', async (req, res) =>
+app.post('/api/resetPassword', async (req, res) =>
 {
-    const { userID, givenCode } = req.body;
+    const { email, givenCode, newPassword } = req.body;
     const db = client.db();
 
     // Get user
-    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+    const user = await db.collection(userCol).findOne( { email: email } );
 
     // Not found
     if (!user)
-        return res.status(500).json( { error: "Invalid User ID" } );
+        return res.status(500).json( { error: "Invalid email." } );
 
     // Compare given code to one in db
     if (String(user.auth) != String(givenCode))
         return res.status(500).json( { error: "Code does not match." } );
+
+    await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
+                                            { $set: { password: hash(newPassword) } });
 
     res.json( emptyErr );
 });
@@ -983,9 +989,22 @@ app.post('/api/getComments', auth, async (req, res) =>
     // No recipe with this id
     if (!recipe)
         return res.status(404).json( { error: "Recipe not found." } );
-        
-    console.log(recipe.comments); 
-    res.send(recipe.comments);
+
+    let result = [];
+
+    // id -> {username, pfp}
+    for (const comment of recipe.comments)
+    {
+        let user = await db.collection(userCol).findOne( { _id: ObjectId(comment.user) } );
+
+        result.push({
+            username: user.username,
+            pic: user.profilePic,
+            comment: comment.text
+        });
+    }
+
+    res.send(result);
 });
 
 app.post('/api/addComment', auth, async (req, res) =>
