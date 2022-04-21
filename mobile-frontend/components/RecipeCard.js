@@ -22,7 +22,6 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
     const [likeIcon, setLikeIcon] = useState(liked ? likeFill : likeOutline)
     const [overAmt, setOverAmt] = useState(-1);
     const [blur, setBlur] = useState(0)
-    console.log(pic)
     recPic = (pic === null || pic === "") ? `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryMap[country]}.png` : pic
     const [openModalShowing, setOpenModalShowing] = useState(false)
 
@@ -154,9 +153,11 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
                     recID={recID}
                     creID={creID}
                     token={token}
-                    faved={faved}
-                    liked={liked}
+                    faved={favIcon === 'heart' ? true : false}
+                    liked={likeIcon === likeFill ? true : false}
                     onXClick={closeModal}
+                    changeLike={decideIfLiked}
+                    changeFav={decideIfFav}
                 />
             )
         }

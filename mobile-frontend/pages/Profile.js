@@ -43,7 +43,6 @@ export default function Profile ({route, navigation})
 
     async function updatePfp(uri)
     {
-        console.log(uri.length)
         let response = await fetch(url + 'uploadImage', {
                             method: 'POST',
                             body: JSON.stringify( { pic: uri } ), 

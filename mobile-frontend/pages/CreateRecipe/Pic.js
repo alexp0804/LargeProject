@@ -35,8 +35,6 @@ export default function Pic({route, navigation})
             base64: true
         });
 
-        console.log(pickerResult)
-
         let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
 
         if (pickerResult.cancelled === true)
@@ -56,7 +54,6 @@ export default function Pic({route, navigation})
                             }});
 
         let txt = await response.text();
-        console.log(txt)
         let res = JSON.parse(txt);
         setRecImg(res.url)
     }

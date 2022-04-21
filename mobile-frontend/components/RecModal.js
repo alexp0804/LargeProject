@@ -7,12 +7,11 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
 const url = URL();
-export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, onXClick, adding})
+export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, onXClick, changeLike, changeFav, adding})
 {
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? "ios-thumbs-up-sharp" : "ios-thumbs-up-outline")
     const [creatorName, setCreatorName] = useState("Anonymous")
-    console.log(creID)
 
     getCreatorName()
     async function getCreatorName()
@@ -22,7 +21,6 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
                                 headers:{'Content-Type': 'application/json', 'x-access-token': token}})
         let txt = await resp.text()
         let ret = JSON.parse(txt)
-        console.log(ret.username)
         setCreatorName(ret.username)
     }
 
@@ -77,26 +75,27 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
         if (like === "ios-thumbs-up-outline")
         {
             setLikeIcon("ios-thumbs-up-sharp")
-            addToLikes()
         }
         else
         {
             setLikeIcon("ios-thumbs-up-outline")
-            removeFromLikes()
         }
+        changeLike()
     }
+    
     function decideIfFav(fav)
     {
         if (fav === "hearto")
         {
             setFavIcon("heart")
-            addToFav()
+            // setLikeIcon of RecipeCard.js (parent)
         }
         else
         {
             setFavIcon("hearto")
-            removeFromFav()
+            // setLikeIcon of RecipeCard.js (parent)
         }
+        changeFav()
     }
 
     function added()

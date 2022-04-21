@@ -48,7 +48,6 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
                             }});
 
         let txt = await response.text();
-        console.log(txt)
         let res = JSON.parse(txt);
         setEditPic(res.url)
     }
@@ -98,7 +97,6 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
                                     }});
         let txt = await response.text();
         let res = JSON.parse(txt)
-        console.log(res)
         
         onXClick()
     }

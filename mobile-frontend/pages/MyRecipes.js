@@ -55,7 +55,6 @@ export default function MyRecipes({route, navigation})
                            />
                     <View>
                         {searchArray.map((rec) => {
-                            {console.log("line 60: " + rec.name)}
                             return (
                                 <RecipeCard 
                                     name={rec.name}
