@@ -381,24 +381,12 @@ app.post('/api/editUser', auth, async (req, res) =>
     if (newField === "password")
         newValue = hash(newValue);
 
-    // Check if field is picture, if so upload it
-    if (newField === "profilePic")
-    {
-        try
-        {
-            newValue = (await cloudinary.uploader.upload(newField)).secure_url;
-        }
-        catch (e)
-        {
-            return res.status(500).json( { error: "Image upload failure." } );
-        }
-    }
     // Update the value
     await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
                                             { $set: { [newField]: newValue } });
 
     // We okay
-    res.json( emptyErr );
+    res.json( { newField: newValue, error: "" } );
 });
 
 // GET USER FAVORITE(S)
@@ -529,7 +517,7 @@ app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
     // Update favorite count for recipe
     db.collection(recipeCol).updateOne(
         { _id: ObjectId(recipeID) },
-        { $inc: { numFavorites: -1 } }
+        { $inc: { favorites: -1 } }
     );
 
     // Okay status
