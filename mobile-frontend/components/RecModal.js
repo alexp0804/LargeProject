@@ -7,11 +7,23 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
 const url = URL();
-export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, onXClick, adding})
+export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, onXClick, adding})
 {
-    console.warn(name)
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? "ios-thumbs-up-sharp" : "ios-thumbs-up-outline")
+    const [creatorName, setCreatorName] = useState("Anonymous")
+    console.log(creID)
+
+    getCreatorName()
+    async function getCreatorName()
+    {
+        let resp = await fetch(url + "getUserInfo", {method:"POST",
+                                body: JSON.stringify({userID: creID}),
+                                headers:{'Content-Type': 'application/json', 'x-access-token': token}})
+        let txt = await resp.text()
+        let ret = JSON.parse(txt)
+        setCreatorName(ret.username)
+    }
 
     async function addToLikes()
     {
@@ -117,6 +129,9 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
                 </Text>
                 <Text style={styles.countryName}>
                     {country}
+                </Text>
+                <Text style={styles.countryName}>
+                    Created by: {creatorName}
                 </Text>
                 <Text style={styles.sectionTitles}>
                     Ingredients:

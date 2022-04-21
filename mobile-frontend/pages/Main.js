@@ -138,6 +138,10 @@ export default function Main ({route, navigation})
                 }
 
                 setOpenModalShowing(true)
+                setOverAmt(1000);
+                for (let i = 0; i < 5; i++) {
+                    setBlur(i * 10);
+                }
             }
             else
             {
@@ -328,7 +332,7 @@ export default function Main ({route, navigation})
         navigation.setOptions({
             headerRight: () => (
                 <View style={{marginRight:"7%"}}>
-                <TouchableOpacity onPress={() => addRecipeNav()}>
+                <TouchableOpacity onPress={() => mapSettings()}>
                   <Feather name="menu" size={24} color="black" />
                 </TouchableOpacity>
               </View>
@@ -372,6 +376,11 @@ export default function Main ({route, navigation})
     }
     function closeViewModalTest()
     {
+        for (let i = 5; i > 0; i--) {
+        setBlur(i * 10);
+        }
+        setBlur(1)
+        setOverAmt(-1)
         setOpenModalShowing(false);
         console.warn(openModalShowing)
     }
@@ -430,6 +439,7 @@ export default function Main ({route, navigation})
                     instructions={recipe.instructions}
                     userID={route.params.id}
                     recID={recipe._id}
+                    creID={recipe.creator}
                     token={route.params.token}
                     faved={favoriteRecipe}
                     liked={likeRecipe}

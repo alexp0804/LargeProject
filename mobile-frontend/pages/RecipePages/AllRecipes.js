@@ -178,6 +178,7 @@ export default function AllRecipes({route, navigation})
                                                 instructions={rec.instructions}
                                                 userID={route.params.id}
                                                 recID={rec._id}
+                                                creID={rec.creator}
                                                 token={route.params.token}
                                                 faved={(rec._id in favMap)}
                                                 liked={(rec._id in likeMap)}

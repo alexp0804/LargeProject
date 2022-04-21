@@ -8,7 +8,7 @@ const url = URL();
 
 export default function Verify({route, navigation})
 {
-    
+    const [authCode, setAuthCode] = useState('')
     async function doAuth(authCode, navigation)
     {
         let username = route.params.username

@@ -38,7 +38,6 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
 
         let txt = await resp.text()
         let err = JSON.parse(txt)
-        console.warn(err)
     }
 
     // Adds given recipe to user favorites
@@ -52,7 +51,6 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
 
         let txt = await resp.text()
         let err = JSON.parse(txt)
-        console.warn(err)
     }
 
     // Removes given recipe from user likes
@@ -123,7 +121,6 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
         setOpenModalShowing(false);
         setOverAmt(-1);
         setBlur(0);
-        console.warn(openModalShowing)
     }
 
     function decideWhichModal()
