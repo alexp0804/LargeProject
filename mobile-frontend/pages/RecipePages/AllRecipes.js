@@ -152,7 +152,7 @@ export default function AllRecipes({route, navigation})
 
       return (
         <SafeAreaView>
-            <View style={{position:"absolute", marginTop:"176%", backgroundColor:'#addfad', height:"10%", width:"100%", zIndex:100 , borderWidth:2, flexDirection:"row"}}>
+            <View style={{position:"absolute", marginTop:"176%", backgroundColor:'#addfad', height:"10%", width:"100%", zIndex:15 , borderWidth:2, flexDirection:"row"}}>
                 <View style={{marginTop:"2.5%", marginLeft:"10%"}}>
                     <TouchableOpacity onPress={() => filterLike()}>
                         <FontAwesome name= {clickedLike ? "thumbs-up" :"thumbs-o-up"} size={50} color="white" />

@@ -6,6 +6,7 @@ import URL from './URL';
 import RecModal from '../components/RecModal';
 import EditModal from '../components/EditModal';
 import CountryHash from '../components/CountryCodes'
+import { BlurView } from "expo-blur";
 
 const likeOutline = "ios-thumbs-up-outline",
       likeFill = "ios-thumbs-up";
@@ -20,6 +21,8 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
 
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? likeFill : likeOutline)
+    const [overAmt, setOverAmt] = useState(-1);
+    const [blur, setBlur] = useState(0)
     console.log(pic)
     recPic = (pic === null || pic === "") ? `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryMap[country]}.png` : pic
     const [openModalShowing, setOpenModalShowing] = useState(false)
@@ -118,6 +121,8 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
     function closeModal()
     {
         setOpenModalShowing(false);
+        setOverAmt(-1);
+        setBlur(0);
         console.warn(openModalShowing)
     }
 
@@ -160,12 +165,23 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
         }
     }
 
+    function OpenModal()
+    {
+        setOverAmt(11)
+        setBlur(50)
+        setOpenModalShowing(true)
+    }
+
     return (
-        <TouchableOpacity activeOpacity={0.75} onPress={() => setOpenModalShowing(true)}>
+        <TouchableOpacity activeOpacity={0.75} onPress={() => OpenModal()}>
             <Modal
+            
                 visible={openModalShowing} animationType="slide" 
                 transparent={true} height="10%">
                 {decideWhichModal()}
+                <BlurView intensity={blur} tint="default" style={{height:"100%", width:"100%", position:"absolute", zIndex:overAmt}}>
+
+                </BlurView>
             </Modal>
             {/* Container */}
             <View style={[styles.shared, styles.container]}>
@@ -209,9 +225,14 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
 const deviceWidth = Math.round(Dimensions.get('window').width);
 const borderRad = 25;
 
+
 const styles = StyleSheet.create({
     shared: {
         borderRadius: borderRad,
+    },
+    absolute:{
+        position:"absolute",
+        zIndex:20
     },
     container: {
         overflow: "visible",
@@ -227,7 +248,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity:0.1,
 
-        marginTop: "5%"
+        marginTop: "5%",
     },
     image: {
         height: 145,
