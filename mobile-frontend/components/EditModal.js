@@ -1,5 +1,5 @@
 import React, { useState, Component } from "react";
-import { ScrollView, StyleSheet, KeyboardAvoidingView, TextInput, View, Image, Text, ImageBackground, Dimensions} from "react-native";
+import { Alert, ScrollView, StyleSheet, KeyboardAvoidingView, TextInput, View, Image, Text, ImageBackground, Dimensions} from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
@@ -80,6 +80,29 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
         }
         onXClick()
     }
+
+    function deleteTheRec()
+    {
+        Alert.alert('Are you sure?', 'Deleting a recipe is permanent and cannot be undone!', [
+            {text: 'Yes', onPress: () => actuallyDelete()},
+            {text: 'Cancel'}
+        ])
+    }
+    async function actuallyDelete()
+    {
+        let response = await fetch(url + 'deleteRecipe', {
+                                    method: 'POST',
+                                    body: JSON.stringify( { recipeID: recID } ), 
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'x-access-token': token
+                                    }});
+        let txt = await response.text();
+        let res = JSON.parse(txt)
+        console.log(res)
+        
+        onXClick()
+    }
     return (
         <View style={styles.main}>
             <ImageBackground
@@ -127,9 +150,17 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
                 <TouchableOpacity
                     activeOpacity={0.5} onPress={() => fireEditData()}
                     style={{width: "60%", padding:"3%", backgroundColor: "green", borderRadius: 10, shadowOpacity: ".2",
-                            alignSelf: "center", marginTop:"3%"}} >
+                            alignSelf: "left", marginTop:"3%"}} >
                     <Text style={{textAlign: "center", fontSize: 20, color:"white", fontFamily: "Arial", fontWeight: "500"}}>
                         Submit Changes
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={0.5} onPress={() => deleteTheRec()}
+                    style={{width: "60%", padding:"3%", backgroundColor: "red", borderRadius: 10, shadowOpacity: ".2",
+                            alignSelf: "left", marginTop:"3%"}} >
+                    <Text style={{textAlign: "center", fontSize: 20, color:"white", fontFamily: "Arial", fontWeight: "500"}}>
+                        Delete Recipe
                     </Text>
                 </TouchableOpacity>
             </KeyboardAwareScrollView>
