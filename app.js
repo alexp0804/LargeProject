@@ -60,7 +60,7 @@ const successPage = `<!DOCTYPE html>
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap; 
+            flex-wrap: wrap;
         }
         .innerInnerWrapper {
             max-width: 1000px;
@@ -95,7 +95,7 @@ const successPage = `<!DOCTYPE html>
             text-decoration: none;
         }
 
-    </style> 
+    </style>
     <body>
         <div class="wrapper">
             <div class="innerWrapper">
@@ -114,7 +114,7 @@ const successPage = `<!DOCTYPE html>
                </div>
            </div>
        </div>
-   </body> 
+   </body>
 </html>`;
 
 const senderEmail = process.env.SENDER_EMAIL;
@@ -125,7 +125,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Cloudinary set up 
+// Cloudinary set up
 cloudinary.config({
     cloud_name: "deks041ua",
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -310,7 +310,7 @@ app.post('/api/getResetCode', auth, async (req, res) =>
     // Check that email is valid
     const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
 
-    if (!valid) 
+    if (!valid)
         return res.status(500).json( { error: "Invalid email address." } );
 
     const authCode = createAuthCode();
@@ -351,13 +351,13 @@ app.post('/api/validateResetCode', async (req, res) =>
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
 
     // Not found
-    if (!user) 
+    if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
-    
+
     // Compare given code to one in db
     if (String(user.auth) != String(givenCode))
         return res.status(500).json( { error: "Code does not match." } );
-    
+
     res.json( emptyErr );
 });
 
@@ -368,9 +368,9 @@ app.post('/api/editUser', auth, async (req, res) =>
 
     // Find the user
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
-    
+
     // Not found
-    if (!user) 
+    if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
     // Valid field?
@@ -380,7 +380,7 @@ app.post('/api/editUser', auth, async (req, res) =>
     // Check if field is password
     if (newField === "password")
         newValue = hash(newValue);
-    
+
     // Check if field is picture, if so upload it
     if (newField === "profilePic")
     {
@@ -435,7 +435,7 @@ app.post('/api/getFavorites', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    favs.map(  
+                    favs.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -687,7 +687,7 @@ app.post('/api/getLikes', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    likes.map(  
+                    likes.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -781,7 +781,7 @@ app.post('/api/getRecipesInBounds', auth, async (req, res) =>
         location: { $geoWithin: { $box: [ bottomLeft, topRight ] } }
     } );
 
-    res.json(await result.toArray());    
+    res.json(await result.toArray());
 });
 
 // GET RECIPES BY COUNTRY
@@ -795,10 +795,10 @@ app.post('/api/getCountryRecipes', auth, async (req, res) =>
 
     if (!found)
         res.status(404).json( { error: "Country not found" } );
-    
+
     // Get the actual recipe object associated with each id
     let result = await Promise.all(
-                    found.recipes.map(  
+                    found.recipes.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -818,12 +818,27 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
     if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
-    // Grab the recipe associated with each id
+    // Iterate backwards so removing elements doesn't mess with indexing
+    for (let i = user.created.length; i >= 0; i--)
+    {
+        // If the recipe isn't in the database
+        if (await atLeastOne(recipeCol, user.created[i]) == 0)
+        {
+            // Remove recipe from user favorites list from database.
+            db.collection(userCol).updateOne(
+                  { _id: ObjectId(userID) },
+                  { $pull: { created: ObjectId(user.created[i]) } }
+            )
+            // Remove recipe from favs
+            user.created.splice(i, 1);
+        }
+    }
+
     let result = await Promise.all(
                     user.created.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
-                    )
-                );
+                        )
+                    );
 
     // Return created recipes
     res.json(result);
