@@ -6,11 +6,12 @@ import { BlurView } from 'expo-blur';
 import {CheckBox} from 'react-native-elements';
 import URL from '../components/URL';
 import RecModal from '../components/RecModal';
-import { NavigationContainer } from '@react-navigation/native';
+import CountryCodes from '../components/CountryCodes';
 
 const icon = require("../components/icon.svg")
 const countries = require("../components/Countries.json")
 const url = URL()
+const countryHash = CountryCodes()
 
 
 export default function Main ({route, navigation})
@@ -59,99 +60,7 @@ export default function Main ({route, navigation})
        })
    }
    
-   async function checkRecipe(checkBox)
-   {
-       if (checkBox == "like")
-       {
-           if(likeRecipe == true)
-           {
-                try
-                {
-                    let response = await fetch(url + "deleteLike", {method:"POST", 
-                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
-                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
-                    let txt = await response.text();
-                    let res = JSON.parse(txt);
-                    if (res.error != "")
-                    {
-                        console.warn(res.error)
-                        return
-                    }
-                }
-                catch(error)
-                {
-                    console.warn(error.toString())
-                }
-           }
-           else if(likeRecipe == false)
-           {
-                try
-                {
-                    let response = await fetch(url + "addLike", {method:"POST", 
-                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
-                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
-                    let txt = await response.text();
-                    let res = JSON.parse(txt);
-                    if (res.error != "")
-                    {
-                        console.warn(res.error)
-                        return
-                    }
-                }
-                catch(error)
-                {
-                    console.warn(error.toString())
-                }
-            }
-            setLikeRecipe(!likeRecipe)
-       }
-
-       if (checkBox == "favorite")
-       {
-            if(favoriteRecipe == true)
-            {
-                try
-                {
-                    let response = await fetch(url + "deleteFavorite", {method:"POST", 
-                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
-                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
-                    let txt = await response.text();
-                    let res = JSON.parse(txt);
-                    if (res.error != "")
-                    {
-                        console.warn(res.error)
-                        return
-                    }
-                }
-                catch(error)
-                {
-                    console.warn(error.toString())
-                }
-            }
-            else if(favoriteRecipe == false)
-            {
-                try
-                {
-                    let response = await fetch(url + "addFavorite", {method:"POST", 
-                    body: JSON.stringify({userID: route.params.id, recipeID: recipe._id}), 
-                    headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}})
-                    let txt = await response.text();
-                    let res = JSON.parse(txt);
-                    if (res.error != "")
-                    {
-                        console.warn(res.error)
-                        return
-                    }
-                }
-                catch(error)
-                {
-                    console.warn(error.toString())
-                }
-            }
-            setFavoriteRecipe(!favoriteRecipe)
-        }
-   }
-
+   
    function addRecipeNav()
    {
         navigation.navigate("AddRecipe")
@@ -275,7 +184,7 @@ export default function Main ({route, navigation})
                 let temporary= {
                             id:res.recipeID,
                             position:{lat:[coords.lat], lng:[coords.lng]},
-                            icon: "icon no worky 😔"
+                            icon: `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryHash[recipe.country]}.png`
                 }
                 temp.push(temporary)
                 console.warn("testing")
@@ -388,7 +297,7 @@ export default function Main ({route, navigation})
                 let tmp = {
                     id: recipe._id,
                     position: {lat:[recipe.location.coordinates[0]], lng: [recipe.location.coordinates[1]]},
-                    icon: "icon no worky 😔"
+                    icon: `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryHash[recipe.country]}.png`
                 }
 
                 tempArray.push(tmp);            
@@ -436,12 +345,14 @@ export default function Main ({route, navigation})
            let txt = await response.text();
            console.warn("Testing 123456")
            let recipes = JSON.parse(txt);
+           console.warn(recipes)
 
          recipes.forEach((recipe) => {
+             console.warn(recipe)
             let tmp = {
                 id: recipe._id,
                 position: {lat:[recipe.location.coordinates[1]], lng: [recipe.location.coordinates[0]]},
-                icon: "icon no worky 😔"
+                icon: `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryHash[recipe.country]}.png`
             }
 
             tempArray.push(tmp);            
