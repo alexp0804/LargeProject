@@ -14,12 +14,16 @@ export default function MyRecipes({route, navigation})
     const [searchArray, setSearchArray] = useState(route.params.myRecipes)
     likeMap = {}
     favMap = {}
-    likes.forEach((rec) => {
-        likeMap[rec._id] = rec
-    })
-    favs.forEach((rec) => {
-        favMap[rec._id] = rec
-    })
+    updateLikeAndFavMaps()
+    function updateLikeAndFavMaps()
+    {
+        likes.forEach((rec) => {
+            likeMap[rec._id] = rec
+        })
+        favs.forEach((rec) => {
+            favMap[rec._id] = rec
+        })
+    }
 
       async function search(text)
       {
@@ -69,6 +73,7 @@ export default function MyRecipes({route, navigation})
                                     faved={(rec._id in favMap)}
                                     liked={(rec._id in likeMap)}
                                     isMyRec={true}
+                                    updateMaps={updateLikeAndFavMaps}
                                     key={rec._id}
                                 />
                             )
