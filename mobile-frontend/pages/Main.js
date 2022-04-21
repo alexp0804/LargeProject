@@ -376,7 +376,7 @@ export default function Main ({route, navigation})
        <SafeAreaView style={{height:"150%"}}> 
           <BlurView intensity={blur} tint="default" style={{height:"100%", width:"100%", position:"absolute", zIndex:overAmt}}>
             </BlurView>
-            <LeafletView doDebug={true}  mapCenterPosition={{lat:27.964157, lng: -82.452606}}
+            <LeafletView doDebug={true}  mapCenterPosition={{lat:50.8333, lng: 4}} zoom={6}
                 onLoadStart={() => loadMarkers()}  mapMarkers={markerArray}
                 onMessageReceived={(message) => mapMessage(message, recipe)}></LeafletView>
             <Modal animationType="slide"

@@ -43,8 +43,9 @@ export default function AllRecipes({route, navigation})
 
       async function search(text)
       {
-            try
-            {    
+        let filteredArray = []
+        try
+        {    
             console.warn("Getting there")
             console.warn(text)
             let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:text}), 
@@ -52,7 +53,25 @@ export default function AllRecipes({route, navigation})
             let txt = await response.text();
             console.warn(txt);
             let recipes = JSON.parse(txt);
-            setSearchArray(recipes)
+            if(clickedLike)
+            {
+                recipes.forEach((rec) => {
+                    if (rec._id in likeMap)
+                    {
+                        filteredArray.push(rec)
+                    }
+                })
+            }
+            if(clickedFav)
+            {
+                recipes.forEach((rec) => {
+                    if (rec._id in favMap)
+                    {
+                        filteredArray.push(rec)
+                    }
+                })
+            }
+            setSearchArray(filteredArray)
             }
             catch(error)
             {
@@ -61,40 +80,40 @@ export default function AllRecipes({route, navigation})
 
         }
 
-        async function filterLike()
+    async function filterLike()
+    {
+        if (clickedLike)
         {
-            if (clickedLike)
-            {
-                setSearchArray(all)
-            }
-            else
-            {
-                if (clickedFav)
-                {
-                    setClickedFav(false)
-                }
-                try
-                {
-                    let response = await (fetch(url + "getLikes", {method:"POST", 
-                                            body: JSON.stringify({userID: route.params.id}), 
-                                            headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
-                    let txt = await response.text()
-                    let res = JSON.parse(txt)
-                    let filteredArray = []
-                    res.forEach((rec) => {
-                        filteredArray.push(rec)
-                    })
-
-                    setSearchArray(filteredArray)
-                
-                }
-                catch(error)
-                {
-                    console.warn(error.toString())
-                }
-            }
-            setClickedLike(!clickedLike)
+            setSearchArray(all)
         }
+        else
+        {
+            if (clickedFav)
+            {
+                setClickedFav(false)
+            }
+            try
+            {
+                let response = await (fetch(url + "getLikes", {method:"POST", 
+                                        body: JSON.stringify({userID: route.params.id}), 
+                                        headers:{'Content-Type': 'application/json', 'x-access-token': route.params.token}}))
+                let txt = await response.text()
+                let res = JSON.parse(txt)
+                let filteredArray = []
+                res.forEach((rec) => {
+                    filteredArray.push(rec)
+                })
+
+                setSearchArray(filteredArray)
+            
+            }
+            catch(error)
+            {
+                console.warn(error.toString())
+            }
+        }
+        setClickedLike(!clickedLike)
+    }
 
         async function filterFav()
         {

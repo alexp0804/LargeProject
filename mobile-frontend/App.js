@@ -11,7 +11,7 @@ import ViewRecipes from './pages/ViewRecipePage';
 import Mid from './pages/Mid'
 import MyRecipes from './pages/MyRecipes';
 import OnBoardScreen from './pages/OnBoardScreen';
-import anyRegistered from './pages/Screen/AnyRegistered';
+import AnyRegistered from './pages/Screen/AnyRegistered';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,8 +20,8 @@ export default function App() {
     <NavigationContainer>
       <StatusBar barStyle="dark-content"/>
       <Stack.Navigator>
-       <Stack.Screen name= "BoardScreen" component= {OnBoardScreen}/>
-       <Stack.Screen name= "AnyRegistered" component= {anyRegistered}/>
+       <Stack.Screen name= "Home" component= {OnBoardScreen} options={{headerTransparent:true, title:""}}/>
+       <Stack.Screen name= "AnyRegistered" component= {AnyRegistered} options={{headerTransparent:true, headerTitle:""}}/>
        <Stack.Screen name= "Log In" component= {LogIn} options={{headerShown: false}} />
         <Stack.Screen name= "Mid" component={Mid} options={{headerShown:false}}/>
         <Stack.Screen name= "Sign Up" component = {SignUpScreen} options= {{title: "" , headerTransparent: true}} />
