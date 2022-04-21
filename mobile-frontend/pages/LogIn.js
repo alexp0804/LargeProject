@@ -8,6 +8,8 @@ import URL from '../components/URL';
 import {
     TextInput,
   } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 const url = URL();
 
@@ -73,7 +75,7 @@ export default function LogIn( { navigation } )
     }
 
     return (
-      <SafeAreaView className="flex-1" style={{ backgroundColor: "white" }}>
+      <KeyboardAwareScrollView className="flex-1" style={{ backgroundColor: "white" }}>
         <ScrollView>
           <View>
 
@@ -182,7 +184,7 @@ export default function LogIn( { navigation } )
             </Text>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </KeyboardAwareScrollView>
     );
 }
 
@@ -226,8 +228,6 @@ const styles = StyleSheet.create({
 
     },
     loginButton: {
-        marginLeft: "13%",
-        marginRight: "13%",
         padding: "3.5%",
         backgroundColor: "#a1483a",
         borderRadius: 10,

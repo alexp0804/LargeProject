@@ -2,6 +2,7 @@ import React, { useState, Component } from "react";
 import { Alert, ScrollView, StyleSheet, KeyboardAvoidingView, TextInput, View, Image, Text, ImageBackground, Dimensions} from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-picasso";
+import { AntDesign } from '@expo/vector-icons'; 
 import URL from './URL';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as ImagePicker from 'expo-image-picker'
@@ -170,13 +171,12 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
 
 const styles = StyleSheet.create({
     main: {
-        borderColor:'black',
-        borderWidth:2,
         marginTop:"25%",
         height:"78%",
         width:"95%",
         margin:20,
         backgroundColor:"white",
+        borderRadius: 30,
         padding:15,
         alignItems:'center',
         alignSelf:'center'
@@ -187,10 +187,12 @@ const styles = StyleSheet.create({
         marginTop:"3%"
     },
     img: {
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         alignSelf:'center',
         width:407,
         height:200,
-        marginTop:"-5%",
+        marginTop:"-4%",
         borderRadius:40
     },
     mainTitle: {
