@@ -361,6 +361,21 @@ app.post('/api/validateResetCode', async (req, res) =>
     res.json( emptyErr );
 });
 
+app.post('/api/getUserInfo', async (req, res) =>
+{
+    const { userID} = req.body;
+    const db = client.db();
+
+    // Get user
+    const userInfo = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    // Not found
+    if (!userInfo)
+        return res.status(500).json( { error: "Invalid User ID" } );
+	else
+    	res.json( {username: userInfo.username} );
+});
+
 app.post('/api/editUser', auth, async (req, res) =>
 {
     let { userID, newField, newValue } = req.body;
