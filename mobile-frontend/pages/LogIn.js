@@ -5,6 +5,9 @@ import { Feather, Ionicons } from '@expo/vector-icons';
 import Input from '../components/Input';
 import { StackActions } from '@react-navigation/native';
 import URL from '../components/URL';
+import {
+    TextInput,
+  } from 'react-native-gesture-handler';
 
 const url = URL();
 
@@ -70,81 +73,116 @@ export default function LogIn( { navigation } )
     }
 
     return (
-        <SafeAreaView className="flex-1">
-            <ScrollView>
+      <SafeAreaView className="flex-1" style={{ backgroundColor: "white" }}>
+        <ScrollView>
+          <View>
 
-                {/* Log In Title */}
-                <View style={styles.title}>
-                    <Text style={styles.titleText}>
-                        ReciPin.{'\n'}
-                        Recipes.{'\n'}
-                        Anytime.{'\n'}
-                        Anywhere.{'\n'}
-                    </Text>
-                    {/* <Image source="../assets/map_tilt.png">
-                    </Image> */}
-                
-                </View>
-                
-                {/* Username Form */}
-                <View style= {styles.forms}>
+            <Image
+              style={{
+                width: "100%",
+                resizeMode: "contain",
+                marginTop: 60
+              }}
+              source={require("../assets/Login.png")}
+            ></Image>
+          </View>
 
-                    <Ionicons name="md-person-outline"
-                              size={24}
-                              color="black"
-                              style={styles.icons} />
+          {/* Log In Title */}
+          <View style={styles.title}>
+          <Text
+              style={{ marginTop: -60, marginBottom: 20, fontSize: 32, fontWeight: "bold", textAlign: "center" }}
+            >
+              Log in
+            </Text>
+           
+          </View>
 
-                    <Input placeholder="Username"
-                           value= {user} 
-                           setValue= {setUser}
-                           />
-                </View>
 
-                {/* Password Form */}
-                <View style= {styles.forms}>
-                    <Feather name="lock"
-                             size={24}
-                             color="black"
-                             style={styles.icons} />
+          {/* Username Form */}
+          <View style={styles.inputContainer}>
+            <Ionicons
+              name="md-person-outline"
+              size={24}
+              color="black"
+              style={styles.icons}
+            />
 
-                    <Input placeholder="Password"
-                           value= {password} 
-                           setValue={setPassword}
-                           secure={true} />
-                </View>
-                
-                {/* Login Button */}
-                <View className= "pt-lg">
-                    <TouchableOpacity activeOpacity={0.5}
-                                      style={styles.loginButton}
-                                      onPress={ 
-                                          doLogin.bind(this, user, password, setUser, setPassword, navigation)
-                                      }>
+            <Input placeholder="Username" value={user} setValue={setUser} />
+          </View>
 
-                        <Text className="align-center"
-                              style={{color: "white", fontSize: 16, fontWeight: "500"}}>
-                            Login 
-                        </Text>
+          {/* Password Form */}
+          <View style={styles.inputContainer}>
+            <Feather name="lock" size={24} color="black" style={styles.icons} />
 
-                    </TouchableOpacity>
+            <Input
+              placeholder="Password"
+              value={password}
+              setValue={setPassword}
+              secure={true}
+            />
+          </View>
 
-                    {/* Error Message */}
-                    <Text className = "align-center" style = {{color:"red", paddingTop:"15%", fontSize:20, fontWeight:"700"}}>
-                        {error}
-                    </Text>
-                </View>
+          {/* Login Button */}
+          <View className="pt-lg">
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.loginButton}
+              onPress={doLogin.bind(
+                this,
+                user,
+                password,
+                setUser,
+                setPassword,
+                navigation
+              )}
+            >
+              <Text
+                className="align-center"
+                style={{ color: "white", fontSize: 16, fontWeight: "500" }}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
 
-                {/* Register Button */}
-                <View style={{marginTop:"25%"}}>
-                    <Text className="align-center"
-                          onPress={() => navigation.navigate('Sign Up')}
-                          style={{fontSize: 18, textDecorationLine:"underline"}}>
-                        Don't have an account? Sign up here!
-                    </Text>
-                </View>
+            {/* Error Message */}
+            <Text
+              className="align-center"
+              style={{
+                color: "red",
+                paddingTop: "15%",
+                fontSize: 20,
+                fontWeight: "700",
+              }}
+            >
+              {error}
+            </Text>
+          </View>
 
-            </ScrollView>
-        </SafeAreaView>
+          <View>
+
+            <Image
+              style={{
+                width: "50%",
+                resizeMode: "contain",
+                marginTop: -100,
+                marginLeft: 30,
+              }}
+              source={require("../assets/arrowlogin.png")}
+            ></Image>
+          </View>
+
+          {/* Register Button */}
+          <View style={{ marginTop: "25%" }}>
+            <Text
+              className="align-center"
+              onPress={() => navigation.navigate("Sign Up")}
+              style={{ fontSize: 18, textDecorationLine: "underline" }}
+            >
+              Don't have an account? Sign up here!
+            </Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
 }
 
@@ -190,13 +228,26 @@ const styles = StyleSheet.create({
     loginButton: {
         marginLeft: "13%",
         marginRight: "13%",
-        padding: "3%",
-        backgroundColor: "blue",
+        padding: "3.5%",
+        backgroundColor: "#a1483a",
         borderRadius: 10,
+        width: 200,
         alignSelf: "center",
     },
     icons: {
         alignContent: 'center',
         opacity: 0.5,
-    }
+    },
+    inputContainer: {
+        flex: 1,
+        marginLeft: 50, 
+        marginBottom: 20,
+        height: 60,
+        width: 290,
+        borderRadius: 20,
+        flexDirection: 'row',
+        backgroundColor: "#f8f5f3",
+        alignItems: 'center',
+        paddingHorizontal: 20,
+      }
 });
