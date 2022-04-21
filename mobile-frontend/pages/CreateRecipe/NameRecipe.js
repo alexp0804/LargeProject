@@ -40,6 +40,14 @@ export default function NameRecipe({route, navigation})
           >
             Name {"\n"} your masterpiece
           </Text>
+          <View style = {style.indicatorContainer}>
+              <View style = {style.currentIndicator}></View>
+              <View style = {style.indicator}></View>
+              <View style = {style.indicator}></View>
+              <View style = {style.indicator}></View>
+              <View style = {style.indicator}></View>
+              <View style = {style.indicator}></View>
+          </View>
 
 
         </TouchableOpacity>
@@ -102,7 +110,7 @@ const style = StyleSheet.create ({
         height: 12,
         width: 30,
         borderRadius: 10,
-        backgroundColor: '#a1483a',
+        backgroundColor: '#ff5677',
         marginHorizontal: 5,
       },
       indicator: {

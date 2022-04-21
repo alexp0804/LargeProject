@@ -87,11 +87,13 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
     {
         if (fav === "hearto")
         {
+            console.warn("Testing")
             setFavIcon("heart")
             // setLikeIcon of RecipeCard.js (parent)
         }
         else
         {
+            console.warn("Testing123")
             setFavIcon("hearto")
             // setLikeIcon of RecipeCard.js (parent)
         }
@@ -165,7 +167,7 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
         </View>
     )
 }
-
+const deviceWidth = Math.round(Dimensions.get('window').width);
 const styles = StyleSheet.create({
     main: {
         marginTop:"25%",
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         alignSelf:'center',
-        width:407,
+        width:deviceWidth - 21,
         height:200,
         marginTop:"-4%",
         borderRadius:40
@@ -217,7 +219,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 30,
         marginBottom:"-4%",
         backgroundColor: "#e6e6e6",
-        width: "109%",
+        width: deviceWidth - 21,
         height: "8%"
     }
 })

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { ScrollView, TouchableOpacity, Text, TextInput, View, Image } from 'react-native'
+import { ScrollView, StyleSheet, TouchableOpacity, Text, TextInput, View, Image } from 'react-native'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { SelectCountry } from 'react-native-element-dropdown';
 import { StackActions } from '@react-navigation/routers'
@@ -25,6 +25,10 @@ export default function CountrySelection({route, navigation})
             <TouchableOpacity onPress={() => navigation.dispatch(StackActions.replace("Landing", {screen:"Map"}))}>
             <Feather name="x" size={28} color="black"/>
             </TouchableOpacity>
+            <SelectCountry activeColor='#addfad' style={{padding: "3%", marginLeft:"11%", marginRight:"11%", marginTop: "10%", backgroundColor: "#dbe1e1"}} search searchPlaceholder='Search for country...' placeholder='Select Country' data={countrArray} labelField='label' valueField='value' onChange={item => {
+                setValue(item.value);
+                setCountry(item.label)
+            }} value={value}/>
             <Image
             style={{
               width: "60%",
@@ -46,12 +50,15 @@ export default function CountrySelection({route, navigation})
           >
             Where is it from?
           </Text>
-
-            <SelectCountry activeColor='#addfad' style={{padding: "3%", marginLeft:"11%", marginRight:"11%", marginTop: "10%", backgroundColor: "#dbe1e1"}} search searchPlaceholder='Search for country...' placeholder='Select Country' data={countrArray} labelField='label' valueField='value' onChange={item => {
-                setValue(item.value);
-                setCountry(item.label)
-            }} value={value}/>
-            <View style={{flexDirection:"row", marginTop:"25%", alignSelf:"center"}}>
+          <View style = {style.indicatorContainer}>
+            <View style = {style.indicator}></View>
+            <View style = {style.indicator}></View>
+            <View style = {style.indicator}></View>
+            <View style = {style.indicator}></View>
+            <View style = {style.currentIndicator}></View>
+            <View style = {style.indicator}></View>
+          </View>
+            <View style={{flexDirection:"row", marginBottom: "25%", alignSelf:"center"}}>
                 <TouchableOpacity style={{backgroundColor:"black", width:"25%", borderRadius:7,  alignSelf:"center"}} 
                                           onPress={() => navigation.navigate("Instructions", {name:route.params.name, desc:route.params.desc, 
                                           ingredients:route.params.ingredients, instructions:route.params.instructions})}>
@@ -65,3 +72,33 @@ export default function CountrySelection({route, navigation})
         </View>
     )
 }
+
+const style = StyleSheet.create ({
+  textContainer: {
+      flex: 1, 
+      paddingHorizontal: 50, 
+      justifyContent: 'space-between',
+      paddingBottom: 40,
+  },
+  indicatorContainer: {
+      height: 50,
+      flex: 1,
+      justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    currentIndicator: {
+      height: 12,
+      width: 30,
+      borderRadius: 10,
+      backgroundColor: '#ff5677',
+      marginHorizontal: 5,
+    },
+    indicator: {
+      height: 12,
+      width: 12,
+      borderRadius: 6,
+      backgroundColor: 'grey',
+      marginHorizontal: 5,
+    },   
+});

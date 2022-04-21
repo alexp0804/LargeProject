@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, ScrollView, StyleSheet, Image} from 'react-native';
+import { TouchableOpacity, ScrollView, StyleSheet, Image, Alert} from 'react-native';
 import { SafeAreaView, Text, View } from 'react-native-picasso';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import Input from '../components/Input';
@@ -48,6 +48,9 @@ export default function LogIn( { navigation } )
                 setUser("");
                 setPassword("");
                 setError(res.error);
+                Alert.alert(`Username or password incorrect`, 'Please try again.', [
+                  {text: 'Okay'}
+              ])
             }
             // If successful, navigate to the landing page with the user info
             else
@@ -141,21 +144,6 @@ export default function LogIn( { navigation } )
                 Login
               </Text>
             </TouchableOpacity>
-
-            {/* Error Message */}
-            <Text
-              className="align-center"
-              style={{
-                color: "red",
-                paddingTop: "15%",
-                fontSize: 20,
-                fontWeight: "700",
-                position:"absolute",
-                zIndex:100,
-              }}
-            >
-              {error}
-            </Text>
           </View>
 
           <View>
@@ -164,7 +152,7 @@ export default function LogIn( { navigation } )
               style={{
                 width: "50%",
                 resizeMode: "contain",
-                marginTop: -100,
+                marginTop: -20,
                 marginLeft: 30,
               }}
               source={require("../assets/arrowlogin.png")}
@@ -172,11 +160,11 @@ export default function LogIn( { navigation } )
           </View>
 
           {/* Register Button */}
-          <View style={{ marginTop: "25%" }}>
+          <View>
             <Text
               className="align-center"
               onPress={() => navigation.navigate("Sign Up")}
-              style={{ fontSize: 18, textDecorationLine: "underline" }}
+              style={{ fontSize: 18, textDecorationLine: "underline", marginTop: "-10%"}}
             >
               Don't have an account? Sign up here!
             </Text>

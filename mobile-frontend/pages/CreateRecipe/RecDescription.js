@@ -39,14 +39,21 @@ export default function RecDescription({ route, navigation }) {
       >
         Quick elevator pitch {"\n"} for your recipe
       </Text>
-
+      <View style = {style.indicatorContainer}>
+          <View style = {style.indicator}></View>
+          <View style = {style.currentIndicator}></View>
+          <View style = {style.indicator}></View>
+          <View style = {style.indicator}></View>
+          <View style = {style.indicator}></View>
+          <View style = {style.indicator}></View>
+      </View>
       <TextInput
         placeholderTextColor="black"
         multiline={true}
         placeholder="Add a description"
         style={{
           paddingTop: "5%",
-          marginTop: "9%",
+          marginTop: "4%",
           marginLeft: "10%",
           marginRight: "10%",
           borderColor: "black",
@@ -102,3 +109,35 @@ export default function RecDescription({ route, navigation }) {
     </KeyboardAwareScrollView>
   );
 }
+
+const style = StyleSheet.create ({
+  textContainer: {
+      flex: 1, 
+      paddingHorizontal: 50, 
+      justifyContent: 'space-between',
+      paddingBottom: 40,
+  },
+  indicatorContainer: {
+      height: 50,
+      flex: 1,
+      justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    currentIndicator: {
+      height: 12,
+      width: 30,
+      borderRadius: 10,
+      backgroundColor: '#ff5677',
+      marginHorizontal: 5,
+    },
+    indicator: {
+      height: 12,
+      width: 12,
+      borderRadius: 6,
+      backgroundColor: 'grey',
+      marginHorizontal: 5,
+    },
+    
+   
+});
