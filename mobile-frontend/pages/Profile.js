@@ -148,51 +148,75 @@ export default function Profile ({route, navigation})
                 </Modal>
                 <View>
                     <Image
-                        style={{width:200, height:200, borderRadius:1000000, alignSelf:"center", marginTop: "15%"}}
+                        style={{width:200, height:200, borderRadius:1000000, alignSelf:"center", marginTop: "5%"}}
                         source={{
                         uri: pfp,
                         }}>
                     </Image>                
-                    <Text style={{textAlign:"center", fontWeight:"900", fontSize:30, marginTop:"3%"}}>
+                    <Text style={{textAlign:"center", fontWeight:"900", fontSize:30, marginTop:"3%", marginBottom: "-4%"}}>
                         {route.params.username}
                     </Text>
                 </View>
 
+                <Image
+              style={{
+                width: "50%",
+                resizeMode: "contain",
+                marginTop: -40,
+                marginBottom: -250,
+                marginLeft: 10,
+                bottom: 70,
+                zIndex: -200
+              }}
+              source={require("../assets/abstract3.png")}
+            ></Image>
+
                 {/* Buttons (CRUD) */}
-                <View>
+                <View >
                     {/* Primary Buttons */}
                     <View style={{marginTop:"10%"}}>
                         {/* View Recipes */}
                         <TouchableOpacity
-                            activeOpacity= {0.5} onPress={() => viewRecipes()} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
-                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
+                            activeOpacity= {0.5} onPress={() => viewRecipes()} style={modalStyles.loginButton}  >
                             <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
                                 View Recipes
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            activeOpacity= {0.5} onPress={() => handleGoToMine()} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
-                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
+                            activeOpacity= {0.5} onPress={() => handleGoToMine()} style={modalStyles.loginButton}  >
                             <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
                                 My Recipes
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            activeOpacity= {0.5} onPress={openImagePickerAsync} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
-                            borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
+                            activeOpacity= {0.5} onPress={openImagePickerAsync} style={modalStyles.loginButton}  >
                             <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
                                 Update profile picture
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.5} onPress={() => navigation.dispatch(StackActions.replace("Log In"))}
-                            style={{width: "60%", padding:"3%", backgroundColor: "red", borderRadius: 10, shadowOpacity: ".2",
-                                    alignSelf: "center", marginTop:"3%"}} >
+                            style={modalStyles.loginButton} >
                             <Text style={{textAlign: "center", fontSize: 20, color:"white", fontFamily: "Arial", fontWeight: "500"}}>
                                 Log out
                             </Text>
                         </TouchableOpacity>
                     </View>
+
+                    <View> 
+                 </View>
+
+                 <Image
+              style={{
+                width: "50%",
+                resizeMode: "contain",
+                marginTop: -100,
+                marginLeft: 200,
+                zIndex: -200
+                
+              }}
+              source={require("../assets/landingbacky.png")}
+            ></Image>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -219,5 +243,29 @@ const modalStyles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
     },
+    loginButton: {
+        padding: "3.5%",
+        backgroundColor: "#a1483a",
+        borderRadius: 10,
+        marginTop: 15,
+        width: 250,
+        alignSelf: "center"
+    },
+    icons: {
+        alignContent: 'center',
+        opacity: 0.5,
+    },
+    inputContainer: {
+        flex: 1,
+        marginLeft: 50, 
+        marginBottom: 10,
+        height: 60,
+        width: 290,
+        borderRadius: 20,
+        flexDirection: 'row',
+        backgroundColor: "#f8f5f3",
+        alignItems: 'center',
+        paddingHorizontal: 20,
+      }
 })
 
