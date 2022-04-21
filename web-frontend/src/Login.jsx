@@ -136,8 +136,8 @@ export default function App() {
                     Remember me     
                 </label> 
                 
-                <a href="./register" className="text-dark">
-                    <u>    Forgot password?</u>
+                <a href="./reset" className="text-dark">
+                    <u> Forgot password?</u>
                 </a>
                 
             </div>

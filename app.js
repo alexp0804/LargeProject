@@ -586,7 +586,8 @@ app.post('/api/createRecipe', auth, async (req, res) =>
             coordinates: coordinates.reverse()
         },
         likes: 0,
-        favorites: 0
+        favorites: 0,
+        comments: []
     };
 
     // Upload the image to Cloudinary
@@ -993,6 +994,7 @@ app.post('/api/getComments', auth, async (req, res) =>
     let result = [];
 
     // id -> {username, pfp}
+
     for (const comment of recipe.comments)
     {
         let user = await db.collection(userCol).findOne( { _id: ObjectId(comment.user) } );
