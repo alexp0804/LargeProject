@@ -39,6 +39,8 @@ export default function RecipeReviewCard(props) {
 
   const [lgShow, setLgShow] = useState(false);
 
+  const [likeCount, setLikeCount] = useState(props.recipe.likes)
+
   // Fav = true, then display BookmarkIcon
   const [FavFlag, setFavFlag] = useState(props.fav);
   let x = <BookmarkBorderIcon />;
@@ -50,7 +52,7 @@ export default function RecipeReviewCard(props) {
 
 
    // Heart = true, then display HeartIcon
-   const [HeartFlag, setHeartFlag] = useState(props.fav);
+   const [HeartFlag, setHeartFlag] = useState(props.like);
    let y = <FavoriteBorderIcon />;
  
    // if already heart'd
@@ -71,8 +73,6 @@ export default function RecipeReviewCard(props) {
       recipeID: props.recipe["_id"],
     });
 
-    console.log(jsonPayLoad);
-
     try {
       // Do not await fetches anymore
       const response = await fetch(buildPath("api/addLike"), {
@@ -88,10 +88,14 @@ export default function RecipeReviewCard(props) {
 
       let res = JSON.parse(await response.text());
 
-      if (res.hasOwnProperty("error")) console.log(res["error"]);
-
       setheartImage(<FavoriteIcon />);
-      setHeartFlag(!HeartFlag);
+      setHeartFlag(true);
+      setLikeCount(prev => {return prev + 1;})
+
+      props.likeMethod((prevItems) => {
+        prevItems.set(props.recipe["_id"], props.recipe);
+        return prevItems;
+      });
     } catch (e) {
       console.log(e);
     }
@@ -102,8 +106,6 @@ export default function RecipeReviewCard(props) {
       userID: JSON.parse(window.localStorage.getItem("userObject"))["_id"],
       recipeID: props.recipe["_id"],
     });
-
-    console.log(jsonPayLoad);
 
     try {
       // Do not await fetches anymore
@@ -120,10 +122,13 @@ export default function RecipeReviewCard(props) {
 
       let res = JSON.parse(await response.text());
 
-      if (res.hasOwnProperty("error")) console.log(res["error"]);
-
       setheartImage(< FavoriteBorderIcon/>);
-      setHeartFlag(!HeartFlag);
+      setHeartFlag(false);
+      setLikeCount(prev => {return prev - 1;})
+      props.likeMethod((prevItems) => {
+        prevItems.delete(props.recipe["_id"], props.recipe);
+        return prevItems;
+      });
     } catch (e) {
       console.log(e);
     }
@@ -134,8 +139,6 @@ export default function RecipeReviewCard(props) {
       userID: JSON.parse(window.localStorage.getItem("userObject"))["_id"],
       recipeID: props.recipe["_id"],
     });
-
-    console.log(jsonPayLoad);
 
     try {
       // Do not await fetches anymore
@@ -152,15 +155,10 @@ export default function RecipeReviewCard(props) {
 
       let res = JSON.parse(await response.text());
 
-      if (res.hasOwnProperty("error")) console.log(res["error"]);
 
-      console.log("SET AS FAVORITE");
-      console.log("shit");
       setFavFlag(true);
       props.favMethod((prevItems) => {
-        console.log(prevItems);
         prevItems.set(props.recipe["_id"], props.recipe);
-        console.log(prevItems);
         return prevItems;
       });
       setbookImage(<BookmarkIcon />);
@@ -175,7 +173,6 @@ export default function RecipeReviewCard(props) {
       recipeID: props.recipe["_id"],
     });
 
-    console.log(jsonPayLoad);
 
     try {
       // Do not await fetches anymore
@@ -192,9 +189,6 @@ export default function RecipeReviewCard(props) {
 
       let res = JSON.parse(await response.text());
 
-      if (res.hasOwnProperty("error")) console.log(res["error"]);
-
-      console.log("set as unfav");
       setbookImage(<BookmarkBorderIcon />);
       setFavFlag(false);
       props.favMethod((prevItems) => {
@@ -255,7 +249,7 @@ export default function RecipeReviewCard(props) {
           // subheader="September 14, 2016"
         />
 
-        <CardContent>
+        <CardContent style ={{ paddingBottom: "0px"}}>
           <Row>
             <CardMedia
               component="img"
@@ -271,34 +265,67 @@ export default function RecipeReviewCard(props) {
               {props.recipe.desc}
             </Typography>
           </Row>
+          </CardContent>
+        <CardHeader
+        style ={{ paddingTop: "0px"}}
+          avatar={
+            <IconButton
+            style ={{padding: '0px', marginRight: '-7px'}}
+            aria-label="add to favorites"
+            onClick={() => {
+                HeartFlag ? deleteLike() : setLike();
+            }}
+            >
+           {heartImage}
+          </IconButton>
+          }
+          action={
+            <IconButton onClick={() => setLgShow(true)}>
+            <ReadMoreIcon aria-label="show more"> </ReadMoreIcon>
+          </IconButton>
+          }
+          title= {likeCount}
+          // subheader="September 14, 2016"
+        />
 
+
+        
+        <CardActions disableSpacing></CardActions>
+      </Card>
+    </>
+  );
+}
+
+/*
+Mini...
           <Row>
             <Col>
+            <Row style ={{backgroundColor: "green"}}>
+                
+              <Col>
               <IconButton
                 aria-label="add to favorites"
                 onClick={() => {
-                  HeartFlag ? deleteLike() : setLike();
+                    HeartFlag ? deleteLike() : setLike();
                 }}
-              >
+                >
                {heartImage}
               </IconButton>
-              {/* 
-                <IconButton aria-label="share" onClick={() => setLgShow(true)}>
-                  <NumbersIcon/>
-                </IconButton> */}
+              </Col>
+              <Col style ={{textAlign: 'center', fontSize : "20px", margin: '0%', padding: '0%', backgroundColor: 'red'}}> {3} </Col>
+            </Row>
+              
+              
             </Col>
 
             <Col></Col>
+
 
             <Col md={{ offset: 4 }}>
               <IconButton onClick={() => setLgShow(true)}>
                 <ReadMoreIcon aria-label="show more"> </ReadMoreIcon>
               </IconButton>
             </Col>
+
           </Row>
-        </CardContent>
-        <CardActions disableSpacing></CardActions>
-      </Card>
-    </>
-  );
-}
+*/

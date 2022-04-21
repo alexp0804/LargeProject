@@ -148,7 +148,7 @@ const Sidebar = (props) =>
       <body>
         <Navbar style = {{zIndex : "2000"}} collapseOnSelect expand="lg" bg="light" variant="light">
           <Container>
-            <Navbar.Brand onClick={handleShow} href="#home">ReciPin.</Navbar.Brand>
+            <Navbar.Brand onClick={handleShow} href="">ReciPin.</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
@@ -171,7 +171,7 @@ const Sidebar = (props) =>
             </Offcanvas.Header>
             <Offcanvas.Body>
 
-              <SidebarContent createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
+              <SidebarContent closeSideBar = {handleClose} favs = {props.favs} likes = {props.likes} setMarkerList = {props.setMarkerList}/>
 
 
             </Offcanvas.Body>

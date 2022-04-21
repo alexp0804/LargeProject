@@ -41,10 +41,11 @@ const MappyMap = (props) =>
   let counter = 0;
 
   const cry = useMapEvents({dragend(e){
-      let middle =  mappy.getCenter();
-      getRecipesInView([middle['lat'], middle['lng']], 2000.3);
-      console.log(mappy.getBounds())
-    console.log(mappy.getCenter())
+      let bounds = mappy.getBounds()
+      let northEast = bounds['_northEast']
+      let southWest = bounds['_southWest']
+      getRecipesInView([northEast['lng'], northEast['lat']], [southWest['lng'], southWest['lat']] );
+
    }, });
 
 
@@ -122,18 +123,18 @@ const MappyMap = (props) =>
       }
   };
 
-  const getRecipesInView = async (center ,distances) =>
+  const getRecipesInView = async (northEast , southWest) =>
   {
 
       let jsonPayLoad = JSON.stringify({
-            location: center,
-            distance: distances
+            topRight: northEast,
+            bottomLeft: southWest
       });
 
       try 
       {
           // returns liked, favorited
-          const response = await fetch(buildPath("api/getNearbyRecipes"), {
+          const response = await fetch(buildPath("api/getRecipesInBounds"), {
               method: "POST",
               body: jsonPayLoad,
               headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
@@ -169,7 +170,7 @@ const MappyMap = (props) =>
       }
   };
 
-  useEffect(() => {getRecipesInView([50, 3], 900.3);}, []);
+  useEffect(() => {getRecipesInView([23.35, 53.98], [-17.35, 45.65]);}, []);
   useEffect(() => {getLikes();}, []);
   useEffect(() => {getFavs();}, []);
 
@@ -204,13 +205,14 @@ const MappyMap = (props) =>
   const eventHandlers = useMemo(() => ({dragend(){console.log('dragged')},  }), [],);
 
   const flags = lower + '.png'
-  
+
+    
     return (
 
 
       <>
 
-        < Sidebar createMarker= {createMarker} setMarkerList = {setMarkerList} getRecipesInView = {getRecipesInView} favs = {favList}/>
+        < Sidebar setMarkerList = {setMarkerList} favs = {favList} likes = {likedList}/>
 
 
         <TileLayer
