@@ -14,6 +14,7 @@ import WelcomePage from "./pages/WelcomePage";
 import PasswordReset from './pages/PasswordReset';
 import EmailVerification from './pages/EmailVerfied';
 import './App.css';
+const path = require('path');
 
 
 const rootElement = document.getElementById("root");

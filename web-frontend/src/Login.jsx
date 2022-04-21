@@ -47,7 +47,7 @@ export default function App() {
         setMessage(res['error']);
   
       else
-        window.location.href = "/landing";
+        window.location.href = buildPath("/landing");
     }
     catch(e)
     {
