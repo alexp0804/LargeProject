@@ -123,6 +123,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // Setting up Express and cors.
 const app = express();
 app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 
 // Cloudinary set up
