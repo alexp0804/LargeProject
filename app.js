@@ -219,10 +219,15 @@ app.post('/api/register/:platform', async (req, res) =>
     let platform = req.params.platform;
 
     const usernameTaken = await db.collection(userCol).findOne( { username: username } );
+    const emailTaken = await db.collection(recipeCol).findOne( { email: email } );
 
     // If there's a result the username is taken.
     if (usernameTaken != null)
         return res.status(500).json( { error: "Username taken." } );
+    
+    if (emailTaken != null)
+        return res.status(500).json( { error: "Email taken." } );
+    
 
     let verifyLink = "hostingLink/api/verify/usercode/username".replace("hostingLink", baseURL).replace("usercode", userCode).replace("username", username);
 
@@ -302,13 +307,13 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
 
 
 // Password Reset Section
-app.post('/api/getResetCode', auth, async (req, res) =>
+app.post('/api/getResetCode', async (req, res) =>
 {
-    const { userID, email } = req.body;
+    const { email } = req.body;
     const db = client.db();
 
     // Check that email is valid
-    const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
+    const valid = await db.collection(userCol).findOne( { email: email } );
 
     if (!valid)
         return res.status(500).json( { error: "Invalid email address." } );
@@ -403,6 +408,18 @@ app.post('/api/editUser', auth, async (req, res) =>
     // We okay
     res.json( { newField: newValue, error: "" } );
 });
+
+app.post('/api/getProfilePicByUser', auth, async (req, res) => {
+    const {userID} = req.body;
+    const db = client.db();
+
+    let user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    if (!user)
+        return res.status(404).json( { error:"User not found" } );
+
+    res.json( { pic: user.profilePic, error: "" } );
+})
 
 // GET USER FAVORITE(S)
 app.post('/api/getFavorites', auth, async (req, res) =>
