@@ -12,6 +12,7 @@ const OnBoardScreen = ({navigation}) => {
           <Image
             style={{
               width: "100%",
+              marginTop: "20%",
               resizeMode: "contain",
             }}
             source={require("../assets/abstract2.png")}

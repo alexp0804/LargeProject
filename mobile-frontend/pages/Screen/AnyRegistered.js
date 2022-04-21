@@ -12,6 +12,7 @@ const AnyRegistered = ({navigation}) => {
           <Image
             style={{
               width: "100%",
+              marginTop: "20%",
               resizeMode: "contain",
             }}
             source={require("../../assets/register.png")}
@@ -42,7 +43,7 @@ const AnyRegistered = ({navigation}) => {
                 color: "grey",
               }}
             >
-              When it comes to a great recipe, you know it when you see it
+              Not already a user? Create an account with us now! 
             </Text>
           </View>
 
