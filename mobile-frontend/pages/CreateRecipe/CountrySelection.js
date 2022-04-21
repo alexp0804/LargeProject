@@ -20,7 +20,6 @@ export default function CountrySelection({route, navigation})
             countrArray.push({label:country.name, value:country.id})
         })
     }
-    console.warn(route.params)
     return(
         <View style={{width:"100%", height:"95%", marginTop:"15%"}}>
             <TouchableOpacity onPress={() => navigation.dispatch(StackActions.replace("Landing", {screen:"Map"}))}>

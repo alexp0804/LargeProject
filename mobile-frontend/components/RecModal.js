@@ -33,7 +33,6 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
                                 headers:{'Content-Type': 'application/json', 'x-access-token': token}})
         let txt = await resp.text()
         let err = JSON.parse(txt)
-        console.warn(err)
     }
 
     async function addToFav()
@@ -43,7 +42,6 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
                                 headers:{'Content-Type': 'application/json', 'x-access-token': token}})
         let txt = await resp.text()
         let err = JSON.parse(txt)
-        console.warn(err)
     }
 
     async function removeFromLikes()

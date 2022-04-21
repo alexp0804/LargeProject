@@ -10,10 +10,8 @@ export default function LikedRecipes({route, navigation})
 {
     var likes = route.params.liked
     var favs = route.params.favs
-    console.log(likes)
     const hashyHash = {}
     const[searchArray, setSearchArray] = useState(route.params.liked)
-    console.warn(likes)
     React.useEffect(() => {
         const nameHeader = navigation.addListener('focus', () => {
             navigation.getParent().setOptions({
@@ -37,29 +35,23 @@ export default function LikedRecipes({route, navigation})
                     hashyHash[rec._id] = rec
                 })
                 
-            console.warn("Getting there")
-            console.warn(text)
-            console.warn(hashyHash)
+
             let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:text}), 
             headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
             let txt = await response.text();
-            console.warn("This WAS working")
-            console.warn(txt);
+
             let recipes = JSON.parse(txt);
             let tempArray = []
-            console.warn("Testing 2.0")
-            console.warn(recipes)
+
 
             recipes.forEach((rec) => {
                 ("This is working")
                     if (rec._id in hashyHash)
                     {
-                        console.warn("Testy Test")
                         tempArray.push(rec)
                     }
             })
-            console.warn("Testing Test test")
-            console.warn(tempArray)
+
             setSearchArray(tempArray)
         }
         catch(error)
@@ -69,7 +61,6 @@ export default function LikedRecipes({route, navigation})
 
 
     }
-      console.warn(favMap)
 
       return (
         <SafeAreaView>

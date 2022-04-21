@@ -7,8 +7,6 @@ import { Ionicons } from '@expo/vector-icons';
 export default function LandingPage({navigation, route})
 {
     const Tab = createBottomTabNavigator();
-    console.warn("Testing 5678")
-    console.warn(route.params)
 
   return(
     <Tab.Navigator screenOptions={({ route }) => ({

@@ -28,7 +28,6 @@ export default function Main ({route, navigation})
    const [favoriteRecipe, setFavoriteRecipe] = useState(false)
    const [openModalShowing, setOpenModalShowing] = useState(false)
 
-   console.warn(route.params)
 
    function mapSettings()
    {
@@ -42,8 +41,6 @@ export default function Main ({route, navigation})
 
    function compareRecipe (id, array, box)
    {
-       console.warn(id)
-       console.warn(array)
        array.forEach((rec) => {
            if (rec._id == id)
            {
@@ -124,7 +121,6 @@ export default function Main ({route, navigation})
 
                     if (newRes.error == null)
                     {
-                        console.warn("Is it favorites?")
                         compareRecipe(res._id, newRes, "favorite")
                     }
                     else
@@ -176,14 +172,12 @@ export default function Main ({route, navigation})
             let response = await fetch(url + 'createRecipe',  {method:'POST', body:JSON.stringify(tmp), 
                                          headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}, query:{token:route.params.token}});
             let txt= await response.text()
-            console.warn(txt)
+
             let res = JSON.parse(txt)
-            console.warn("Testing456")
-            console.warn(res)
+
 
             if (res.error == null)
             {
-                console.warn("testing")
                 let temp = markerArray
                 let temporary= {
                             id:res.recipeID,
@@ -191,7 +185,6 @@ export default function Main ({route, navigation})
                             icon: `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryHash[recipe.country]}.png`
                 }
                 temp.push(temporary)
-                console.warn("testing")
                 setMarkerArray(temp)
                 setOpenModalShowing(true);
                 navigation.setParams({adding:false})
@@ -293,11 +286,8 @@ export default function Main ({route, navigation})
         }
         try
         {
-            console.warn("Is it breaking here")
-            console.warn(filteredArray)
             let tempArray = []
             filteredArray.forEach((recipe) => {
-                console.warn("Testing" + recipe._id)
                 let tmp = {
                     id: recipe._id,
                     position: {lat:[recipe.location.coordinates[0]], lng: [recipe.location.coordinates[1]]},
@@ -313,8 +303,6 @@ export default function Main ({route, navigation})
             console.warn(error.toString())
         }
         
-        console.warn(markerArray)
-        console.warn(filtered)
         setModalVisible(false);
    }
 
@@ -340,7 +328,6 @@ export default function Main ({route, navigation})
           });
       }, [navigation]);
 
-    console.warn(JSON.stringify(route))
 
     async function loadMarkers()
     {
@@ -351,12 +338,9 @@ export default function Main ({route, navigation})
            let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:""}), 
            headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
            let txt = await response.text();
-           console.warn("Testing 123456")
            let recipes = JSON.parse(txt);
-           console.warn(recipes)
 
          recipes.forEach((recipe) => {
-             console.warn(recipe)
             let tmp = {
                 id: recipe._id,
                 position: {lat:[recipe.location.coordinates[1]], lng: [recipe.location.coordinates[0]]},
@@ -365,7 +349,6 @@ export default function Main ({route, navigation})
 
             tempArray.push(tmp);            
         })
-        console.warn(tempArray)
         setMarkerArray(tempArray);
        }
        catch(error)
@@ -382,7 +365,6 @@ export default function Main ({route, navigation})
         setBlur(1)
         setOverAmt(-1)
         setOpenModalShowing(false);
-        console.warn(openModalShowing)
     }
     
     return(

@@ -6,7 +6,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 export default function RecDescription({ route, navigation }) {
   const [value, setValue] = useState("");
-  console.warn(route.params);
 
   return (
     <KeyboardAwareScrollView style={{ width: "100%", height: "95%", marginTop: "15%" }}>
@@ -77,8 +76,6 @@ export default function RecDescription({ route, navigation }) {
             style={{ textAlign: "center" }}
           />
         </TouchableOpacity>
-        {console.warn("Testing123")}
-        {console.warn(route.params.name)}
         <TouchableOpacity
           style={{
             backgroundColor: "black",

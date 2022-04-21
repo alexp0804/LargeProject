@@ -1,5 +1,5 @@
 import React, { useState, Component } from "react";
-import { ScrollView, StyleSheet, View, Image, Text, Dimensions, Modal} from "react-native";
+import { Alerts, ScrollView, StyleSheet, View, Image, Text, Dimensions, Modal, Alert} from "react-native";
 import { AntDesign, Ionicons } from '@expo/vector-icons'; 
 import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
@@ -16,7 +16,6 @@ const url = URL();
 
 export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, isMyRec})
 {
-    console.warn(liked)
     const stdHeaders = {'Content-Type': 'application/json', 'x-access-token': token}
 
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")

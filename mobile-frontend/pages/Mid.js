@@ -6,8 +6,6 @@ import { useState } from 'react';
 export default function Mid({route,navigation})
 {
     const Stack = createNativeStackNavigator();
-    console.warn("Testy test test")
-    console.warn(route.params)
     return(
         <Stack.Navigator children>
             <Stack.Screen name= "Landing" component= {LandingPage} options={{headerShown: false}} initialParams={{id:route.params.id, token:route.params.token, user: route.params.username, pic: route.params.pic, value:route.params.value}}/>

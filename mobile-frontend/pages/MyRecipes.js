@@ -36,10 +36,8 @@ export default function MyRecipes({route, navigation})
             let tempArray = []
 
             recipes.forEach((rec) => {
-                ("This is working")
                     if (rec._id in hashyHash)
                     {
-                        console.warn("Testy Test")
                         tempArray.push(rec)
                     }
             })

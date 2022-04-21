@@ -11,8 +11,6 @@ const url = URL()
 
 export default function AllRecipes({route, navigation})
 {
-    console.warn("Testing 1234")
-    console.warn(route.params.allRecipes)
     var all = route.params.allRecipes
     var likes = route.params.liked
     var favs = route.params.favs
@@ -37,21 +35,14 @@ export default function AllRecipes({route, navigation})
         return nameHeader;
       }, [navigation]);
 
-      console.warn("All Recipies")
-
-      console.warn(route.params.allRecipes)
-
       async function search(text)
       {
         let filteredArray = []
         try
         {    
-            console.warn("Getting there")
-            console.warn(text)
             let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:text}), 
             headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
             let txt = await response.text();
-            console.warn(txt);
             let recipes = JSON.parse(txt);
             if(clickedLike)
             {

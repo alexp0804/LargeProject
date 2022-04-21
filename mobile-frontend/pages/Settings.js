@@ -3,7 +3,6 @@ import { View, Text, SafeAreaView} from "react-native";
 
 export default function Settings ({route, navigation})
 {
-    console.warn(route.params)
     React.useLayoutEffect(() => {
         navigation.getParent().setOptions({
           title: "Settings"

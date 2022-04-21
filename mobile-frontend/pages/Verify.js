@@ -12,12 +12,10 @@ export default function Verify({route, navigation})
     async function doAuth(authCode, navigation)
     {
         let username = route.params.username
-        console.warn(username)
         try
         {
             let response = await fetch(url + 'verify' + '/' + authCode + '/' + username
                                         , {method:'GET', headers:{'Content-Type': 'application/json'}})
-            console.warn(response.status)
             if (response.status != 200)
             {
                 // add error code saying invalid auth code

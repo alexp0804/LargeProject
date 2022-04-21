@@ -29,8 +29,6 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
             base64: true
         });
 
-        console.log(pickerResult)
-
         let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
 
         if (pickerResult.cancelled === true)

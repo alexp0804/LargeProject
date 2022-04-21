@@ -69,8 +69,6 @@ export default function NameRecipe({route, navigation})
               alignSelf: "center",
             }}
             onPress={() => {
-              console.warn("Testing test test");
-              console.warn(value);
               navigation.navigate("RecDescription", { name: value });
             }}
           >

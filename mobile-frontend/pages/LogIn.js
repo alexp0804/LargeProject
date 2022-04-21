@@ -52,10 +52,6 @@ export default function LogIn( { navigation } )
             // If successful, navigate to the landing page with the user info
             else
             {
-                console.warn("TESTING")
-                console.warn(res._id)
-                console.warn(res.username)
-                console.warn(res.token)
                 navigation.dispatch(StackActions.replace("Mid", {
                         id: res._id,
                         username: res.username,
