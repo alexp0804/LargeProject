@@ -9,7 +9,7 @@ import {
 
 import Login from "./Login";
 import Register from "./Register";
-import Landing from "./Landing.jsx";
+import Landing from "./Landing";
 import WelcomePage from "./pages/WelcomePage";
 import PasswordReset from './pages/PasswordReset';
 import EmailVerification from './pages/EmailVerfied';

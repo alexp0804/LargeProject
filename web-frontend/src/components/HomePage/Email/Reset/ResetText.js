@@ -41,7 +41,7 @@ const VerifyPopUp = ({title, active, email, setErrorMsg}) => {
         let response = await fetch(buildPath("api/resetPassword"), {
             method: "POST",
             body: JSON.stringify(payload),
-            headers: {"Content-type": "application/json"}
+            headers: {"Content-type": "application/json", "Access-Control-Allow-Origin":"*"}
         });
 
         let result = JSON.parse(await response.text());
@@ -103,7 +103,7 @@ const ResetText = () => {
         let response = await fetch(buildPath("api/getResetCode"), {
             method: "POST",
             body: JSON.stringify( { email: email } ),
-            headers: { "Content-Type": "application/json"}
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin":"*" }
         });
 
         let res = JSON.parse(await response.text());
