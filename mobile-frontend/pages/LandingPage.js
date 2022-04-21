@@ -21,14 +21,14 @@ export default function LandingPage({navigation, route})
             iconName = focused ? "earth" : "earth-outline";
         }
 
-        return <Ionicons name={iconName} size={size} color={"green"} />;
+        return <Ionicons name={iconName} size={size} color={"black"} />;
     },
 
       tabBarLabel: ({ focused }) => {
         let titleStyle = {
           fontSize: 12,
           fontWeight: focused ? 'bold' : '500',
-          color: focused ? 'green' : 'black',
+          color: focused ? 'brown' : 'black',
         };
         if (route.name === 'Profile') {
           return <Text style={titleStyle}>Profile</Text>;
