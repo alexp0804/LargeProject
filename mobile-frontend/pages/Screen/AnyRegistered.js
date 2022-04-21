@@ -5,7 +5,7 @@ import { PrimaryButton, SecondaryButton } from '../../components/Button';
 
 
 
-const anyRegistered = ({navigation}) => {
+const AnyRegistered = ({navigation}) => {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View>
@@ -89,4 +89,4 @@ const style = StyleSheet.create ({
      
 });
 
-export default anyRegistered;
+export default AnyRegistered;
