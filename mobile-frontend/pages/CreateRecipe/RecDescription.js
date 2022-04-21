@@ -2,13 +2,14 @@ import React, {useState} from 'react'
 import { ScrollView, TouchableOpacity, Text, TextInput, View, Image, StyleSheet } from 'react-native'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/routers'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function RecDescription({ route, navigation }) {
   const [value, setValue] = useState("");
   console.warn(route.params);
 
   return (
-    <ScrollView style={{ width: "100%", height: "95%", marginTop: "15%" }}>
+    <KeyboardAwareScrollView style={{ width: "100%", height: "95%", marginTop: "15%" }}>
       <TouchableOpacity
         onPress={() =>
           navigation.dispatch(
@@ -101,6 +102,6 @@ export default function RecDescription({ route, navigation }) {
           />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
