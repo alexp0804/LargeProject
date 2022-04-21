@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { ScrollView, TouchableOpacity, Text, TextInput, View } from 'react-native'
+import { ScrollView, TouchableOpacity, Text, TextInput, View, Image } from 'react-native'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/routers';
 import * as ImagePicker from 'expo-image-picker'
@@ -66,29 +66,37 @@ export default function Pic({route, navigation})
             <TouchableOpacity onPress={closeNav}>
             <Feather name="x" size={28} color="black"/>
             </TouchableOpacity>
+            <Image
+            style={{
+              width: "80%",
+              marginTop: ".5%",
+              left: 10,
+              resizeMode: "contain",
+            }}
+            source={require("../../assets/pic.png")}
+          ></Image>
             <Text style={{textAlign:"center", paddingTop:"5%", paddingBottom:"10%", fontWeight:"bold", fontSize:30}}>
                 Almost finished!
             </Text>
-            <Text style={{textAlign:"center", paddingTop:"5%", paddingBottom:"10%", fontWeight:"bold", fontSize:20}}>
-                As easy as:{"\n"}
-                Upload a picture.{"\n"}
-                Hit the Check Mark.{"\n"}
-                Tap anywhere on the map.
+            <Text style={{textAlign:"center", paddingTop:"1%", paddingBottom:"10%", fontWeight:"bold", fontSize:20}}>
+                1. Upload a picture.{"\n"}
+                2. Hit the Check Mark.{"\n"}
+                3. Drop the pin on the map.
             </Text>
             <TouchableOpacity
-                activeOpacity= {0.5} onPress={openImagePickerAsync} style= {{width: "60%", padding:"3%", backgroundColor: "green", 
+                activeOpacity= {0.5} onPress={openImagePickerAsync} style= {{width: "60%", padding:"3%", backgroundColor: "black", 
                 borderRadius: 10, shadowOpacity: ".2", alignSelf: "center", marginTop:"3%"}} >
-                <Text style={{textAlign:"center", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
-                    Click Here to Upload Photo
+                <Text style={{textAlign:"center", padding: "3%", fontSize:20, color:"white", fontFamily:"Arial", fontWeight:"500"}}>
+                    Upload Photo
                 </Text>
             </TouchableOpacity>
-            <View style={{flexDirection:"row", marginTop:"25%", alignSelf:"center"}}>
-                <TouchableOpacity style={{ backgroundColor:"#addfad", width:"25%", borderRadius:7,  alignSelf:"center"}} 
+            <View style={{flexDirection:"row", marginTop:"20%", alignSelf:"center"}}>
+                <TouchableOpacity style={{ backgroundColor:"black", width:"25%", borderRadius:7,  alignSelf:"center"}} 
                 onPress={() => navigation.navigate("CountrySelection" , {name:route.params.name, desc:route.params.desc, 
                                                                          ingredients:route.params.ingredients, instructions:route.params.instructions, country:route.params.country})}>
                     <Ionicons name="arrow-back" size={34} color="white" style={{textAlign:"center"}} />
                 </TouchableOpacity>
-                <TouchableOpacity style={{backgroundColor:"#addfad",  width:"25%", borderRadius:7, marginLeft:"10%", alignSelf:"center"}} onPress={backToMap}>
+                <TouchableOpacity style={{backgroundColor:"black",  width:"25%", borderRadius:7, marginLeft:"10%", alignSelf:"center"}} onPress={backToMap}>
                     <Ionicons name="checkmark-done-sharp" size={34} color="white" style={{textAlign:"center"}}/>
                 </TouchableOpacity>
             </View>
