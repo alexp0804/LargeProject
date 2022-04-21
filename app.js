@@ -955,6 +955,51 @@ function haversine(a, b)
     return 6371e3 * 2 * Math.atan2(Math.sqrt(t), Math.sqrt(1 - t)) / 1000;
 }
 
+app.post('/api/getComments', auth, async (req, res) => 
+{
+    const { recipeID } = req.body;
+    const db = client.db();
+
+    // Find recipe
+    let recipe = await db.collection(recipeCol).findOne( { _id: ObjectId(recipeID) } );
+
+    // No recipe with this id
+    if (!recipe)
+        return res.status(404).json( { error: "Recipe not found." } );
+        
+    console.log(recipe.comments); 
+    res.send(recipe.comments);
+});
+
+app.post('/api/addComment', auth, async (req, res) =>
+{
+    const { recipeID, userID, commentText } = req.body;
+    const db = client.db();
+    
+    // Construct new comment
+    let comment = {
+        user: ObjectId(userID),
+        text: commentText
+    };
+
+    // Find recipe, append comment onto its comments array
+    try 
+    {
+        db.collection(recipeCol).updateOne(
+            { _id: ObjectId(recipeID) },
+            { $push: { comments: {
+                user: ObjectId(userID),
+                text: commentText
+            } } }
+        );
+    }
+    catch (e)
+    {
+        return res.status(500).json( { error: e } );
+    }
+
+    res.json( emptyErr );
+});
 
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int
