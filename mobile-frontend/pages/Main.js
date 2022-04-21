@@ -318,16 +318,20 @@ export default function Main ({route, navigation})
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
-                <TouchableOpacity onPress={() => addRecipeNav()} style={{borderColor:"blue", borderWidth:2}}>
+              <View style={{marginLeft:"7%"}}>
+                <TouchableOpacity onPress={() => addRecipeNav()}>
                   <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
+              </View>
           ),
         });
         navigation.setOptions({
             headerRight: () => (
-              <TouchableOpacity>
-                  <Feather name="menu" size={24} color="black" onPress={() => mapSettings()}/>
-              </TouchableOpacity>
+                <View style={{marginRight:"7%"}}>
+                <TouchableOpacity onPress={() => addRecipeNav()}>
+                  <Feather name="menu" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
             ),
           });
       }, [navigation]);

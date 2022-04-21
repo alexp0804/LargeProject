@@ -163,7 +163,9 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         padding:15,
         alignItems:'center',
-        alignSelf:'center'
+        alignSelf:'center',
+        position:"absolute",
+        zIndex:20
     },
     scroll: {
         width:"100%",
