@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { ScrollView, TouchableOpacity, Text, TextInput, View, Image } from 'react-native'
+import { StyleSheet, ScrollView, TouchableOpacity, Text, TextInput, View, Image } from 'react-native'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/routers';
 import * as ImagePicker from 'expo-image-picker'
@@ -87,7 +87,15 @@ export default function Pic({route, navigation})
                     Upload Photo
                 </Text>
             </TouchableOpacity>
-            <View style={{flexDirection:"row", marginTop:"20%", alignSelf:"center"}}>
+            <View style = {style.indicatorContainer}>
+                <View style = {style.indicator}></View>
+                <View style = {style.indicator}></View>
+                <View style = {style.indicator}></View>
+                <View style = {style.indicator}></View>
+                <View style = {style.indicator}></View>
+                <View style = {style.currentIndicator}></View>
+            </View>
+            <View style={{flexDirection:"row", marginBottom:"20%", marginTop:"2%",alignSelf:"center"}}>
                 <TouchableOpacity style={{ backgroundColor:"black", width:"25%", borderRadius:7,  alignSelf:"center"}} 
                 onPress={() => navigation.navigate("CountrySelection" , {name:route.params.name, desc:route.params.desc, 
                                                                          ingredients:route.params.ingredients, instructions:route.params.instructions, country:route.params.country})}>
@@ -100,3 +108,33 @@ export default function Pic({route, navigation})
         </ScrollView>
     )
 }
+
+const style = StyleSheet.create ({
+    textContainer: {
+        flex: 1, 
+        paddingHorizontal: 50, 
+        justifyContent: 'space-between',
+        paddingBottom: 40,
+    },
+    indicatorContainer: {
+        height: 50,
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      currentIndicator: {
+        height: 12,
+        width: 30,
+        borderRadius: 10,
+        backgroundColor: '#ff5677',
+        marginHorizontal: 5,
+      },
+      indicator: {
+        height: 12,
+        width: 12,
+        borderRadius: 6,
+        backgroundColor: 'grey',
+        marginHorizontal: 5,
+      },   
+  });

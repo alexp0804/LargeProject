@@ -290,7 +290,7 @@ export default function Main ({route, navigation})
             filteredArray.forEach((recipe) => {
                 let tmp = {
                     id: recipe._id,
-                    position: {lat:[recipe.location.coordinates[0]], lng: [recipe.location.coordinates[1]]},
+                    position: {lat:[recipe.location.coordinates[1]], lng: [recipe.location.coordinates[0]]},
                     icon: `https://res.cloudinary.com/deks041ua/image/upload/v1650347912/flags/${countryHash[recipe.country]}.png`
                 }
 
