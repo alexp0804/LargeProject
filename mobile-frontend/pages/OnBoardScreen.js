@@ -1,3 +1,4 @@
+import { StackActions } from '@react-navigation/routers';
 import React from 'react'
 import {Text, StyleSheet, View, Image} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -45,7 +46,7 @@ const OnBoardScreen = ({navigation}) => {
               <View style = {style.indicator}></View>
           </View>
 
-              <PrimaryButton onPress={()=>navigation.navigate('AnyRegistered')} title = "Get Started"> </PrimaryButton>
+              <PrimaryButton onPress={()=>navigation.dispatch(StackActions.replace('AnyRegistered'))} title = "Get Started"> </PrimaryButton>
               
         </View>
       </SafeAreaView>

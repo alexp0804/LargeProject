@@ -1,3 +1,4 @@
+import { StackActions } from '@react-navigation/routers';
 import React from 'react'
 import {Text, StyleSheet, View, Image} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,7 +24,7 @@ const AnyRegistered = ({navigation}) => {
           <View>
             
 
-            <PrimaryButton onPress={()=>navigation.navigate('Log In')} title = "Log in"> </PrimaryButton>
+            <PrimaryButton onPress={()=>navigation.dispatch(StackActions.replace('Log In'))} title = "Log in"> </PrimaryButton>
 
             <Text> 
 
@@ -32,7 +33,7 @@ const AnyRegistered = ({navigation}) => {
             </Text>
 
 
-            <SecondaryButton onPress={()=>navigation.navigate('Sign Up')} title = "Create Account"> </SecondaryButton>
+            <SecondaryButton onPress={()=>navigation.dispatch(StackActions.replace('Sign Up'))} title = "Create Account"> </SecondaryButton>
             
 
             <Text
