@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import {Button, TouchableOpacity, Linking, Keyboard, ScrollView} from 'react-native';
+import {Button, TouchableOpacity, Linking, Keyboard, ScrollView, StyleSheet, Image} from 'react-native';
 import { ThemeProvider, SafeAreaView, Text, View, TextInput} from 'react-native-picasso';
 import Input from '../components/Input';
 import URL from '../components/URL';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const url = URL();
 
@@ -63,36 +64,56 @@ export default function SignUpScreen({navigation}) {
 
 
   return (
-      <SafeAreaView className="flex-1">
-        <ScrollView>
-          <View className = "mx-md my-xxl p-lg" style= {{marginTop: "25%"}}>
-            <Text className = "align-center size-xxl weight-bold">
-              Sign Up
-            </Text>
+      <SafeAreaView className="flex-1" style={{ backgroundColor: "white" }}>
+        <KeyboardAwareScrollView>
+          
+
+
+          <View>
+
+            <Image
+              style={{
+                width: "70%",
+                resizeMode: "contain",
+                left: 50,
+                marginTop: -10
+              }}
+              source={require("../assets/signup.png")}
+            ></Image>
           </View>
-          <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
-          <Ionicons name="md-person-outline" size={24} color="black" style= {{paddingTop: "3.5%"}} />
+
+          <View >
+          <Text
+              style={{ marginTop: -30, marginBottom: 20, fontSize: 32, fontWeight: "bold", textAlign: "center" }}
+            >
+              Sign up
+            </Text>
+           
+          </View>
+
+
+          <View style={styles.inputContainer}>
+          <Ionicons name="md-person-outline" size={24} color="black" style= {{paddingTop: ".5%"}} />
             <Input placeholder= "Username" value= {user} 
                   setValue= {setUser} />
           </View>
-          <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
-          <Ionicons name="mail-outline" size={24} color="black" style= {{paddingTop: "3.5%"}} />
-            <Input placeholder= "Your email" value= {email} 
+          <View style={styles.inputContainer}>
+          <Ionicons name="mail-outline" size={24} color="black" style= {{paddingTop: ".5%"}} />
+            <Input placeholder= "Email" value= {email} 
                   setValue= {setEmail} />
           </View>
-          <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
-            <Feather name="unlock" size={24} color="black" style= {{paddingTop:"3%"}}/>
+          <View style={styles.inputContainer}>
+            <Feather name="unlock" size={24} color="black" style= {{paddingTop:".5%"}}/>
             <Input placeholder= "Password" value= {password} 
                   setValue= {setPassword} secure= {true}/>
           </View>
-          <View style= {{marginLeft: "15%", marginRight: "15%", flexDirection: "row", borderColor: "gray", borderBottomWidth: 2}}>
-            <Feather name="lock" size={24} color="black" style= {{paddingTop: "3%"}}/>
+          <View style={styles.inputContainer}>
+            <Feather name="lock" size={24} color="black" style= {{paddingTop: ".5%"}}/>
             <Input placeholder= "Confirm Password" value= {confPass} 
                   setValue= {setConf} secure= {true}/>
           </View>
           <View className= "pt-lg">
-            <TouchableOpacity activeOpacity= {0.5} style= {{width: "30%", padding:"3%", backgroundColor: "blue", alignSelf: "center", 
-            borderRadius: 10, shadowOpacity: ".2"}} onPress={doSignUp.bind(this, user, email, password, confPass, setEmail, setPassword, setConf, setUser, navigation)}>
+            <TouchableOpacity activeOpacity= {0.5} style={styles.loginButton} onPress={doSignUp.bind(this, user, email, password, confPass, setEmail, setPassword, setConf, setUser, navigation)}>
               <Text className= "align-center" style= {{color: "white", fontSize: 16, fontWeight: "500"}}>
                 Sign Up
               </Text>
@@ -101,7 +122,35 @@ export default function SignUpScreen({navigation}) {
               {error}
             </Text>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  loginButton: {
+    padding: "3.5%",
+    backgroundColor: "#a1483a",
+    marginTop: -10,
+    borderRadius: 10,
+    width: 200,
+    alignSelf: "center",
+  },
+  icons: {
+      alignContent: 'center',
+      opacity: 0.5,
+  },
+  inputContainer: {
+      flex: 1,
+      marginLeft: 50, 
+      marginBottom: 20,
+      height: 45,
+      width: 290,
+      borderRadius: 20,
+      flexDirection: 'row',
+      backgroundColor: "#f8f5f3",
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingBottom: -10
+    }
+});
