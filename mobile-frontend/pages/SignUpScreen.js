@@ -119,6 +119,16 @@ export default function SignUpScreen({navigation}) {
             <Text className= "align-center" style= {{color:"red", fontSize: 20, fontWeight:"700", paddingTop: "20%"}}>
               {error}
             </Text>
+            {/* Login Button */}
+            <View>
+              <Text
+                className="align-center"
+                onPress={() => navigation.navigate("Log In")}
+                style={{ fontSize: 18, textDecorationLine: "underline", marginTop: "-10%"}}
+              >
+                Already have an account? Log in here!
+              </Text>
+            </View>
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
