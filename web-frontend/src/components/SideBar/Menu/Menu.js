@@ -3,9 +3,7 @@ import MenuLink from './MenuLink'
 import styled from 'styled-components'
 import Modal from 'react-bootstrap/Modal'
 import { useState } from 'react';
-import Featured from './FeaturedModal';
-import Bookmarks from './BookmarksModal';
-import MyRecipes from './MyRecipesModal';
+import AddRecipe from './AddRecipeFromSideBar'
 import Search2 from './SearchBar2';
 import CustomRecipePopupModal from './CustomRecipePopupModal'
 
@@ -50,12 +48,12 @@ const Menu = (props) => {
 
         <Container>
 
-            < Search2 / > 
+            < Search2 closeSideBar = {props.closeSideBar} setMarkerList = {props.setMarkerList} / > 
             <CustomRecipePopupModal closeSideBar = {props.closeSideBar} hashMap = {props.likes} setMarkerList = {props.setMarkerList} title="Featured Recipes"/>
             <CustomRecipePopupModal closeSideBar = {props.closeSideBar} hashMap = {props.likes} setMarkerList = {props.setMarkerList} title="Liked Recipes"/>
             <CustomRecipePopupModal closeSideBar = {props.closeSideBar} hashMap = {props.favs} setMarkerList = {props.setMarkerList} title="Bookmarks"/>
-            <Bookmarks title="Add Recipe"/>
-            <MenuLink title="Pick for Me" icon={'cog'} setMarkerList = {props.setMarkerList} />
+            <AddRecipe closeSideBar = {props.closeSideBar} setAddingRecipe = {props.setAddingRecipe}  title="Add Recipe"/>
+            <MenuLink closeSideBar = {props.closeSideBar} title="Pick for Me" icon={'cog'} setMarkerList = {props.setMarkerList} />
         </Container>
     )
 }

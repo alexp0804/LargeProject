@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button, Offcanvas, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import SidebarContent from './SideBar/SidebarContents';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
-import AddRecipe from './SideBar/Menu/AddRecipe';
+// import AddRecipe from './SideBar/Menu/AddRecipe';
+import AddRecipe from './SideBar/Menu/testAddRecipe.js';
 import {useMap} from 'react-leaflet';
 //import Bookmarks from './SideBar/Menu/BookmarksModal';
 import BookMarks from './SideBar/Menu/Bookmarked.js'
@@ -36,8 +37,6 @@ function OffCanvasExample(props) {
         userID: JSON.parse(window.localStorage.getItem('userObject'))['_id']
       });
 
-    console.log(jsonPayLoad)
-
 
     try 
     {
@@ -61,7 +60,6 @@ function OffCanvasExample(props) {
             let x = res[0]['location']['coordinates'][1]
             let y = res[0]['location']['coordinates'][0]
 
-            console.log([x,y])
             mappy.setView(mappy.getCenter(), 1)
         }
 
@@ -72,8 +70,8 @@ function OffCanvasExample(props) {
     }
 
 
-    return;
-};
+
+    };
 
 
 
@@ -91,6 +89,7 @@ function OffCanvasExample(props) {
             setMarkerList = {props.setMarkerList}
             recipe = {recipe}
             setArray = {setArray}
+            handleClose = {handleClose}
             />
         );
     }
@@ -139,9 +138,6 @@ const Sidebar = (props) =>
   ];
 
   let mappy = useMap();
-  console.log("favs")
-  console.log(props.favs)
-
 
 
     return (
@@ -152,9 +148,9 @@ const Sidebar = (props) =>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <AddRecipe title="Add Recipes"/>
+                <AddRecipe setAddingRecipe = {props.setAddingRecipe} title="Add Recipes"/>
               </Nav>
-                <BookMarks title="Bookmarks" favs = {props.favs}/>      
+                <BookMarks title="Bookmarks" hashMap = {props.favs} setMarkerList = {props.setMarkerList}/>      
               <Nav>
                 <OffCanvasExample placement={'end'} name="My Recipes" setMarkerList = {props.setMarkerList} />
                 <Nav.Link eventKey={2} href="./home">
@@ -171,7 +167,7 @@ const Sidebar = (props) =>
             </Offcanvas.Header>
             <Offcanvas.Body>
 
-              <SidebarContent closeSideBar = {handleClose} favs = {props.favs} likes = {props.likes} setMarkerList = {props.setMarkerList}/>
+              <SidebarContent setAddingRecipe = {props.setAddingRecipe} closeSideBar = {handleClose} favs = {props.favs} likes = {props.likes} setMarkerList = {props.setMarkerList}/>
 
 
             </Offcanvas.Body>

@@ -5,6 +5,7 @@ import countryPosition from "../data/CountriesUpdated.json"
 import Sidebar from './Sidebar';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipesMap';
 import { useMemo } from 'react';
+import DraggableMarker from './DragPin.js'
 
 
 function importAll(r) {
@@ -32,13 +33,13 @@ const MappyMap = (props) =>
   const [favList, setFavList] = useState([]);
   const [likedList, setLikedList] = useState([]);
 
+  const [addingRecipe, setAddingRecipe] = useState(false);
+
 
   const lower = countryPosition.id;
   let flaggy = true;
 
   let mappy= useMap();
-  
-  let counter = 0;
 
   const cry = useMapEvents({dragend(e){
       let bounds = mappy.getBounds()
@@ -47,7 +48,6 @@ const MappyMap = (props) =>
       getRecipesInView([northEast['lng'], northEast['lat']], [southWest['lng'], southWest['lat']] );
 
    }, });
-
 
 
   const getLikes = async () =>
@@ -142,8 +142,6 @@ const MappyMap = (props) =>
 
           let res = JSON.parse(await response.text());
 
-          console.log(res);
-
         if (flaggy)
         {
             await new Promise(resolve => setTimeout(resolve,1500));
@@ -153,15 +151,13 @@ const MappyMap = (props) =>
         // if we haven't loaded in yet
         if (!props.wait)
         {
-            await new Promise(resolve => setTimeout(resolve,1500))
+            await new Promise(resolve => setTimeout(resolve,1000))
             props.setAlreadyLoaded(true);
-            console.log("WAITING")
+
         }
       
         setMarkerList(res);
               
-
-
 
       }
       catch(e)
@@ -202,25 +198,31 @@ const MappyMap = (props) =>
       </Marker>);
   }
 
-  const eventHandlers = useMemo(() => ({dragend(){console.log('dragged')},  }), [],);
 
   const flags = lower + '.png'
 
-    
+
+    function renderTheMarkers()
+    {
+        if (addingRecipe) 
+            return <DraggableMarker setAddingRecipe = {setAddingRecipe} />
+        else
+            return markerList.map(createMarker);
+    }
+  
     return (
 
 
       <>
 
-        < Sidebar setMarkerList = {setMarkerList} favs = {favList} likes = {likedList}/>
+        < Sidebar setAddingRecipe = {setAddingRecipe} setMarkerList = {setMarkerList} favs = {favList} likes = {likedList}/>
 
 
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-    
-        {markerList.map(createMarker)}
+        {renderTheMarkers()}
 
         </>
       

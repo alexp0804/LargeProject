@@ -23,7 +23,7 @@ const SidebarContent = (props) => {
     return (
         <Container>
             <Profile />
-            <Menu closeSideBar = {props.closeSideBar} favs = {props.favs} likes = {props.likes} setMarkerList = {props.setMarkerList}/>
+            <Menu setAddingRecipe = {props.setAddingRecipe} closeSideBar = {props.closeSideBar} favs = {props.favs} likes = {props.likes} setMarkerList = {props.setMarkerList}/>
         </Container>
     )
 }

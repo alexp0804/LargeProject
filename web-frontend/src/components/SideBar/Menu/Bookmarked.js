@@ -9,6 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import image from '../../../assets/images/milkshake.jpg'
 import { Modal} from 'react-bootstrap'
 import styled from 'styled-components'
+import {useMap} from 'react-leaflet'
 
 const Container = styled.div`
     border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
@@ -25,21 +26,35 @@ const Container = styled.div`
 `
 
 
-const BookMarks = (props) => {
+const CustomRecipePopupModal = (props) => {
 
     const [lgShow, setLgShow] = useState(false);
   const { post } = props;
+  
+  let mappy = useMap();
+
+
 
 
   function createCard(recipe)
   {
+    function moveToCard()
+    {
+        let x = recipe['location']['coordinates'][1]
+        let y = recipe['location']['coordinates'][0]
+        mappy.panTo([x,y]);
+        mappy.setZoom(12);
+        props.setMarkerList([recipe]);
+        setLgShow(false)
+    }
+
     let picture = recipe.pic
 
     if (picture == null || picture == "")
       picture = "https://image.shutterstock.com/image-vector/picture-vector-icon-no-image-260nw-1350441335.jpg"
       return(
-        <CardActionArea component="a" href="#">
-    <Card sx={{ display: 'flex', marginBottom: '2%' }}>
+        <CardActionArea component="" href="" onClick = {moveToCard} sx = {{ marginBottom: '2%'}}>
+    <Card sx={{ display: 'flex' }}>
     <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' , justifyContent: 'center'}} >
       <Typography component="h2" variant="h5">
         {recipe.name}
@@ -65,7 +80,7 @@ const BookMarks = (props) => {
   }
   let x = [];
 
-  props.favs.forEach(function(key, value){x.push(key);})
+  props.hashMap.forEach(function(key, value){x.push(key);})
 
   return (
       <>
@@ -77,7 +92,7 @@ const BookMarks = (props) => {
     aria-labelledby="example-modal-sizes-title-lg"
   >
     <Modal.Header closeButton>
-      <Modal.Title id="example-modal-sizes-title-lg"> Bookmarks: </Modal.Title>
+      <Modal.Title id="example-modal-sizes-title-lg"> {props.title}: </Modal.Title>
     </Modal.Header>
     <Modal.Body>
     <Grid item xs={12} md={6}>
@@ -89,10 +104,10 @@ const BookMarks = (props) => {
         </Modal>
 
         <Container onClick={() => setLgShow(true)} active={props.active}  >
-          {'Bookmarks'}
+        {props.title}
         </Container>
     </>
   );
 }
 
-export default BookMarks;
+export default CustomRecipePopupModal;

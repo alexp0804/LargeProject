@@ -141,7 +141,7 @@ export default function RecipeReviewCard(props) {
                 className = "row"
               >
 
-            <EditRecipe recipe = {recipe}/>
+            <EditRecipe recipe = {recipe} handleClose = {props.handleClose}/>
             <button className = "btn btn-danger" onClick = {() => deleteRecipe()}> 
                 <FontAwesomeIcon icon={faTrash} />
             </button>

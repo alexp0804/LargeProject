@@ -7,6 +7,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import SearchIcon from '@mui/icons-material/Search';
+import {useMap} from 'react-leaflet'
 import IconButton from '@mui/material/IconButton';
 
 const Container = styled.div`
@@ -42,8 +43,26 @@ font-weight: 300;
 color: ${props => props.active ? props.theme.activeMenu : "#AAA5A5"};
 `
 
-const Search2 = ({ title, active, icon }) => {
+const Search2 = ({ title, active, ...props }) => {
 	const [recipes, setRecipes] = useState([]);
+
+    let x;
+
+    let mappy = useMap();
+    const hitSearch = () =>
+    {
+        if (recipes.length > 0)
+        {
+            let x = recipes[0].location.coordinates[1]
+            let y = recipes[0].location.coordinates[0]
+            console.log(recipes[0])
+            mappy.panTo([x, y])
+            mappy.setZoom(12);
+            props.setMarkerList([recipes[0]])
+            props.closeSideBar(); 
+        }
+
+    }
 
 	async function searchRecipes(inputValue) {
 		const app_name = 'reci-pin';
@@ -66,7 +85,9 @@ const Search2 = ({ title, active, icon }) => {
 			headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
 		});
 
-		setRecipes(JSON.parse(await response.text()));
+        let res = JSON.parse(await response.text())
+        x = res;
+		setRecipes(res);
 	}
 	return (
 		<>
@@ -119,7 +140,7 @@ const Search2 = ({ title, active, icon }) => {
 			);
 		}}
 		/>
-		<IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+		<IconButton type="submit" sx={{ p: '10px' }} aria-label="search" onClick = {hitSearch}>
 		<SearchIcon />
 		</IconButton>
 		</Container>

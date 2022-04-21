@@ -32,9 +32,9 @@ function filterBy(option, country) {
     return option.toLowerCase().indexOf(country.text.toLowerCase()) > -1;
 }
 
-const MyRecipes = ({ title, active, icon }) => {
+const MyRecipes = ({ title, active, ...props }) => {
 
-    const [lgShow, setLgShow] = useState(false);
+    const [lgShow, setLgShow] = useState(props.openAddModal);
     const [countryHook, setCountryHook] = useState();
     const [imageHook, setImage] = useState('');
 

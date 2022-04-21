@@ -11,12 +11,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil } from '@fortawesome/free-solid-svg-icons'
 import { EditText, EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
+import UploadImage from './uploadImage.js'
 
+
+const app_name = 'reci-pin';
+function buildPath(route)
+{
+if (process.env.NODE_ENV === 'production')
+    return 'https://' + app_name + '.herokuapp.com/' + route;
+else
+    return 'http://localhost:5000/' + route;
+}
 const EditRecipe = (props) => {
 
     let x = document.getElementById("closeButtons")
 
     const [lgShow, setLgShow] = useState(false);
+    const [imageHook, setImage] = useState('');
 
     let recipeTitle, ingredients,directions, description, pic;
 
@@ -50,17 +61,14 @@ const EditRecipe = (props) => {
     }
 
     const app_name = 'reci-pin';
-    function buildPath(route)
-    {
-    if (process.env.NODE_ENV === 'production')
-        return 'https://' + app_name + '.herokuapp.com/' + route;
-    else
-        return 'http://localhost:5000/' + route;
-    }
 
-    function changeRecipe()
+
+    async function changeRecipe()
     {
-        let x = [recipeTitle, ingredients, directions, description, pic];
+        
+        await updatePFP();
+        
+        let x = [recipeTitle, ingredients, directions, description, pic['url']];
         let y = ["name", "ingredients", "instructions", "desc", "pic"]
 
         for (let i = 0; i < x.length; i++)
@@ -69,7 +77,39 @@ const EditRecipe = (props) => {
                 continue;
 
             updateRecipe(y[i], x[i]);
+        }
+        setLgShow(false);
+    }
+
+    const updatePFP = async () =>
+    {
+
+        if ( window.localStorage.getItem('pic') != null && window.localStorage.getItem('pic') != "")
+        {
             
+            let jsonPayLoad = JSON.stringify({'pic': window.localStorage.getItem('pic')});
+    
+            console.log(jsonPayLoad);
+            try {
+                // Do not await fetches anymore
+                const response = await fetch(buildPath("api/uploadImage"), {
+                  method: "POST",
+                  body: jsonPayLoad,
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": JSON.parse(
+                      window.localStorage.getItem("userObject")
+                    )["token"],
+                  },
+                });
+          
+                let res = JSON.parse(await response.text());    
+                pic = res;
+      
+              } catch (e) 
+              {
+                console.log(e);
+              }
             
         }
     }
@@ -150,12 +190,21 @@ const EditRecipe = (props) => {
 
               </Row>
 
-                <Form.Label>Preparation Time: </Form.Label>
-              <Form.Select className="w-25" aria-label="Default select example">
-                <option value="1"> 0-30min </option>
-                <option value="2"> 1 - 2 hrs</option>
-                <option value="3"> 2 - 3 hrs </option>
-              </Form.Select>
+              <Row>
+
+                <Col>
+                    <Form.Label>Preparation Time: </Form.Label>
+                    <Form.Select className="w-25" aria-label="Default select example">
+                        <option value="1"> 0-30min </option>
+                        <option value="2"> 1 - 2 hrs</option>
+                        <option value="3"> 2 - 3 hrs </option>
+                    </Form.Select>
+                </Col>
+
+                <Col>
+                    <UploadImage addImage = {setImage} />
+                </Col>
+                </Row>
 
               <Form.Group className="mt-3 mb-3" controlId="formGridAddress2">
                 <Form.Label>Ingredients: </Form.Label>
