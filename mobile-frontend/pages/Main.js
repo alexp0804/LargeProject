@@ -427,6 +427,7 @@ export default function Main ({route, navigation})
                     liked={likeRecipe}
                     onXClick={closeViewModalTest}
                     adding={route.params.adding}
+                    onMap={true}
                 />
             </Modal>
         </SafeAreaView>

@@ -90,6 +90,8 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
     }
     function decideIfLiked(like)
     {
+        console.log('deciding if liked... on card')
+        console.log(like)
         if (like === likeOutline)
         {
             setLikeIcon(likeFill)
@@ -160,6 +162,7 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
                     onXClick={closeModal}
                     changeLike={decideIfLiked}
                     changeFav={decideIfFav}
+                    onMap={false}
                 />
             )
         }
