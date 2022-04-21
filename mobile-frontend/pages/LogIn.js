@@ -83,7 +83,7 @@ export default function LogIn( { navigation } )
               style={{
                 width: "100%",
                 resizeMode: "contain",
-                marginTop: 60
+                marginTop: 120
               }}
               source={require("../assets/Login.png")}
             ></Image>
@@ -92,7 +92,7 @@ export default function LogIn( { navigation } )
           {/* Log In Title */}
           <View style={styles.title}>
           <Text
-              style={{ marginTop: -60, marginBottom: 20, fontSize: 32, fontWeight: "bold", textAlign: "center" }}
+              style={{ marginTop: -80, marginBottom: 10, fontSize: 32, fontWeight: "bold", textAlign: "center" }}
             >
               Log in
             </Text>
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
         marginLeft: 50, 
-        marginBottom: 20,
+        marginBottom: 10,
         height: 60,
         width: 290,
         borderRadius: 20,

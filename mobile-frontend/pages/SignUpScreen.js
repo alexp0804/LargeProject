@@ -76,7 +76,7 @@ export default function SignUpScreen({navigation}) {
                 width: "70%",
                 resizeMode: "contain",
                 left: 50,
-                marginTop: -10
+                marginTop: -30
               }}
               source={require("../assets/signup.png")}
             ></Image>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
       flex: 1,
       marginLeft: 50, 
       marginBottom: 20,
-      height: 45,
+      height: 50,
       width: 290,
       borderRadius: 20,
       flexDirection: 'row',
