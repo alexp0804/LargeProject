@@ -1,6 +1,6 @@
 import SelectInput from '@mui/material/Select/SelectInput';
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
+import { MapContainer, ZoomControl, TileLayer, Marker, Popup} from 'react-leaflet'
 import countryPosition from "../data/CountriesUpdated.json"
 import Sidebar from './Sidebar';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipesMap';
@@ -40,7 +40,7 @@ const MappyMap = () =>
           userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
       });
 
-      try 
+      try
       {
           // returns liked, favorited
           const response = await fetch(buildPath("api/getLikes"), {
@@ -58,9 +58,9 @@ const MappyMap = () =>
           {
             hashy.set(res[i]['_id'], res)
           }
-      
+
           setLikedList(hashy)
-              
+
 
 
 
@@ -77,7 +77,7 @@ const MappyMap = () =>
           userID: JSON.parse(window.localStorage.getItem('userObject'))['_id'],
       });
 
-      try 
+      try
       {
           // returns liked, favorited
           const response = await fetch(buildPath("api/getFavorites"), {
@@ -96,7 +96,7 @@ const MappyMap = () =>
           {
             hashy.set(res[i]['_id'], res)
           }
-      
+
           setFavList(hashy)
 
 
@@ -115,7 +115,7 @@ const MappyMap = () =>
             distance: distances
       });
 
-      try 
+      try
       {
           // returns liked, favorited
           const response = await fetch(buildPath("api/getNearbyRecipes"), {
@@ -130,9 +130,9 @@ const MappyMap = () =>
 
 
         await new Promise(resolve => setTimeout(resolve,1500));
-      
+
         setMarkerList(res);
-              
+
 
 
 
@@ -147,7 +147,7 @@ const MappyMap = () =>
   useEffect(() => {getLikes();}, []);
   useEffect(() => {getFavs();}, []);
 
-  
+
 
   function createMarker(recipe)
   {
@@ -161,10 +161,10 @@ const MappyMap = () =>
           <div>
             <h2>
 
-              < RecipeReviewCard 
+              < RecipeReviewCard
               key = {recipe['_id']}
-              recipe = {recipe} 
-              like= {likedList.get(recipe['_id']) != undefined? true: false} 
+              recipe = {recipe}
+              like= {likedList.get(recipe['_id']) != undefined? true: false}
               fav = {favList.get(recipe['_id']) != undefined? true: false}
               likeMethod = {setLikedList}
               favMethod = {setFavList} />
@@ -176,11 +176,11 @@ const MappyMap = () =>
   }
 
   const flags = lower + '.png'
-  
+
     return (
 
 
-      <MapContainer center={[50.8333, 4]} zoom={6} minZoom={3} >
+      <MapContainer center={[50.8333, 4]} zoom={6} minZoom={3} zoomControl={false} >
 
         < Sidebar createMarker= {createMarker} setMarkerList = {setMarkerList} />
 
@@ -189,7 +189,7 @@ const MappyMap = () =>
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-    
+    	<ZoomControl position="bottomright"/>
         {markerList.map(createMarker)}
       </MapContainer>
     );

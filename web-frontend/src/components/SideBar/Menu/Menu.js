@@ -51,7 +51,7 @@ const Menu = (props) => {
 
         <Container>
 
-            < Search2 handleClose = {props.handleClose} / >
+            < Search2 handleClose = {props.handleClose} createMarker = {props.createMarker}/ >
             <Featured title="Featured Recipes"/>
             <Bookmarks title="Bookmarks"/>
             <MyRecipes title="Add Recipe"/>

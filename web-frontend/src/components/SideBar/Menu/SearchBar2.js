@@ -9,6 +9,7 @@ import match from 'autosuggest-highlight/match';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import {useMap} from 'react-leaflet';
+import l from "leaflet";
 
 const Container = styled.div`
 border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
@@ -100,7 +101,7 @@ const Search2 = (props, { title, active, icon }) => {
 
 				let options = { animate:true, duration:1.2, easeLinearity:0.5 };
 
-				map.flyTo([lng + 4, lat], 6, options);
+				map.flyTo([lng, lat], 10, options);
 
 				props.handleClose();
 			}
