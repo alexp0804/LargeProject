@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native-picasso";
 import URL from './URL';
 
 const url = URL();
-export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, onXClick, changeLike, changeFav, adding})
+export default function RecModal({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, onXClick, changeLike, changeFav, adding, onMap})
 {
     const [favIcon, setFavIcon] = useState(faved ? "heart" : "hearto")
     const [likeIcon, setLikeIcon] = useState(liked ? "ios-thumbs-up-sharp" : "ios-thumbs-up-outline")
@@ -72,32 +72,55 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
 
     function decideIfLiked(like)
     {
+        console.log('deciding....')
+        console.log(like)
+        let tmp = like
         if (like === "ios-thumbs-up-outline")
         {
             setLikeIcon("ios-thumbs-up-sharp")
+            if (onMap)
+            {
+                addToLikes()
+                return
+            }
         }
         else
         {
             setLikeIcon("ios-thumbs-up-outline")
+            if (onMap)
+            {
+                removeFromLikes()
+                return
+            }
         }
-        changeLike()
+        console.log('calling changeLike parent thingy')
+        changeLike(tmp)
     }
     
     function decideIfFav(fav)
     {
+        let tmp = fav
         if (fav === "hearto")
         {
             console.warn("Testing")
             setFavIcon("heart")
-            // setLikeIcon of RecipeCard.js (parent)
+            if (onMap)
+            {
+                addToFav()
+                return
+            }
         }
         else
         {
             console.warn("Testing123")
             setFavIcon("hearto")
-            // setLikeIcon of RecipeCard.js (parent)
+            if (onMap)
+            {
+                removeFromFav()
+                return
+            }
         }
-        changeFav()
+        changeFav(tmp)
     }
 
     function added()
