@@ -7,7 +7,7 @@ import IceCream from "./assets/images/AddressPin.png"
 
 // This function is necessary to deploy both on heroku and localhost.
 // You must use this to get the buildPath of any endpoint you call
-const app_name = 'largeproj';
+const app_name = 'reci-pin';
 function buildPath(route)
 {
     if (process.env.NODE_ENV === 'production')
@@ -19,7 +19,8 @@ function buildPath(route)
 export default function Register() {
   // react hook (useState)
   // [variable that changes, function that changes it]
-  const [message, setMessage] = useState("");
+  const [errorMessage, setBadMessage] = useState("");
+  const [successMessage, setGoodMessage] = useState("");
   let userName, email, password, confirmPassword;
 
   const registerUser = async (event) => {
@@ -27,7 +28,8 @@ export default function Register() {
     event.preventDefault();
 
     if (confirmPassword.value !== password.value) {
-      setMessage("Passwords must match.");
+      setBadMessage("Passwords must match.");
+      setGoodMessage("");
       return;
     }
 
@@ -39,7 +41,6 @@ export default function Register() {
 
     try 
     {
-      // Do not await fetches anymore
       const response = await fetch(buildPath("api/register/web"), {
         method: "POST",
         body: jsonPayLoad,
@@ -47,10 +48,12 @@ export default function Register() {
       });
       let res = JSON.parse(await response.text());
 
-      // to do
-      console.log(res);
-
-      window.location.href = "/";
+      // Registration success
+      if (res.error === "")
+      {
+        setGoodMessage("All good! Check your email to verify your account.");
+        setBadMessage("");
+      }
     } 
     catch (e) 
     {
@@ -86,7 +89,7 @@ export default function Register() {
       </div>
       <div id="" className="p-6 col flex-fill">
         <h1 className="text-center text-dark flex-fill py-5 "> Register </h1>
-        <p className="text-danger text-center">{message}</p>
+        <p className="text-danger text-center">{errorMessage}</p>
         <form className="px-5 flex-fill" onSubmit={registerUser}>
           <div className="input-group flex-fill pb-1">
             <div className="input-group-prepend">
@@ -159,6 +162,8 @@ export default function Register() {
             {" "}
             Register
           </button>
+          <p className="text-success text-center"
+                style={{paddingTop: 10}}>{successMessage}</p>
           <p id="loginText" className="text-dark my-4">
             <a href="./" className="text-dark">
               <u> Already have an account?</u>
