@@ -10,6 +10,7 @@ import CountryHash from '../components/CountryCodes'
 const likeOutline = "ios-thumbs-up-outline",
       likeFill = "ios-thumbs-up";
 
+
 const url = URL();
 
 export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, isMyRec})

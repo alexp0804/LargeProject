@@ -105,6 +105,7 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
             <ImageBackground
                 source={{uri: pic}}
                 style={styles.img}
+                imageStyle={{borderTopLeftRadius:30, borderTopRightRadius: 30}}
             >
                 <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
                     <Feather style={{marginLeft:"2%", marginTop:"2%"}} name="x" size={28} color="black"/>
@@ -170,6 +171,8 @@ const styles = StyleSheet.create({
         marginTop:"3%"
     },
     img: {
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         alignSelf:'center',
         width:407,
         height:200,
@@ -195,6 +198,8 @@ const styles = StyleSheet.create({
     footer: {
         flexDirection:'row',
         alignItems:'center',
+        borderBottomRightRadius:30,
+        borderBottomLeftRadius: 30,
         marginBottom:"-4%",
         backgroundColor: "#e6e6e6",
         width: "109%",

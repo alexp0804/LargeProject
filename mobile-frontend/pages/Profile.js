@@ -18,7 +18,7 @@ export default function Profile ({route, navigation})
     const {id, username} = route.params;
     const [openModalShowing, setOpenModalShowing] = useState(false)
     const [imageURI, setImageURI] = useState(null)
-    const [pfp, setPfp] = useState(route.params.pic)
+    const [pfp, setPfp] = useState((route.params.pic === "" || route.params.pic === null) ? 'https://cdn.discordapp.com/attachments/943310745142185989/966558890403721297/unknown.png' : route.params.pic)
     console.log(pfp)
 
     let openImagePickerAsync = async() =>
@@ -56,8 +56,8 @@ export default function Profile ({route, navigation})
                             }});
 
         let txt = await response.text();
-        console.log(txt)
         let res = JSON.parse(txt);
+        setPfp(res.url)
 
         let response2 = await fetch(url + 'editUser', {
                             method: 'POST',
@@ -67,7 +67,9 @@ export default function Profile ({route, navigation})
                                 'x-access-token': route.params.token
                             }})
         let txt2 = await response2.text();
+        console.log(txt2)
         let res2 = JSON.parse(txt2)
+
         if (res2.error != "")
         {
             alert("An error occured in updated your profile picture")

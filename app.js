@@ -49,7 +49,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Cloudinary set up 
+// Cloudinary set up
 cloudinary.config({
     cloud_name: "deks041ua",
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -234,7 +234,7 @@ app.post('/api/getResetCode', auth, async (req, res) =>
     // Check that email is valid
     const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
 
-    if (!valid) 
+    if (!valid)
         return res.status(500).json( { error: "Invalid email address." } );
 
     const authCode = createAuthCode();
@@ -266,6 +266,21 @@ app.post('/api/getResetCode', auth, async (req, res) =>
     res.json( emptyErr );
 });
 
+app.post('/api/getUserInfo', async (req, res) =>
+{
+    const { userID} = req.body;
+    const db = client.db();
+
+    // Get user
+    const userInfo = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    // Not found
+    if (!userInfo)
+        return res.status(500).json( { error: "Invalid User ID" } );
+	else
+    	res.json( {username: userInfo.username} );
+});
+
 app.post('/api/validateResetCode', async (req, res) =>
 {
     const { userID, givenCode } = req.body;
@@ -275,13 +290,13 @@ app.post('/api/validateResetCode', async (req, res) =>
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
 
     // Not found
-    if (!user) 
+    if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
-    
+
     // Compare given code to one in db
     if (String(user.auth) != String(givenCode))
         return res.status(500).json( { error: "Code does not match." } );
-    
+
     res.json( emptyErr );
 });
 
@@ -292,9 +307,9 @@ app.post('/api/editUser', auth, async (req, res) =>
 
     // Find the user
     const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
-    
+
     // Not found
-    if (!user) 
+    if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
     // Valid field?
@@ -304,7 +319,7 @@ app.post('/api/editUser', auth, async (req, res) =>
     // Check if field is password
     if (newField === "password")
         newValue = hash(newValue);
-    
+
     // Update the value
     await db.collection(userCol).updateOne( { _id: ObjectId(userID) },
                                             { $set: { [newField]: newValue } });
@@ -347,7 +362,7 @@ app.post('/api/getFavorites', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    favs.map(  
+                    favs.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -599,7 +614,7 @@ app.post('/api/getLikes', auth, async (req, res) =>
     }
 
     let result = await Promise.all(
-                    likes.map(  
+                    likes.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
@@ -696,10 +711,10 @@ app.post('/api/getCountryRecipes', auth, async (req, res) =>
 
     if (!found)
         res.status(404).json( { error: "Country not found" } );
-    
+
     // Get the actual recipe object associated with each id
     let result = await Promise.all(
-                    found.recipes.map(  
+                    found.recipes.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
                         )
                     );
