@@ -64,8 +64,8 @@ export default function MyRecipes({route, navigation})
                                     desc={rec.desc}
                                     country={rec.country}
                                     pic={rec.pic}
-                                    ingredients="heheieihf"
-                                    instructions="hehehehe"
+                                    ingredients={rec.ingredients}
+                                    instructions={rec.instructions}
                                     userID={route.params.id}
                                     recID={rec._id}
                                     token={route.params.token}
