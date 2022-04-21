@@ -150,6 +150,8 @@ export default function LogIn( { navigation } )
                 paddingTop: "15%",
                 fontSize: 20,
                 fontWeight: "700",
+                position:"absolute",
+                zIndex:100,
               }}
             >
               {error}
