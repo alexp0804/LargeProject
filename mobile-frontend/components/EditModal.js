@@ -109,13 +109,16 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
             <ImageBackground
                 source={{uri: editPic}}
                 style={styles.img}
+                imageStyle={{borderTopLeftRadius: 30, borderTopRightRadius: 30}}
             >
-                <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
-                    <Feather style={{marginLeft:"2%", marginTop:"2%"}} name="x" size={28} color="black"/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={openImagePickerAsync}activeOpacity={0.5}>
-                    
-                </TouchableOpacity>
+                <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
+                        <Feather style={{marginLeft:"2%", marginTop:"5%"}} name="x" size={28} color="black"/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginLeft: "80%"}}onPress={openImagePickerAsync} activeOpacity={0.5}>
+                        <AntDesign name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
             </ImageBackground>
             <KeyboardAwareScrollView style={styles.scroll}>
                 <Text style={styles.sectionTitles}>
