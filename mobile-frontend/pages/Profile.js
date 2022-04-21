@@ -130,7 +130,7 @@ export default function Profile ({route, navigation})
 
     return(
         <SafeAreaView>
-            <ScrollView style={{width:"100%", height:"100%"}}>
+            <ScrollView style={{width:"100%", height:"100%", backgroundColor: "white"}}>
                 <Modal visible={openModalShowing} animationType="slide" >
                     <EditModal
                         name="Hello!"
