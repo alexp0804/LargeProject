@@ -22,7 +22,7 @@ export default function App() {
       <Stack.Navigator>
        <Stack.Screen name= "Home" component= {OnBoardScreen} options={{headerTransparent:true, title:""}}/>
        <Stack.Screen name= "AnyRegistered" component= {AnyRegistered} options={{headerTransparent:true, headerTitle:""}}/>
-       <Stack.Screen name= "Log In" component= {LogIn} options={{headerShown: false}} />
+       <Stack.Screen name= "Log In" component= {LogIn} options= {{title: "", headerTransparent: true}} />
         <Stack.Screen name= "Mid" component={Mid} options={{headerShown:false}}/>
         <Stack.Screen name= "Sign Up" component = {SignUpScreen} options= {{title: "" , headerTransparent: true}} />
         <Stack.Screen name= "Verify" component= {Verify} options= {{headerShown: false}}/>

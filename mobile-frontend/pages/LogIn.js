@@ -8,6 +8,8 @@ import URL from '../components/URL';
 import {
     TextInput,
   } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 const url = URL();
 
@@ -73,7 +75,7 @@ export default function LogIn( { navigation } )
     }
 
     return (
-      <SafeAreaView className="flex-1" style={{ backgroundColor: "white" }}>
+      <KeyboardAwareScrollView className="flex-1" style={{ backgroundColor: "white" }}>
         <ScrollView>
           <View>
 
@@ -81,7 +83,7 @@ export default function LogIn( { navigation } )
               style={{
                 width: "100%",
                 resizeMode: "contain",
-                marginTop: 60
+                marginTop: 120
               }}
               source={require("../assets/Login.png")}
             ></Image>
@@ -90,7 +92,7 @@ export default function LogIn( { navigation } )
           {/* Log In Title */}
           <View style={styles.title}>
           <Text
-              style={{ marginTop: -60, marginBottom: 20, fontSize: 32, fontWeight: "bold", textAlign: "center" }}
+              style={{ marginTop: -80, marginBottom: 10, fontSize: 32, fontWeight: "bold", textAlign: "center" }}
             >
               Log in
             </Text>
@@ -182,7 +184,7 @@ export default function LogIn( { navigation } )
             </Text>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </KeyboardAwareScrollView>
     );
 }
 
@@ -226,8 +228,6 @@ const styles = StyleSheet.create({
 
     },
     loginButton: {
-        marginLeft: "13%",
-        marginRight: "13%",
         padding: "3.5%",
         backgroundColor: "#a1483a",
         borderRadius: 10,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
         marginLeft: 50, 
-        marginBottom: 20,
+        marginBottom: 10,
         height: 60,
         width: 290,
         borderRadius: 20,

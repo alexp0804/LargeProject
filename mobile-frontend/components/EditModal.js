@@ -2,6 +2,7 @@ import React, { useState, Component } from "react";
 import { Alert, ScrollView, StyleSheet, KeyboardAvoidingView, TextInput, View, Image, Text, ImageBackground, Dimensions} from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-picasso";
+import { AntDesign } from '@expo/vector-icons'; 
 import URL from './URL';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as ImagePicker from 'expo-image-picker'
@@ -108,13 +109,16 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
             <ImageBackground
                 source={{uri: editPic}}
                 style={styles.img}
+                imageStyle={{borderTopLeftRadius: 30, borderTopRightRadius: 30}}
             >
-                <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
-                    <Feather style={{marginLeft:"2%", marginTop:"2%"}} name="x" size={28} color="black"/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={openImagePickerAsync}activeOpacity={0.5}>
-                    
-                </TouchableOpacity>
+                <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity onPress={onXClick} activeOpacity={0.25} borderColor='black' borderWidth="2">
+                        <Feather style={{marginLeft:"2%", marginTop:"5%"}} name="x" size={28} color="black"/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginLeft: "80%"}}onPress={openImagePickerAsync} activeOpacity={0.5}>
+                        <AntDesign name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
             </ImageBackground>
             <KeyboardAwareScrollView style={styles.scroll}>
                 <Text style={styles.sectionTitles}>
@@ -170,13 +174,12 @@ export default function EditModal({name, desc, country, pic, ingredients, instru
 
 const styles = StyleSheet.create({
     main: {
-        borderColor:'black',
-        borderWidth:2,
         marginTop:"25%",
         height:"78%",
         width:"95%",
         margin:20,
         backgroundColor:"white",
+        borderRadius: 30,
         padding:15,
         alignItems:'center',
         alignSelf:'center'
@@ -187,10 +190,12 @@ const styles = StyleSheet.create({
         marginTop:"3%"
     },
     img: {
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         alignSelf:'center',
         width:407,
         height:200,
-        marginTop:"-5%",
+        marginTop:"-4%",
         borderRadius:40
     },
     mainTitle: {

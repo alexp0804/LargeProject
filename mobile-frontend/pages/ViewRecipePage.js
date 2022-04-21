@@ -1,5 +1,4 @@
 import All from './RecipePages/AllRecipes';
-import CustomTab from '../components/CustomTab';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import {View, Text, TouchableOpacity} from 'react-native'
