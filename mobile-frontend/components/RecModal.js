@@ -22,6 +22,7 @@ export default function RecModal({name, desc, country, pic, ingredients, instruc
                                 headers:{'Content-Type': 'application/json', 'x-access-token': token}})
         let txt = await resp.text()
         let ret = JSON.parse(txt)
+        console.log(ret.username)
         setCreatorName(ret.username)
     }
 

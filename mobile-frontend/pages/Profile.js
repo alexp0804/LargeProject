@@ -19,7 +19,6 @@ export default function Profile ({route, navigation})
     const [openModalShowing, setOpenModalShowing] = useState(false)
     const [imageURI, setImageURI] = useState(null)
     const [pfp, setPfp] = useState((route.params.pic === "" || route.params.pic === null) ? 'https://cdn.discordapp.com/attachments/943310745142185989/966558890403721297/unknown.png' : route.params.pic)
-    console.log(pfp)
 
     let openImagePickerAsync = async() =>
     {
@@ -33,8 +32,6 @@ export default function Profile ({route, navigation})
             base64: true
         });
 
-        console.log(pickerResult)
-
         let base64img = `data:image/jpg;base64,${pickerResult.base64}`;
 
         if (pickerResult.cancelled === true)
@@ -46,7 +43,7 @@ export default function Profile ({route, navigation})
 
     async function updatePfp(uri)
     {
-        console.log(imageURI)
+        console.log(uri.length)
         let response = await fetch(url + 'uploadImage', {
                             method: 'POST',
                             body: JSON.stringify( { pic: uri } ), 
@@ -57,7 +54,6 @@ export default function Profile ({route, navigation})
 
         let txt = await response.text();
         let res = JSON.parse(txt);
-        setPfp(res.url)
 
         let response2 = await fetch(url + 'editUser', {
                             method: 'POST',
@@ -67,7 +63,6 @@ export default function Profile ({route, navigation})
                                 'x-access-token': route.params.token
                             }})
         let txt2 = await response2.text();
-        console.log(txt2)
         let res2 = JSON.parse(txt2)
 
         if (res2.error != "")

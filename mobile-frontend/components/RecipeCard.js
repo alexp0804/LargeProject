@@ -14,7 +14,7 @@ const likeOutline = "ios-thumbs-up-outline",
 
 const url = URL();
 
-export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, token, faved, liked, isMyRec})
+export default function RecipeCard({name, desc, country, pic, ingredients, instructions, userID, recID, creID, token, faved, liked, isMyRec})
 {
     console.warn(liked)
     const stdHeaders = {'Content-Type': 'application/json', 'x-access-token': token}
@@ -153,6 +153,7 @@ export default function RecipeCard({name, desc, country, pic, ingredients, instr
                     instructions={instructions}
                     userID={userID}
                     recID={recID}
+                    creID={creID}
                     token={token}
                     faved={faved}
                     liked={liked}
