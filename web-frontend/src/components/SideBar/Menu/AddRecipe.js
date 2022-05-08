@@ -9,6 +9,7 @@ import { useMap} from 'react-leaflet'
 import l from "leaflet";
 import {Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import UploadImage from './uploadImage.js'
 
 
 const Container = styled.div`
@@ -31,10 +32,11 @@ function filterBy(option, country) {
     return option.toLowerCase().indexOf(country.text.toLowerCase()) > -1;
 }
 
-const MyRecipes = ({ title, active, icon }) => {
+const MyRecipes = ({ title, active, ...props }) => {
 
-    const [lgShow, setLgShow] = useState(false);
+    const [lgShow, setLgShow] = useState(props.openAddModal);
     const [countryHook, setCountryHook] = useState();
+    const [imageHook, setImage] = useState('');
 
     let recipeTitle, country, ingredients, directions, description;
     let mappy = useMap();
@@ -46,18 +48,21 @@ const MyRecipes = ({ title, active, icon }) => {
     function insertMarker()
     {
         setLgShow(false)
+
+        //window.localStorage.setItem('pic', imageHook);
   
         let marky =  l.marker(mappy.getCenter(), {draggable: true}).addTo(mappy);
 
-        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
+        let popup = l.popup().setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","", ${marky.getLatLng()["lat"]}, ${marky.getLatLng()["lng"]}, "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)
         marky.bindPopup(popup).openPopup();
 
-        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","${2}", "${marky.getLatLng()["lat"]}", "${marky.getLatLng()["lng"]}", "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
+        marky.on('dragend', function(){marky.openPopup(); popup.setContent(`<div class = "d-flex justify-content-sm-center flex-column"><h3 class = "text-center">Drag and drop</h3><button type = "button" onClick = 'window.myObj.submitRecipe("${countryHook}", "${directions}", "${recipeTitle}", "${ingredients}", "${description}","", ${marky.getLatLng()["lat"]}, ${marky.getLatLng()["lng"]}, "${JSON.parse(localStorage.getItem('userObject'))['_id']}", ${process.env.NODE_ENV === 'production'})' class = "btn btn-secondary text-white"> Add recipe </button></div>`)});
     }
 
     return (
       <>
         <Modal
+          style = {{marginTop: '1.7%'}} 
           size="lg"
           show={lgShow}
           onHide={() => setLgShow(false)}
@@ -94,13 +99,23 @@ const MyRecipes = ({ title, active, icon }) => {
                 </Form.Group>
 
               </Row>
+              <Row>
 
-                <Form.Label>Preparation Time: </Form.Label>
-              <Form.Select className="w-25" aria-label="Default select example">
-                <option value="1"> 0-30min </option>
-                <option value="2"> 1 - 2 hrs</option>
-                <option value="3"> 2 - 3 hrs </option>
-              </Form.Select>
+                <Col>
+                    <Form.Label>Preparation Time: </Form.Label>
+                    <Form.Select className="w-25" aria-label="Default select example">
+                    <option value="1"> 0-30min </option>
+                    <option value="2"> 1 - 2 hrs</option>
+                    <option value="3"> 2 - 3 hrs </option>
+                    </Form.Select>
+                </Col>
+
+                <Col>
+                    <UploadImage addImage = {setImage} />
+                </Col>
+              </Row>
+
+                
 
               <Form.Group className="mt-3 mb-3" controlId="formGridAddress2">
                 <Form.Label>Ingredients: </Form.Label>
@@ -158,14 +173,14 @@ const MyRecipes = ({ title, active, icon }) => {
 
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Notes: </Form.Label>
-                  <FormControl as="textarea" aria-label="With textarea"  type="notes"
-                  placeholder="Don't overcook the red sauce!" 
+                  <FormControl as="textarea" aria-label="With textarea"  type="Summary"
+                  placeholder="Savory red sauce and Meatballs you just can't get enough of!" 
                   onChange = {(e) => description = e.target.value}/>
                 </Form.Group>
               </Row>
 
               <Form.Group className="mb-3" id="formGridCheckbox">
-                <Form.Check type="checkbox" label="Make My Recipe Public" />
+                <Form.Check defaultChecked = {true} type="checkbox" label="Make My Recipe Public" />
               </Form.Group>
 
               <Button variant="primary" type="button" onClick = {insertMarker} >
@@ -175,7 +190,7 @@ const MyRecipes = ({ title, active, icon }) => {
           </Modal.Body>
         </Modal>
 
-        <Container onClick={() => setLgShow(true)} active={active}>
+        <Container onClick={() => setLgShow(true)} active={active}  >
           {title}
         </Container>
       </>

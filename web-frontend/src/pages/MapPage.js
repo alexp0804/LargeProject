@@ -1,24 +1,21 @@
 
 import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
 import MappyMap from '../components/MappyMap';
-import DraggableMarkerExample from '../components/DragPin';
-import EventsExample from '../components/ZoomEvent';
-
-
-// Patrick if you want to test drag icon or pan just type < DraggableMarkerExample / > instead of MappyMap
-// they're already exported into here 
+import { MapContainer} from 'react-leaflet' 
 
 const MapPage = () =>
 {
+    const [center, setCenterMappy] = useState([50.8333, 4])
+    const [alreadyLoaded, setAlreadyLoaded] = useState(false)
     return (
 
       <body>
       
 
       
-
-        <MappyMap /> 
+      <MapContainer center={[50,3]} zoom={6} minZoom={3} >
+        <MappyMap setCenterMappy = {setCenterMappy} setAlreadyLoaded = {setAlreadyLoaded} wait = {alreadyLoaded}/> 
+        </MapContainer>
 
 
       </body>

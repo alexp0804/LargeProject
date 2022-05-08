@@ -31,6 +31,7 @@
     {
         submitRecipe: function(country, directions, recipeTitle, ingredients, desc, picture, coordinateX, coordinateY, id, production)
         {
+            console.log(window.localStorage.getItem('pic'))
             const app_name = 'reci-pin';
             let route = 'https://reci-pin.herokuapp.com/api/createRecipe';
 
@@ -45,7 +46,7 @@
                 let jsonPayLoad = JSON.stringify({
                     "name": recipeTitle,
                     'desc': desc,
-                    'pic': picture,
+                    'pic': window.localStorage.getItem('pic'),
                     'creator': id,
                     'instructions': directions,
                     "ingredients": ingredients,

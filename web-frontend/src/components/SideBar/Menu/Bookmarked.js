@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -7,48 +7,107 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import image from '../../../assets/images/milkshake.jpg'
+import { Modal} from 'react-bootstrap'
+import styled from 'styled-components'
+import {useMap} from 'react-leaflet'
 
-function FeaturedPost(props) {
+const Container = styled.div`
+    border-left: 3px solid ${props => props.active ? props.theme.activeMenu : "transparent"};
+    margin-left: 0%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: 0.2s all ease-in-out;
+
+    &:hover {
+        background-color: rgba(0,0,0,0.1);
+    }
+`
+
+
+const CustomRecipePopupModal = (props) => {
+
+    const [lgShow, setLgShow] = useState(false);
   const { post } = props;
+  
+  let mappy = useMap();
+
+
+
+
+  function createCard(recipe)
+  {
+    function moveToCard()
+    {
+        let x = recipe['location']['coordinates'][1]
+        let y = recipe['location']['coordinates'][0]
+        mappy.panTo([x,y]);
+        mappy.setZoom(12);
+        props.setMarkerList([recipe]);
+        setLgShow(false)
+    }
+
+    let picture = recipe.pic
+
+    if (picture == null || picture == "")
+      picture = "https://image.shutterstock.com/image-vector/picture-vector-icon-no-image-260nw-1350441335.jpg"
+      return(
+        <CardActionArea component="" href="" onClick = {moveToCard} sx = {{ marginBottom: '2%'}}>
+    <Card sx={{ display: 'flex' }}>
+    <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' , justifyContent: 'center'}} >
+      <Typography component="h2" variant="h5">
+        {recipe.name}
+      </Typography>
+      <Typography variant="subtitle1" color="text.secondary">
+        Country of Origin: {recipe.country} 
+      </Typography>
+      <Typography variant="subtitle1" paragraph>
+      {recipe.desc}
+      </Typography>
+      <Typography variant="subtitle1" color="primary">
+      </Typography>
+    </CardContent>
+    <CardMedia
+      component="img"
+      sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+      image={picture}
+      alt="food"
+    />
+  </Card>
+  </CardActionArea>
+      );
+  }
+  let x = [];
+
+  props.hashMap.forEach(function(key, value){x.push(key);})
 
   return (
+      <>
+    <Modal
+    style = {{marginTop: '1.7%'}} 
+    size="lg"
+    show={lgShow}
+    onHide={() => setLgShow(false)}
+    aria-labelledby="example-modal-sizes-title-lg"
+  >
+    <Modal.Header closeButton>
+      <Modal.Title id="example-modal-sizes-title-lg"> {props.title}: </Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
-              Strawberry Milkshake 
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              Country of Origin: United States  
-            </Typography>
-            <Typography variant="subtitle1" paragraph>
-            Creamy, thick, pale pink, just strawberry-strawberry-strawberry — all as it should be. Here's how to make your own.
-            </Typography>
-            <Typography variant="subtitle1" color="primary">
-              Recipe
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            image={image}
-            alt="food"
-          />
-        </Card>
-      </CardActionArea>
+
+          {x.map(createCard)}
+
     </Grid>
+    </Modal.Body>
+        </Modal>
+
+        <Container onClick={() => setLgShow(true)} active={props.active}  >
+        {props.title}
+        </Container>
+    </>
   );
 }
 
-// FeaturedPost.propTypes = {
-//   post: PropTypes.shape({
-//     date: PropTypes.string.isRequired,
-//     description: PropTypes.string.isRequired,
-//     image: PropTypes.string.isRequired,
-//     imageLabel: PropTypes.string.isRequired,
-//     title: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
-
-export default FeaturedPost;
+export default CustomRecipePopupModal;

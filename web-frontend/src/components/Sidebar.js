@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { Button, Offcanvas, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import SidebarContent from './SideBar/SidebarContents';
-import Bookmarks from './SideBar/Menu/BookmarksModal';
 import RecipeReviewCard from './SideBar/Menu/ProfileRecipes';
-import AddRecipe from './SideBar/Menu/AddRecipe';
+// import AddRecipe from './SideBar/Menu/AddRecipe';
+import AddRecipe from './SideBar/Menu/testAddRecipe.js';
+import {useMap} from 'react-leaflet';
+//import Bookmarks from './SideBar/Menu/BookmarksModal';
+import BookMarks from './SideBar/Menu/Bookmarked.js'
 
 
 
 
-function OffCanvasExample({ name, ...props }) {
-
-    
+function OffCanvasExample(props) {
 
   const [show, setShow] = useState(false);
+
+  let mappy = useMap();
 
   const handleClose = () => setShow(false);
   const handleShow = () => {setShow(true); getUserRecipes();}
@@ -20,7 +23,6 @@ function OffCanvasExample({ name, ...props }) {
 
   const getUserRecipes = async (event) => {
     // prevents the form from refreshing the page
-    console.log("HELLO")
 
     const app_name = 'reci-pin';
     function buildPath(route)
@@ -34,8 +36,6 @@ function OffCanvasExample({ name, ...props }) {
     let jsonPayLoad = JSON.stringify({
         userID: JSON.parse(window.localStorage.getItem('userObject'))['_id']
       });
-
-    console.log(jsonPayLoad)
 
 
     try 
@@ -51,8 +51,17 @@ function OffCanvasExample({ name, ...props }) {
       if(res.hasOwnProperty('error'))
         console.log(res['error']);
   
-        console.log(res)
-      setArray(res)
+        setArray(res)
+        props.setMarkerList(res);
+
+        if (res.length >= 1)
+        {
+
+            let x = res[0]['location']['coordinates'][1]
+            let y = res[0]['location']['coordinates'][0]
+
+            mappy.setView(mappy.getCenter(), 1)
+        }
 
     }
     catch(e)
@@ -61,8 +70,8 @@ function OffCanvasExample({ name, ...props }) {
     }
 
 
-    return;
-};
+
+    };
 
 
 
@@ -71,11 +80,16 @@ function OffCanvasExample({ name, ...props }) {
         return (
             <RecipeReviewCard
             key = {recipe._id}
+            recipeID = {recipe._id}
             recipeTitle = {recipe.name}
             recipeSummary = {recipe.desc}
             recipeIngredients = {recipe.ingredients}
             recipeinstructions = {recipe.instructions}
             recipePic = {recipe.pic}
+            setMarkerList = {props.setMarkerList}
+            recipe = {recipe}
+            setArray = {setArray}
+            handleClose = {handleClose}
             />
         );
     }
@@ -84,7 +98,7 @@ function OffCanvasExample({ name, ...props }) {
   return (
     <>
       <Button variant="light" onClick={handleShow} className="me-2">
-        {name}
+        {props.name}
       </Button>
       <Offcanvas backdrop = {true} show={show} onHide={handleClose} {...props}>
         <Offcanvas.Header closeButton>
@@ -106,16 +120,6 @@ function OffCanvasExample({ name, ...props }) {
   );
 }
 
-function Readmore() {
-  return (
-    <>
-      {['end'].map((placement, idx) => (
-        <OffCanvasExample key={idx} placement={placement} name="Read More" />
-      ))}
-    </>
-  );
-}
-
 
 const Sidebar = (props) =>
 {
@@ -133,35 +137,22 @@ const Sidebar = (props) =>
     }
   ];
 
+  let mappy = useMap();
 
 
     return (
       <body>
         <Navbar style = {{zIndex : "2000"}} collapseOnSelect expand="lg" bg="light" variant="light">
           <Container>
-            <Navbar.Brand onClick={handleShow} href="#home">ReciPin.</Navbar.Brand>
+            <Navbar.Brand onClick={handleShow} href="">ReciPin.</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <AddRecipe title="Add Recipes"/>
-
-                <Nav.Link>BookMarks</Nav.Link>
-                <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Another action
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">
-                    Separated link
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <AddRecipe setAddingRecipe = {props.setAddingRecipe} title="Add Recipes"/>
               </Nav>
+                <BookMarks title="Bookmarks" hashMap = {props.favs} setMarkerList = {props.setMarkerList}/>      
               <Nav>
-                <Readmore /> 
+                <OffCanvasExample placement={'end'} name="My Recipes" setMarkerList = {props.setMarkerList} />
                 <Nav.Link eventKey={2} href="./home">
                   Logout
                 </Nav.Link>
@@ -176,7 +167,7 @@ const Sidebar = (props) =>
             </Offcanvas.Header>
             <Offcanvas.Body>
 
-              <SidebarContent createMarker = {props.createMarker} setMarkerList = {props.setMarkerList}/>
+              <SidebarContent setAddingRecipe = {props.setAddingRecipe} closeSideBar = {handleClose} favs = {props.favs} likes = {props.likes} setMarkerList = {props.setMarkerList}/>
 
 
             </Offcanvas.Body>

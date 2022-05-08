@@ -20,6 +20,7 @@ import { Overlay } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faPencil } from '@fortawesome/free-solid-svg-icons'
+import EditRecipe from './editRecipe.js'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,14 +34,75 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function RecipeReviewCard(props) {
+
+    
   const [expanded, setExpanded] = React.useState(false);
 
   const [show, setShow] = useState(false);
   const target = useRef(null);
 
+  let recipe = props.recipe;
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const app_name = 'reci-pin';
+  function buildPath(route)
+  {
+      if (process.env.NODE_ENV === 'production')
+          return 'https://' + app_name + '.herokuapp.com/' + route;
+      else
+          return 'http://localhost:5000/' + route;
+  }
+
+    function deleteRecipe()
+    {
+        // If the user does not want to delete we return right away
+        if (!window.confirm("Are you okay with deleting this recipe?"))
+            return;
+
+        deleteRecipeAPI();
+    }
+
+  const deleteRecipeAPI = async() =>
+  {
+
+    let jsonPayLoad = JSON.stringify({
+        recipeID: props.recipeID
+        });
+
+    console.log(jsonPayLoad)
+    
+    
+    try 
+    {
+        // Do not await fetches anymore
+        const response = await fetch(buildPath("api/deleteRecipe"), {
+        method: "POST",
+        body: jsonPayLoad,
+        headers: { "Content-Type": "application/json","x-access-token": JSON.parse(window.localStorage.getItem('userObject'))['token'] }
+        });
+
+        let res = JSON.parse(await response.text());
+    
+        if(res.hasOwnProperty('error'))
+        console.log(res['error']);
+
+        props.setMarkerList(prevItems => { return prevItems.filter((item, index) => {return item['_id'] !== props.recipeID;} )});
+        props.setArray(prevItems => { return prevItems.filter((item, index) => {return item['_id'] !== props.recipeID;} )});
+
+    }
+    catch(e)
+    {
+        console.log(e)
+    }
+  }
+  
+  let picture = props.recipe.pic
+
+  if (picture == null || picture == "")
+    picture = "https://image.shutterstock.com/image-vector/picture-vector-icon-no-image-260nw-1350441335.jpg"
 
 //   <IconButton aria-label="settings" onClick = {() => {}}> 
 //   <MoreVertIcon />
@@ -62,11 +124,13 @@ export default function RecipeReviewCard(props) {
           <Overlay target={target.current} show={show} placement="left">
             {({ placement, arrowProps, show: _show, popper, ...props }) => (
               <div
-                {...props}
+              {...props}
+                id="closeButtons"
                 style={{
-                    zIndex: "3000",
+                  zIndex: "1500",
                   position: 'absolute',
-                backgroundColor: 'rgba(255, 255, 255, 1)',
+                  opacity: 1,
+                  backgroundColor: 'rgba(255, 255, 255, 0)',
                   padding: '0px',
                   color: 'black',
                   borderRadius: '0px',
@@ -76,11 +140,10 @@ export default function RecipeReviewCard(props) {
                 }}
                 className = "row"
               >
-            <button className='btn btn-secondary' style = {{marginBottom: "0.5px"}}>
-            <FontAwesomeIcon icon={faPencil} />
-            </button>
-            <button className = "btn btn-danger">
-            <FontAwesomeIcon icon={faTrash} />
+
+            <EditRecipe recipe = {recipe} handleClose = {props.handleClose}/>
+            <button className = "btn btn-danger" onClick = {() => deleteRecipe()}> 
+                <FontAwesomeIcon icon={faTrash} />
             </button>
               </div>
             )}
@@ -93,7 +156,7 @@ export default function RecipeReviewCard(props) {
       <CardMedia
         component="img"
         height="194"
-        image={image}
+        image={picture}
         alt="Paella dish"
       />
       <CardContent>
@@ -121,7 +184,7 @@ export default function RecipeReviewCard(props) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
         <Typography paragraph>Ingredients:</Typography>
-          <Typography paragraph>
+          <Typography paragraph style ={{whiteSpace: "pre-wrap"}}>
             {props.recipeIngredients}
           </Typography>
           <Typography paragraph>Method:</Typography>

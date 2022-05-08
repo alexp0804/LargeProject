@@ -37,9 +37,85 @@ const emailPlatform = {
           </html>`
 };
 
-const successPage = `<html>
-                     <p style="background-color:red;">Some text</p>
-                     </html>`;
+const successPage = `<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            background-color: lightblue;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
+        }
+        .wrapper {
+            height: 100vh;
+            width: 100vw;
+        }
+        .innerWrapper {
+            max-width: 1000px;
+            height: 100%;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .innerInnerWrapper {
+            max-width: 1000px;
+            display: flex;
+            margin: auto;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .left {
+            width: 40%;
+        }
+        .right {
+            width: 40%;
+
+        }
+        img {
+            width: 100%;
+        }
+        .buttonContainer {
+            margin-top: 100px;
+            margin: 10px;
+            background: #2d3d8b;
+            border-radius: 5px;
+            width: 50%;
+            padding: 15px;
+
+            display: flex;
+            justify-content: center;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+    </style>
+    <body>
+        <div class="wrapper">
+            <div class="innerWrapper">
+                <div class="innerInnerWrapper">
+                    <div class="left">
+                        <img src="https://res.cloudinary.com/deks041ua/image/upload/v1650482160/doodle.png">
+                    </div>
+                    <div class="right">
+                        <div class="textContanier">
+                            <h1>Congrats. You're verified!<br>Are you hungy? I am.</h1>
+                        </div>
+                        <div class="buttonContainer">
+                            <a href="https://reci-pin.herokuapp.com/">Back to home</a>
+                        </div>
+                    </div>
+               </div>
+           </div>
+       </div>
+   </body>
+</html>`;
 
 const senderEmail = process.env.SENDER_EMAIL;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -47,6 +123,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // Setting up Express and cors.
 const app = express();
 app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 
 // Cloudinary set up
@@ -61,7 +138,7 @@ app.set('port', (process.env.PORT || 5000));
 
 // Base URL
 // TODO: make this get heroku or localhost based on prod/local
-const baseURL = "http://localhost:5000";
+const baseURL = (process.env.NODE_ENV === "production") ? "https://reci-pin.herokuapp.com" : "http://localhost:5000";
 
 // Connecting to the MongoDB database
 const MongoClient = require('mongodb').MongoClient;
@@ -143,10 +220,15 @@ app.post('/api/register/:platform', async (req, res) =>
     let platform = req.params.platform;
 
     const usernameTaken = await db.collection(userCol).findOne( { username: username } );
+    const emailTaken = await db.collection(recipeCol).findOne( { email: email } );
 
     // If there's a result the username is taken.
     if (usernameTaken != null)
         return res.status(500).json( { error: "Username taken." } );
+    
+    if (emailTaken != null)
+        return res.status(500).json( { error: "Email taken." } );
+    
 
     let verifyLink = "hostingLink/api/verify/usercode/username".replace("hostingLink", baseURL).replace("usercode", userCode).replace("username", username);
 
@@ -226,13 +308,13 @@ app.get('/api/verify/:auth/:username', async (req, res) =>
 
 
 // Password Reset Section
-app.post('/api/getResetCode', auth, async (req, res) =>
+app.post('/api/getResetCode', async (req, res) =>
 {
-    const { userID, email } = req.body;
+    const { email } = req.body;
     const db = client.db();
 
     // Check that email is valid
-    const valid = await db.collection(userCol).findOne( { _id: ObjectId(userID), email: email } );
+    const valid = await db.collection(userCol).findOne( { email: email } );
 
     if (!valid)
         return res.status(500).json( { error: "Invalid email address." } );
@@ -245,12 +327,15 @@ app.post('/api/getResetCode', auth, async (req, res) =>
 
     // Construct email
     const htmlToSend = `<html>
-                            <div style="margin-top:50px;text-align: center; font-family: Arial;" container>
-                                <h1> Hello! </h1>
-                                <p style="margin-bottom:30px;"> Reset your password by entering this code:</p>
-                                <p style="background:blue;color:white;padding:10px;margin:200px;border-radius:5px;text-decoration:none;">CODE</p>
-                            </div>
-                        </html>`.replace("CODE", String(authCode));
+    <div style="margin-top:50px; text-align: center; font-family: Arial;">
+        <h1> Hello! </h1>
+        <p style="text-align: center; font-family: Arial;"> You can reset your password by entering this code:   </p>
+        <div style="display: flex; justify-content: center;">
+            <p style="background:blue; color:white; margin:10px; padding:10px; width: 20%; border-radius:5px; text-decoration:none;">CODE</p>
+        </div>
+        <p style="font-style: italic; font-size: small;"> If you did not attempt to reset your password, simply ignore this email. </p>
+    </div>
+</html>`.replace("CODE", String(authCode));
 
     const msg = {
         to: email,
@@ -262,6 +347,28 @@ app.post('/api/getResetCode', auth, async (req, res) =>
 
     // Send email
     sgMail.send(msg).catch((error) => { console.error(error); });
+
+    res.json( emptyErr );
+});
+
+app.post('/api/resetPassword', async (req, res) =>
+{
+    const { email, givenCode, newPassword } = req.body;
+    const db = client.db();
+
+    // Get user
+    const user = await db.collection(userCol).findOne( { email: email } );
+
+    // Not found
+    if (!user)
+        return res.status(500).json( { error: "Invalid email." } );
+
+    // Compare given code to one in db
+    if (String(user.auth) != String(givenCode))
+        return res.status(500).json( { error: "Code does not match." } );
+
+    await db.collection(userCol).updateOne( { email: email },
+                                            { $set: { password: hash(newPassword) } });
 
     res.json( emptyErr );
 });
@@ -279,25 +386,6 @@ app.post('/api/getUserInfo', async (req, res) =>
         return res.status(500).json( { error: "Invalid User ID" } );
 	else
     	res.json( {username: userInfo.username} );
-});
-
-app.post('/api/validateResetCode', async (req, res) =>
-{
-    const { userID, givenCode } = req.body;
-    const db = client.db();
-
-    // Get user
-    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
-
-    // Not found
-    if (!user)
-        return res.status(500).json( { error: "Invalid User ID" } );
-
-    // Compare given code to one in db
-    if (String(user.auth) != String(givenCode))
-        return res.status(500).json( { error: "Code does not match." } );
-
-    res.json( emptyErr );
 });
 
 app.post('/api/editUser', auth, async (req, res) =>
@@ -325,8 +413,20 @@ app.post('/api/editUser', auth, async (req, res) =>
                                             { $set: { [newField]: newValue } });
 
     // We okay
-    res.json( emptyErr );
+    res.json( { newField: newValue, error: "" } );
 });
+
+app.post('/api/getProfilePicByUser', auth, async (req, res) => {
+    const {userID} = req.body;
+    const db = client.db();
+
+    let user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    if (!user)
+        return res.status(404).json( { error:"User not found" } );
+
+    res.json( { pic: user.profilePic, error: "" } );
+})
 
 // GET USER FAVORITE(S)
 app.post('/api/getFavorites', auth, async (req, res) =>
@@ -369,6 +469,22 @@ app.post('/api/getFavorites', auth, async (req, res) =>
 
     res.json(result);
 });
+
+app.post('/api/uploadImage', async (req, res) =>
+{
+    const { pic } = req.body;
+    let result;
+
+    try {
+        result = (await cloudinary.uploader.upload(pic)).secure_url;
+    }
+    catch (e)
+    {
+        return res.status(500).json( { error: "Image upload failure.", msg: e } );
+    }
+
+    res.json( { url: result } );
+})
 
 // ADD USER FAVORITE
 app.post('/api/addFavorite', auth, async (req, res) =>
@@ -440,7 +556,7 @@ app.post('/api/deleteFavorite/', auth, async (req, res, next) =>
     // Update favorite count for recipe
     db.collection(recipeCol).updateOne(
         { _id: ObjectId(recipeID) },
-        { $inc: { numFavorites: -1 } }
+        { $inc: { favorites: -1 } }
     );
 
     // Okay status
@@ -466,19 +582,26 @@ app.post('/api/createRecipe', auth, async (req, res) =>
         instructions: instructions,
         ingredients: ingredients,
         country: country,
-        coordinates: coordinates,
+        location: {
+            type: "Point",
+            coordinates: coordinates.reverse()
+        },
         likes: 0,
-        favorites: 0
+        favorites: 0,
+        comments: []
     };
 
     // Upload the image to Cloudinary
-    try
+    if (pic != "" || pic != null)
     {
-        recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
-    }
-    catch (e)
-    {
-        res.status(500).json( { error: "Image upload failure." } );
+        try
+        {
+            recipe.pic = (await cloudinary.uploader.upload(pic)).secure_url;
+        }
+        catch (e)
+        {
+            res.status(500).json( { error: "Image upload failure.", msg: e } );
+        }
     }
 
     // Check if the country is in the database
@@ -579,6 +702,26 @@ app.post('/api/randomRecipe', auth, async (req, res) =>
 
     res.json(await randomRecipe);
 })
+
+// Get info about users relationship to recipe
+app.post('/api/getLikedFavorited', auth, async (req, res) =>
+{
+    const { userID, recipeID } = req.body;
+    const db = client.db();
+
+    let result = {};
+
+    const user = await db.collection(userCol).findOne( { _id: ObjectId(userID) } );
+
+    if (!user)
+        res.status(404).json( { error: "User not found" } );
+
+    result.liked = user.likes.some(f => { return f.equals(recipeID) });
+    result.favorited = user.favorites.some(f => { return f.equals(recipeID) });
+
+    res.json(result);
+})
+
 
 // GET USER LIKE(S)
 app.post('/api/getLikes', auth, async (req, res) =>
@@ -698,7 +841,18 @@ app.post('/api/deleteLike/', auth, async (req, res, next) =>
     res.json( emptyErr );
 });
 
+// GET COUNTRIES WITHIN RECTANGLE
+app.post('/api/getRecipesInBounds', auth, async (req, res) =>
+{
+    const { bottomLeft, topRight } = req.body;
+    const db = client.db();
 
+    let result = await db.collection(recipeCol).find( {
+        location: { $geoWithin: { $box: [ bottomLeft, topRight ] } }
+    } );
+
+    res.json(await result.toArray());
+});
 
 // GET RECIPES BY COUNTRY
 app.post('/api/getCountryRecipes', auth, async (req, res) =>
@@ -734,12 +888,27 @@ app.post('/api/getUserRecipes', auth, async (req, res) =>
     if (!user)
         return res.status(500).json( { error: "Invalid User ID" } );
 
-    // Grab the recipe associated with each id
+    // Iterate backwards so removing elements doesn't mess with indexing
+    for (let i = user.created.length; i >= 0; i--)
+    {
+        // If the recipe isn't in the database
+        if (await atLeastOne(recipeCol, user.created[i]) == 0)
+        {
+            // Remove recipe from user favorites list from database.
+            db.collection(userCol).updateOne(
+                  { _id: ObjectId(userID) },
+                  { $pull: { created: ObjectId(user.created[i]) } }
+            )
+            // Remove recipe from favs
+            user.created.splice(i, 1);
+        }
+    }
+
     let result = await Promise.all(
                     user.created.map(
                         async x => await db.collection(recipeCol).findOne( { _id: x } )
-                    )
-                );
+                        )
+                    );
 
     // Return created recipes
     res.json(result);
@@ -760,9 +929,116 @@ app.post('/api/searchRecipe', auth, async (req, res) =>
 
     const ret = await recipesCursor.toArray();
 
-    res.json(ret);
+    res.json(ret.filter(e => e != null));
 });
 
+// GET NEARBY RECIPES
+app.post('/api/getNearbyRecipes', auth, async (req, res) =>
+{
+    // Location given [x, y] = lat, long
+    // Distance given in miles, float number
+    const { location, distance } = req.body;
+    const db = client.db();
+
+    // Convert distance in miles to km
+    let d = parseInt(distance) * 1609;
+
+    // Get recipes and filter out those that are too far
+    let recipes = await db.collection(recipeCol).find(
+        {
+            location: {
+                $nearSphere: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: location.reverse()
+                    },
+                    $maxDistance: d
+                }
+            }
+        }).toArray();
+
+    res.json(recipes);
+});
+
+function haversine(a, b)
+{
+    const [lat1, lon1] = a,
+          [lat2, lon2] = b
+
+    const rads = x => x * Math.PI / 180;
+
+    const phi_1 = rads(lat1),
+          phi_2 = rads(lat2),
+          dphi = rads(lat2 - lat1),
+          dlambda = rads(lon2 - lon1);
+
+    const t = Math.sin(dphi / 2) * Math.sin(dphi/2) +
+              Math.cos(phi_1) * Math.cos(phi_2) *
+              Math.sin(dlambda / 2) * Math.sin(dlambda / 2);
+
+    // The secret is 6371e3. Don't look it up.
+    return 6371e3 * 2 * Math.atan2(Math.sqrt(t), Math.sqrt(1 - t)) / 1000;
+}
+
+app.post('/api/getComments', auth, async (req, res) => 
+{
+    const { recipeID } = req.body;
+    const db = client.db();
+
+    // Find recipe
+    let recipe = await db.collection(recipeCol).findOne( { _id: ObjectId(recipeID) } );
+
+    // No recipe with this id
+    if (!recipe)
+        return res.status(404).json( { error: "Recipe not found." } );
+
+    let result = [];
+
+    // id -> {username, pfp}
+
+    for (const comment of recipe.comments)
+    {
+        let user = await db.collection(userCol).findOne( { _id: ObjectId(comment.user) } );
+
+        result.push({
+            username: user.username,
+            pic: user.profilePic,
+            comment: comment.text
+        });
+    }
+
+    res.send(result);
+});
+
+app.post('/api/addComment', auth, async (req, res) =>
+{
+    const { recipeID, userID, commentText } = req.body;
+    const db = client.db();
+    
+    // Construct new comment
+    let comment = {
+        user: ObjectId(userID),
+        text: commentText
+    };
+
+    // Find recipe, append comment onto its comments array
+    try 
+    {
+        db.collection(recipeCol).updateOne(
+            { _id: ObjectId(recipeID) },
+            { $push: { comments: {
+                user: ObjectId(userID),
+                text: commentText
+            } } }
+        );
+    }
+    catch (e)
+    {
+        return res.status(500).json( { error: e } );
+    }
+
+    res.json( emptyErr );
+});
 
 // Used when generating the code a user needs to enter to verify their account.
 // Returns a 5-digit code as an int

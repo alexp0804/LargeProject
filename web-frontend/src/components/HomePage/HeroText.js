@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import Register from "../../Register";
 import {  Modal, Button, FormControl, Offcanvas } from 'react-bootstrap'
-import duck from "../../assets/images/duck.jpg"
+import Swing from "../../assets/images/Doodles/Swinging.png"
 
 function Signup() {
   const [show, setShow] = useState(false);
@@ -51,7 +51,7 @@ function OffCanvasExample({ name, ...props }) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} className="me-2">
+      <Button variant="primary" onClick={handleClose} className="me-2">
         {name}
       </Button>
       <Offcanvas show={show} onHide={handleClose} {...props}>
@@ -59,11 +59,7 @@ function OffCanvasExample({ name, ...props }) {
           <Offcanvas.Title>ReciPin</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          Welcome to ReciPin!
-
-         Group 11 created this project to make finding recipes so much more fun. Map stuff Recipe stuff x x x 
-
-         < duck / >
+        
 
         </Offcanvas.Body>
       </Offcanvas>
@@ -93,7 +89,6 @@ const HeroText = () => {
       <h1>Anywhere.</h1>
       <BtnContainer>
         < Readmore / > 
-        < Signup / >
       </BtnContainer> 
       
     </Container>
@@ -103,24 +98,28 @@ const HeroText = () => {
 const BtnContainer = styled.div`
   margin-top: 2rem;
   button {
-    background: #8c1000;
+    background: black;
     border: none;
     padding: 0.9rem 1.1rem;
     color: #fff;
-    border-radius: 1rem;
+    width: 50%;
+    border-radius: .3rem;
     transition: all 0.3s ease-in-out;
     margin: 0.5rem;
     font-size: 0.8rem;
     cursor: pointer;
     &:hover {
-      box-shadow: 0px 17px 16px -11px #81d1ff;
+      box-shadow: 0px 17px 16px -11px transparent;
       transform: translateY(-5px);
+      background: #ff6161;
+      color: black;
     }
   }
 
   .readmore {
     color: #fff;
     background: #8c1000;
+    width: 50%;
     border: 3px solid ;
     
     &:hover {
@@ -143,19 +142,19 @@ const Container = styled.div`
     font-weight: 1000;
 
     &:nth-of-type(1) {
-      color: #46AF78;
+      color: black;
     }
     &:nth-of-type(2) {
-      color: #5a9677;
+      color: black;
       font-weight: 700;
     }
     &:nth-of-type(3) {
-      color: #008C43;
+      color: black;
       font-weight: 700;
     
     }
     &:nth-of-type(4) {
-      color: #177343;
+      color: black;
       font-weight: 700;
     }
   }

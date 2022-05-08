@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import image from "../../assets/images/map_tilt.png"
-import bg from "../../assets/images/green5.jpg";
+import image from "../../assets/images/CoffeeDoddle2.png"
 import HeroText from "./HeroText";
 import Tilt from 'react-parallax-tilt';
 // import Tilt from "react-tilt";
 
 const Hero = () => {
   return (
-    <Container bg={bg}>
+    <Container style={{ backgroundColor : "white"}}>
       <Wrapper>
         <InnerWrapper>
           <Left>

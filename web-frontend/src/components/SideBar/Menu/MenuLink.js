@@ -65,8 +65,6 @@ const MenuLink = (props) => {
             userID: JSON.parse(window.localStorage.getItem('userObject'))['_id']
           });
     
-        console.log(jsonPayLoad)
-    
     
         try 
         {
@@ -81,9 +79,16 @@ const MenuLink = (props) => {
       
           if(res.hasOwnProperty('error'))
             console.log(res['error']);
+
+            let x = res[0]['location']['coordinates'][1]
+            let y = res[0]['location']['coordinates'][0]
+
+            console.log([x,y])
       
-            mappy.panTo(res[0]['coordinates'])
+            mappy.panTo([x, y])
+            mappy.setZoom(12);
             props.setMarkerList(res);
+            props.closeSideBar();   
     
         }
         catch(e)
