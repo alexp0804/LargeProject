@@ -47,6 +47,7 @@ export default function AllRecipes({route, navigation})
             let response = await fetch(url + 'searchRecipe',  {method:'POST', body:JSON.stringify({searchTerm:text}), 
             headers:{'Content-Type': 'application/json', "x-access-token":route.params.token}});
             let txt = await response.text();
+            console.warn(txt)
             let recipes = JSON.parse(txt);
             if(clickedLike)
             {
@@ -65,6 +66,10 @@ export default function AllRecipes({route, navigation})
                         filteredArray.push(rec)
                     }
                 })
+            }
+            else
+            {
+                filteredArray = recipes;
             }
             setSearchArray(filteredArray)
             }
